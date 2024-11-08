@@ -1,0 +1,125 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using XDev_Model.Entities;
+using XDev_Model.Interfaces;
+using XDev_Model;
+using XDev_UnitWork.DTO;
+using XDev_UnitWork.Interfaces;
+using XDev_UnitWork.Custom;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+
+namespace XDev_UnitWork.Business
+{
+    public class EconomicActivityBL : GenericBL<IEconomicActivityRep>, IEconomicActivityBL
+    {
+        public EconomicActivityBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper) : base(dbContext, contextAccessor, mapper)
+        {
+        }
+
+        public async Task<bool> AnyAsync(Guid id)
+        {
+            return await Repository.AnyAsync(f => f.Id == id);
+        }
+
+        public async Task<bool> AnyAsync(string code)
+        {
+            return await Repository.AnyAsync(f => f.Code == code);
+        }
+
+        public async Task CreateAsync(EconomicActivityDTO dto)
+        {
+            var model = await Repository.GetFirstorDefaultAsync(f => f.Code == dto.Code);
+            if (model is null)
+            {
+                model = Mapper.Map<EconomicActivity>(dto);
+                await Repository.CreateAsync(model);
+            }
+            else throw new CustomTogoException($"El código [{dto.Code}] ya existe");
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var model = await Repository.GetByIdAsync(id);
+            if (model is not null)
+                await Repository.DeleteAsync(model);
+        }
+
+        public async Task<EconomicActivityDTO> GetByIdAsync(params object[] ids)
+        {
+            var model = await Repository.GetByIdAsync(ids);
+            if (model is null)
+                return new EconomicActivityDTO();
+
+            return Mapper.Map<EconomicActivityDTO>(model);
+        }
+
+        public async Task<List<EconomicActivityDTO>> GetListAsync(PaginationDTO pagination)
+        {
+            var query = await Repository.QueryAsync();
+            query = query.CreateFilterAndOrder(pagination);
+            return await query.CreatePaging<EconomicActivity, EconomicActivityDTO>(pagination, ContextAccessor.HttpContext);
+        }
+
+        public async Task<List<EconomicActivityDTO>> GetListAsync()
+        {
+            var list = await Repository.GetListAsync();
+            return Mapper.Map<List<EconomicActivityDTO>>(list.Select(s => new EconomicActivityDTO
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Code = s.Code
+            }).OrderBy(o => o.Code).ToList());
+        }
+
+        public async Task UpdateAsync(EconomicActivityDTO dto)
+        {
+            var model = await Repository.GetByIdAsync(dto.Id);
+            try
+            {
+                if (model is not null)
+                {
+                    model.Name = dto.Name;
+
+                    await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
+                }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var user = await DbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.Id == model.LastUpdatedBy);
+                throw new CustomTogoException($"El registro fue modificado por el usuario '{user.UserName}'");
+            }
+        }
+
+        public async Task CreateFromXlsx(Stream stream)
+        {
+            IWorkbook excel = new XSSFWorkbook(stream);
+            ISheet sheet = excel.GetSheetAt(0);
+            List<EconomicActivity> list = new List<EconomicActivity>();
+            var model = await Repository.GetListAsync();
+
+            for (int i = 1; i <= sheet.LastRowNum; i++)
+            {
+                IRow row = sheet.GetRow(i);
+
+                if (row.Cells.Count == 2)
+                {
+                    var exists = model.FirstOrDefault(f => f.Code == row.GetCell(0).ToString());
+
+                    if (exists is null)
+                        list.Add(new EconomicActivity
+                        {
+                            Code = row.GetCell(0).ToString(),
+                            Name = row.GetCell(1).ToString()
+                        });
+                }
+            }
+
+            if (list.Count > 0)
+            {
+                await Repository.CreateAsync(list.ToArray());
+            }
+        }
+    }
+}

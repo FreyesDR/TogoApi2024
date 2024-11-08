@@ -1,0 +1,28 @@
+version: '3.4'
+
+networks:
+  togonetwork:
+
+services:
+  sqlserverdocker:
+    container_name: sql-server-togo
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+        - 8006:1433
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=Xcontra1256$
+        - MSSQL_PID=Express
+    networks:
+        - togonetwork
+  
+  xdev_togoapi:
+    image: ${DOCKER_REGISTRY-}xdevtogoapi
+    container_name: togo-api
+    build:
+      context: .
+      dockerfile: XDev_TogoApi/Dockerfile
+    networks:
+        - togonetwork
+    depends_on:
+        - sqlserverdocker

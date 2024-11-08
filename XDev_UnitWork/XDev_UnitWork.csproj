@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <OutputType>Library</OutputType>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>XDev_UnitWork.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    <PackageReference Include="NPOI" Version="2.7.1" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XDev_Model\XDev_Model.csproj" />
+  </ItemGroup>
+
+</Project>

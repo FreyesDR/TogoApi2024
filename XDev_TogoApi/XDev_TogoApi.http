@@ -1,0 +1,6 @@
+@XDev_TogoApi_HostAddress = http://localhost:5271
+
+GET {{XDev_TogoApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
