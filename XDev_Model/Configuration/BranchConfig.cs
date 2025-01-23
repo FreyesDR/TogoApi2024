@@ -30,7 +30,7 @@ namespace XDev_Model.Configuration
             builder.HasMany(m => m.PointsSale)
                 .WithOne(o => o.Branch)
                 .HasForeignKey(f => f.BranchId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);            
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using XDev_UnitWork.DTO;
+﻿using XDev_UnitWork.DTO.Address;
 
 namespace XDev_UnitWork.Interfaces
 {

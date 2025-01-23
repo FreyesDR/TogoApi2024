@@ -6,6 +6,7 @@ using XDev_Model;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
+using XDev_UnitWork.DTO.Company;
 
 namespace XDev_UnitWork.Business
 {
@@ -31,6 +32,7 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<CompanyEconomicActivity>(dto);
+                model.EconomicActivity = null;
 
                 if (dto.Principal)
                 {

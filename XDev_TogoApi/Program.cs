@@ -19,6 +19,19 @@ using XDev_UnitWork.Business;
 using XDev_TogoApi.EndPoints;
 using XDev_UnitWork.DTO;
 using Microsoft.AspNetCore.Diagnostics;
+using XDev_UnitWork.DTO.Company;
+using XDev_UnitWork.DTO.Partner;
+using XDev_UnitWork.DTO.SaleOrder;
+using XDev_UnitWork.DTO.Invoice;
+using XDev_UnitWork.DTO.Address;
+using XDev_UnitWork.DTO.DM;
+using XDev_UnitWork.DTO.Material;
+using XDev_UnitWork.DTO.PriceScheme;
+
+using Microsoft.Reporting.NETCore;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using XDev_UnitWork.DTO.ElectronicBilling;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +45,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;    
+    options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
@@ -44,7 +57,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
     options.User.RequireUniqueEmail = true;
 
     // Sigin settings.
-    options.SignIn.RequireConfirmedEmail = true;    
+    options.SignIn.RequireConfirmedEmail = true;
 
 }).AddRoles<ApplicationRole>()
   .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -115,6 +128,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     };
 });
 
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+    );
+
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
@@ -152,6 +170,24 @@ builder.Services.AddScoped<IValidator<BranchDTO>, BranchValidator>();
 builder.Services.AddScoped<IPartnerTypeBL, PartnerTypeBL>();
 builder.Services.AddScoped<IValidator<PartnerTypeDTO>, PartnerTypeValidator>();
 
+builder.Services.AddScoped<IPartnerFeaturesBL, PartnerFeaturesBL>();
+
+builder.Services.AddScoped<IPartnerRoleBL, PartnerRoleBL>();
+builder.Services.AddScoped<IValidator<PartnerRoleDTO>, PartnerRoleValidator>();
+
+builder.Services.AddScoped<IPartnerBL, PartnerBL>();
+builder.Services.AddScoped<IValidator<PartnerDTO>, PartnerValidator>();
+
+builder.Services.AddScoped<IPartnerIDBL, PartnerIDBL>();
+builder.Services.AddScoped<IValidator<PartnerIDDTO>, PartnerIDValidator>();
+
+builder.Services.AddScoped<IPartnerEconomicActivityBL, PartnerEconomicActivityBL>();
+builder.Services.AddScoped<IValidator<PartnerEconomicActivityDTO>, PartnerEconomicActivityValidator>();
+
+builder.Services.AddScoped<IPartnerRolesBL, PartnerRolesBL>();
+
+builder.Services.AddScoped<IPartnerCompanyBL, PartnerCompanyBL>();
+
 builder.Services.AddScoped<IAddressBL, AddressBL>();
 
 builder.Services.AddScoped<ICountryBL, CountryBL>();
@@ -173,6 +209,59 @@ builder.Services.AddScoped<IAppLogBL, AppLogBL>();
 
 builder.Services.AddScoped<IWareHouseBL, WareHouseBL>();
 builder.Services.AddScoped<IValidator<WareHouseDTO>, WareHouseValidator>();
+
+builder.Services.AddScoped<IPointSaleBL, PointSaleBL>();
+builder.Services.AddScoped<IValidator<PointSaleDTO>, PointSaleValidator>();
+
+builder.Services.AddScoped<INumberRangeBL, NumberRangeBL>();
+builder.Services.AddScoped<IValidator<NumberRangeDTO>, NumberRangeValidator>();
+
+builder.Services.AddScoped<ICurrencyBL, CurrencyBL>();
+builder.Services.AddScoped<IValidator<CurrencyDTO>, CurrencyValidator>();
+
+builder.Services.AddScoped<IInvoiceTypeBL, InvoiceTypeBL>();
+builder.Services.AddScoped<IValidator<InvoiceTypeDTO>, InvoiceTypeValidator>();
+
+builder.Services.AddScoped<ISaleOrderTypeBL, SaleOrderTypeBL>();
+builder.Services.AddScoped<IValidator<SaleOrderTypeDTO>, SaleOrderTypeValidator>();
+
+builder.Services.AddScoped<ISaleOrderBL, SaleOrderBL>();
+builder.Services.AddScoped<IValidator<SaleOrderDTO>, SaleOrderValidator>();
+
+builder.Services.AddScoped<IMaterialTypeBL, MaterialTypeBL>();
+builder.Services.AddScoped<IValidator<MaterialTypeDTO>, MaterialTypeValidator>();
+
+builder.Services.AddScoped<IUnitMeasureBL, UnitMeasureBL>();
+builder.Services.AddScoped<IValidator<UnitMeasureDTO>, UnitMeasureValidator>();
+
+builder.Services.AddScoped<IMaterialFeatureBL, MaterialFeatureBL>();
+
+builder.Services.AddScoped<IMaterialBL, MaterialBL>();
+builder.Services.AddScoped<IValidator<MaterialDTO>, MaterialValidator>();
+
+builder.Services.AddScoped<IPriceConditionBL, PriceConditionBL>();
+builder.Services.AddScoped<IValidator<PriceConditionDTO>, PriceConditionValidator>();
+
+builder.Services.AddScoped<IPriceSchemeBL, PriceSchemeBL>();
+builder.Services.AddScoped<IValidator<PriceSchemeDTO>, PriceSchemeValidator>();
+
+builder.Services.AddScoped<IMaterialBranchBL, MaterialBranchBL>();
+builder.Services.AddScoped<IValidator<MaterialBranchDTO>, MaterialBranchValidator>();
+
+builder.Services.AddScoped<IMaterialWareHouseBL, MaterialWareHouseBL>();
+builder.Services.AddScoped<IValidator<MaterialWareHouseDTO>, MaterialWareHouseValidator>();
+
+builder.Services.AddScoped<IEBillingBL, EBillingBL>();
+builder.Services.AddScoped<IValidator<EBillingDTO>, EBillingValidator>();
+
+builder.Services.AddScoped<IEBillingCompanyBL, EBillingCompanyBL>();
+builder.Services.AddScoped<IValidator<EBillingCompanyDTO>, EBillingCompanyValidator>();
+
+builder.Services.AddScoped<IEBillingDocumentBL, EBillingDocumentBL>();
+builder.Services.AddScoped<IValidator<EBillingDocumentDTO>, EBillingDocumentValidator>();
+
+builder.Services.AddScoped<IEBillingCompanyInvoiceBL, EBillingCompanyInvoiceBL>();
+builder.Services.AddScoped<IValidator<EBillingCompanyInvoiceDTO>, EBillingCompanyInvoiceValidator>();
 #endregion
 
 var app = builder.Build();
@@ -201,6 +290,7 @@ app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.Run(async con
     {
         Message = exception!.InnerException is null ? exception.Message : exception.InnerException.Message,
         StackTrace = exception.InnerException is null ? exception.StackTrace : exception.InnerException.StackTrace,
+        Source = exception.Source
     };
 
     var errorBL = context.RequestServices.GetRequiredService<IAppLogBL>();
@@ -211,6 +301,7 @@ app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.Run(async con
 }));
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRequestLocalization();
 app.UseCors();
@@ -227,15 +318,78 @@ app.MapGroup("/company/eactivity").MapCompanyEconomicActivity().RequireAuthoriza
 app.MapGroup("/branch/type").MapBranchType().RequireAuthorization();
 app.MapGroup("/branch").MapBranch().RequireAuthorization();
 app.MapGroup("/warehouse").MapWareHouse().RequireAuthorization();
+app.MapGroup("/pointsale").MapPointSale().RequireAuthorization();
 app.MapGroup("/address/type").MapAddressType().RequireAuthorization();
 app.MapGroup("/address").MapAddress().RequireAuthorization();
+app.MapGroup("/partner").MapPartner().RequireAuthorization();
 app.MapGroup("/partner/type").MapPartnerType().RequireAuthorization();
+app.MapGroup("/partner/features").MapPartnerFeatures().RequireAuthorization();
+app.MapGroup("/partner/role").MapPartnerRole().RequireAuthorization();
+app.MapGroup("/partner/roles").MapPartnerRoles().RequireAuthorization();
+app.MapGroup("/partner/idtype").MapPartnerID().RequireAuthorization();
+app.MapGroup("/partner/eactivity").MapPartnerEconomicActivity().RequireAuthorization();
+app.MapGroup("/partner/company").MapPartnerCompany().RequireAuthorization();
 app.MapGroup("/country").MapCountry().RequireAuthorization();
 app.MapGroup("/region").MapRegion().RequireAuthorization();
 app.MapGroup("/city").MapCity().RequireAuthorization();
 app.MapGroup("/idtype").MapIDType().RequireAuthorization();
 app.MapGroup("/eactivity").MapEconomicActivity().RequireAuthorization();
+app.MapGroup("/nrange").MapNumberRange().RequireAuthorization();
+app.MapGroup("/currency").MapCurrency().RequireAuthorization();
+app.MapGroup("/log").MapAppLog().RequireAuthorization();
+
+app.MapGroup("/invoice/type").MapInvoiceType().RequireAuthorization();
+app.MapGroup("/saleorder/type").MapSaleOrderType().RequireAuthorization();
+app.MapGroup("/saleorder").MapSaleOrder().RequireAuthorization();
+app.MapGroup("/pricecond").MapPriceCondition().RequireAuthorization();
+app.MapGroup("/pricescheme").MapPriceScheme().RequireAuthorization();
+
+app.MapGroup("/unitm").MapUnitMeasure().RequireAuthorization();
+app.MapGroup("/material").MapMaterial().RequireAuthorization();
+app.MapGroup("/material/type").MapMaterialType().RequireAuthorization();
+app.MapGroup("/material/features").MapMaterialFeature().RequireAuthorization();
+app.MapGroup("/material/branch").MapMaterialBranch().RequireAuthorization();
+app.MapGroup("/material/warehouse").MapMaterialWareHouse().RequireAuthorization();
+
+app.MapGroup("/ebilling").MapEBilling().RequireAuthorization();
+app.MapGroup("/ebilling/company").MapEBillingCompany().RequireAuthorization();
+app.MapGroup("/ebilling/companyinvoice").MapEBillingCompanyInvoice().RequireAuthorization();
+app.MapGroup("/ebilling/document").MapEBillingDocument().RequireAuthorization();
 
 //app.MapGroup("/auth").MapIdentityApi<ApplicationUser>();
+
+//app.MapGet("/testpdf", (IWebHostEnvironment env) =>
+//{
+//    var filePath = $"{env.ContentRootPath}\\Reports\\GenericSaleOrder.rdlc";
+
+//    if (!File.Exists(filePath))
+//        throw new Exception($"El formulario {filePath} no existe");
+
+//    var fs = new FileStream(filePath, FileMode.Open);
+//    LocalReport localReport = new LocalReport();
+//    localReport.LoadReportDefinition(fs);
+
+//    var dto = new List<SaleOrderPdfFormDTO>();
+
+//    var imagePath = $"{env.WebRootPath}\\image\\LogoAvaLink.png";
+//    var image = File.ReadAllBytes(imagePath);
+
+//    dto.Add(new SaleOrderPdfFormDTO
+//    {
+//        SOType = "Documento de Prueba",
+//        SODate = DateTime.Now,
+//        SONumber = "1234567890",
+//        CompanyLogo = image
+//    });
+
+//    localReport.DataSources.Add(new ReportDataSource("SaleOrderHeaderDataSet", dto));
+//    localReport.DataSources.Add(new ReportDataSource("SaleOrderPositionDataSet", new List<SaleOrderPositionDTO>()));
+
+//    fs.Close();
+
+//    var ms = new MemoryStream(localReport.Render("PDF"));
+
+//    return Results.File(ms, "application/pdf", "SaleOrderPDF.pdf");
+//});
 #endregion
 app.Run();

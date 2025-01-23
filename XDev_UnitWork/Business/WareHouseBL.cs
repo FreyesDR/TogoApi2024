@@ -6,6 +6,7 @@ using XDev_Model;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
 using XDev_UnitWork.Custom;
+using XDev_UnitWork.DTO.Company;
 
 namespace XDev_UnitWork.Business
 {
@@ -64,9 +65,28 @@ namespace XDev_UnitWork.Business
             return await query.CreatePaging<WareHouse, WareHouseDTO>(pagination, ContextAccessor.HttpContext);
         }
 
-        public Task<List<WareHouseDTO>> GetListAsync()
+        public async Task<List<WareHouseDTO>> GetListAsync()
         {
-            throw new NotImplementedException();
+            var list = await Repository.GetListAsync();
+            return list.Select(x => new WareHouseDTO 
+            { 
+                Id = x.Id, 
+                BranchId = x.BranchId ,
+                Code = x.Code,
+                Name = x.Name              
+            }).OrderBy(o => o.Code).ToList();
+        }
+
+        public async Task<List<WareHouseDTO>> GetListAsync(string branchid)
+        {
+            var list = await Repository.GetListAsync(f => f.BranchId == branchid.GetGuid());
+            return list.Select(x => new WareHouseDTO
+            {
+                Id = x.Id,
+                BranchId = x.BranchId,
+                Code = x.Code,
+                Name = x.Name
+            }).OrderBy(o => o.Code).ToList();
         }
 
         public async Task UpdateAsync(WareHouseDTO dto)

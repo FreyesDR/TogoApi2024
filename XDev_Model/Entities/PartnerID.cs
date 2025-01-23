@@ -12,5 +12,6 @@
         public DateTime? DateExpira { get; set; }
         public Guid CountryId { get; set; }
         public Guid RegionId { get; set; }
+        public string NIFNum {  get; set; }
     }
 }

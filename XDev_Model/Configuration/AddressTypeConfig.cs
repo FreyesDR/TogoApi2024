@@ -10,7 +10,7 @@ namespace XDev_Model.Configuration
         {
             
             builder.HasKey("Id");
-            builder.HasIndex(i => i.Code).IsUnique(false);
+            builder.HasIndex(i => i.Code).IsUnique(true);
             builder.Property(p => p.Code).HasMaxLength(2);
             builder.Property(p => p.Name).HasMaxLength(50);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();

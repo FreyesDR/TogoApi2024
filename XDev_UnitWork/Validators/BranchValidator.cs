@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using XDev_UnitWork.Business;
 using XDev_UnitWork.Custom;
-using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_UnitWork.Validators

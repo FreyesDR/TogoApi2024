@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using XDev_UnitWork.Custom;
-using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Address;
 
 namespace XDev_UnitWork.Validators
 {

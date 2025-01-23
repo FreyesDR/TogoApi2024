@@ -6,6 +6,7 @@ using XDev_Model.Entities;
 using XDev_Model;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Custom;
+using XDev_UnitWork.DTO.Address;
 
 namespace XDev_UnitWork.Business
 {
@@ -15,9 +16,9 @@ namespace XDev_UnitWork.Business
         {
         }
 
-        public Task<bool> AnyAsync(Guid id)
+        public async Task<bool> AnyAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await Repository.AnyAsync(f => f.Id == id);
         }
 
         public Task<bool> AnyAsync(string code)

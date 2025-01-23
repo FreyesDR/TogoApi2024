@@ -12,5 +12,6 @@
         public HashSet<Address> Addresses { get; set; }
         public HashSet<WareHouse> WareHouses { get; set; }
         public HashSet<PointSale> PointsSale { get; set; }
+        
     }
 }

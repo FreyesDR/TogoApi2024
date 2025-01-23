@@ -92,6 +92,37 @@ namespace XDev_Model
         public DbSet<AppLog> AppLog { get; set; }
         public DbSet<BranchType> BranchType { get; set; }
         public DbSet<Branch> Branch { get; set; }
+        public DbSet<WareHouse> WareHouse { get; set; }
+        public DbSet<PointSale> PointSale { get; set; }
+        public DbSet<NumberRange> NumberRange { get; set; }
+        public DbSet<Partner> Partner { get; set; }
+        public DbSet<PartnerCompany> PartnerCompany { get; set; }
+        public DbSet<PartnerEconomicActivity> PartnerEconomicActivity { get; set; }
+        public DbSet<PartnerFeatures> PartnerFeatures { get; set; }
+        public DbSet<PartnerType> PartnerType { get; set; }
+        public DbSet<PartnerID> PartnerID { get; set; }
+        public DbSet<PartnerRoles> PartnerRoles { get; set; }
+        public DbSet<PartnerRole> PartnerRole { get; set; }
+        public DbSet<SaleOrder> SaleOrder { get; set; }
+        public DbSet<SaleOrderPosition> SaleOrderPosition { get; set; }
+        public DbSet<SaleOrderType> SaleOrderType { get; set; }
+        public DbSet<SaleOrderSporadicPartner> SaleOrderSporadicPartner { get; set; }
+        public DbSet<InvoiceType> InvoiceType { get; set; }
+
+        public DbSet<UnitMeasure> UnitMeasure { get; set; }
+        public DbSet<MaterialFeatures> MaterialFeatures { get; set; }
+        public DbSet<MaterialType> MaterialType { get; set; }
+        public DbSet<Material>  Material {  get; set; } 
+        public DbSet<PriceScheme> PriceScheme { get; set; }
+        public DbSet<PriceSchemeCondition> PriceSchemeCondition { get; set; }
+        public DbSet<Currency> Currency { get; set; }
+        public DbSet<MaterialBranch> MaterialBranch { get; set; }
+        public DbSet<MaterialWareHouse> MaterialWareHouse { get; set; }
+
+        public DbSet<EBilling> EBilling {  get; set; }
+        public DbSet<EBillingDocument> EBillingDocument { get; set; }
+        public DbSet<EBillingCompany> EBillingCompany { get; set; }
+        public DbSet<EBillingCompanyInvoice> EBillingCompanyInvoice { get; set; }
     }
 
     internal class ConfigDTO

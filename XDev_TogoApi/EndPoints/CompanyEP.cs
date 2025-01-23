@@ -5,6 +5,8 @@ using XDev_UnitWork.DTO;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using XDev_UnitWork.DTO.Company;
+using XDev_UnitWork.DTO.Address;
 
 namespace XDev_TogoApi.EndPoints
 {

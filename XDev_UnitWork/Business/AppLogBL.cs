@@ -2,6 +2,7 @@
 using XDev_Model;
 using XDev_Model.Entities;
 using XDev_Model.Interfaces;
+using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
 
@@ -10,12 +11,14 @@ namespace XDev_UnitWork.Business
     public class AppLogBL : IAppLogBL
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IServiceScopeFactory scopeFactory;
         private readonly IMapper mapper;
 
-        public AppLogBL(IServiceScopeFactory scopeFactory, IMapper mapper, ApplicationDbContext dbContext) 
+        public AppLogBL(IServiceScopeFactory scopeFactory, IMapper mapper, ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) 
         {
             this.dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
             this.scopeFactory = scopeFactory;
             this.mapper = mapper;
         }
@@ -51,9 +54,11 @@ namespace XDev_UnitWork.Business
             throw new NotImplementedException();
         }
 
-        public Task<List<AppLogDTO>> GetListAsync(PaginationDTO pagination)
+        public async Task<List<AppLogDTO>> GetListAsync(PaginationDTO pagination)
         {
-            throw new NotImplementedException();
+            var query = dbContext.AppLog.OrderByDescending(o => o.Date).AsQueryable();
+            query = query.CreateFilterAndOrder(pagination);
+            return await query.CreatePaging<AppLog, AppLogDTO>(pagination, httpContextAccessor.HttpContext);
         }
 
         public Task<List<AppLogDTO>> GetListAsync()

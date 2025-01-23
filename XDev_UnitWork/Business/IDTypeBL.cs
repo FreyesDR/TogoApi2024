@@ -5,6 +5,7 @@ using XDev_Model.Entities;
 using XDev_Model.Interfaces;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.DM;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_UnitWork.Business
@@ -78,6 +79,7 @@ namespace XDev_UnitWork.Business
                 if (model is not null)
                 {
                     model.Name = dto.Name;
+                    model.AltCode = dto.AltCode;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }

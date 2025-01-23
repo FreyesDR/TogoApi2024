@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using XDev_Model.Entities;
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Address;
+using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_TogoApi.EndPoints
@@ -11,7 +14,9 @@ namespace XDev_TogoApi.EndPoints
         public static RouteGroupBuilder MapBranch(this RouteGroupBuilder builder)
         {
             builder.MapGet("/", GetAll);
+            builder.MapGet("/list", GetListAll);
             builder.MapGet("/{companyid}/{id}", GetById);
+            builder.MapGet("/{companyid}/list", GetList);
             builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<BranchDTO>>();
             builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<BranchDTO>>();
             builder.MapDelete("/{id}", Delete);
@@ -21,6 +26,16 @@ namespace XDev_TogoApi.EndPoints
 
             
             return builder;
+        }
+
+        private static async Task<Results<Ok<List<BranchDTO>>, BadRequest<ExceptionReturnDTO>>> GetListAll(IBranchBL branchBL)
+        {
+            return TypedResults.Ok(await branchBL.GetListAsync());
+        }
+
+        private static async Task<Results<Ok<List<BranchListDTO>>, BadRequest<ExceptionReturnDTO>>> GetList(string companyid, IBranchBL branchBL)
+        {
+            return TypedResults.Ok(await branchBL.GetListAsync(companyid));
         }
 
         private static async Task<Results<Ok<List<BranchListDTO>>, BadRequest<ExceptionReturnDTO>>> GetAll(PaginationDTO pagination, string companyid, IBranchBL branchBL)

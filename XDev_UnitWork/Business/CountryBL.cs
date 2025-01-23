@@ -6,6 +6,7 @@ using XDev_Model;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
 using XDev_UnitWork.Custom;
+using XDev_UnitWork.DTO.Address;
 
 namespace XDev_UnitWork.Business
 {

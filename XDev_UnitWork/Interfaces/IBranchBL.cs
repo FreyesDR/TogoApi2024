@@ -1,4 +1,6 @@
 ﻿using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Address;
+using XDev_UnitWork.DTO.Company;
 
 namespace XDev_UnitWork.Interfaces
 {
@@ -7,5 +9,6 @@ namespace XDev_UnitWork.Interfaces
         Task<List<AddressDTO>> GetAddressAsync(PaginationDTO pagination, string branchid);
         Task<AddressDTO> GetAddressById(string branchid, string id);
         Task<List<BranchListDTO>> GetBranchListAsync(PaginationDTO pagination, string companyid);
+        Task<List<BranchListDTO>> GetListAsync(string companyid);
     }
 }

@@ -12,6 +12,7 @@ namespace XDev_Model.Configuration
             builder.HasIndex(p => p.PartnerId).IsUnique(false);
             builder.HasIndex(p => p.IDTypeId).IsUnique(false);
             builder.Property(p => p.DocumentNumber).HasMaxLength(30);
+            builder.Property(p => p.NIFNum).HasMaxLength(1);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
             builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);

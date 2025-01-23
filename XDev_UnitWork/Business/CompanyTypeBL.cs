@@ -5,6 +5,7 @@ using XDev_Model.Entities;
 using XDev_Model.Interfaces;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_UnitWork.Business

@@ -284,7 +284,9 @@ namespace XDev_Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code");
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("AddressType");
 
@@ -328,6 +330,9 @@ namespace XDev_Model.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StackTrace")
@@ -494,7 +499,7 @@ namespace XDev_Model.Migrations
                             Id = "8c5b29e5-fbb8-4cc9-871a-d61aaf739bf5",
                             AccessFailedCount = 0,
                             Active = true,
-                            ConcurrencyStamp = "76a40d2c-7c92-4a49-acbd-d95a9d46c719",
+                            ConcurrencyStamp = "1118fd0b-feb3-4444-b293-50907557cea5",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@avalink.com",
                             EmailConfirmed = true,
@@ -505,7 +510,7 @@ namespace XDev_Model.Migrations
                             NormalizedUserName = "ADMIN@AVALINK.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEG3VrHMqyIN4gVB/lVaj6OGcuVKSCx3EJhfna64rRTI/0qlORLppSj2xkzKyeCrNKA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4407cf3d-9075-4b1f-b9a5-c4157480405a",
+                            SecurityStamp = "27aa74fc-cd74-4e93-a446-142260b5f3d5",
                             TwoFactorEnabled = false,
                             UserName = "admin@avalink.com"
                         });
@@ -1272,6 +1277,10 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("NIFNum")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
                     b.Property<Guid>("RegionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1403,6 +1412,311 @@ namespace XDev_Model.Migrations
                         });
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.Currency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ISOCode")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("Currency");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cf579d9d-18f9-432b-806a-4cad7311fb38"),
+                            Code = "USD",
+                            ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Dólar Estadounidense"
+                        });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBilling", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UrlProd")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UrlSigner")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UrlTest")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EBilling");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            ConcurrencyStamp = "63be85df-6805-41c3-beb2-f6a44db746f6",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ministerio de Hacienda de El Salvador",
+                            UrlProd = "https://api.dtes.mh.gob.sv",
+                            UrlSigner = "http://localhost:8113",
+                            UrlTest = "https://apitest.dtes.mh.gob.sv"
+                        });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingCompany", b =>
+                {
+                    b.Property<Guid>("EBillingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsProd")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("Nif1Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Nif2Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EBillingId", "CompanyId");
+
+                    b.ToTable("EBillingCompany");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingCompanyInvoice", b =>
+                {
+                    b.Property<Guid>("EBillingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvoiceTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<long>("Current")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("EBillingDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("NextReStart")
+                        .HasColumnType("int");
+
+                    b.Property<long>("RangeEnd")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RangeStart")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("ReStartYear")
+                        .HasColumnType("bit");
+
+                    b.HasKey("EBillingId", "CompanyId", "InvoiceTypeId");
+
+                    b.ToTable("EBillingCompanyInvoice");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingDocument", b =>
+                {
+                    b.Property<Guid>("EBillingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("EBillingId", "Id");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("EBillingDocument");
+
+                    b.HasData(
+                        new
+                        {
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Id = new Guid("6d339ff2-e58c-4eba-95e9-dd0df0d1abbe"),
+                            Code = "01",
+                            ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Factura"
+                        },
+                        new
+                        {
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Id = new Guid("d4a32bf7-a3dd-4623-81f4-5a9994e6c9d0"),
+                            Code = "03",
+                            ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Comprobante crédito fiscal"
+                        },
+                        new
+                        {
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Id = new Guid("1dc5c31b-adb6-40b7-8523-5a91ecaea5a3"),
+                            Code = "05",
+                            ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nota de crédito"
+                        },
+                        new
+                        {
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Id = new Guid("9ca389cf-65aa-4b54-bb1b-0080efaa6cb2"),
+                            Code = "06",
+                            ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nota de débito"
+                        },
+                        new
+                        {
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Id = new Guid("1f0e23ab-5e6b-4fca-936e-fb1ea18b40af"),
+                            Code = "11",
+                            ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Factura exportador"
+                        });
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.EconomicActivity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1450,6 +1764,318 @@ namespace XDev_Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AltCode")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("IDType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3e4d4e92-7932-4310-8cda-39b8bdba8d07"),
+                            AltCode = "36",
+                            Code = "NIT",
+                            ConcurrencyStamp = "3e4d4e92-7932-4310-8cda-39b8bdba8d07",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "NIT"
+                        },
+                        new
+                        {
+                            Id = new Guid("acae8706-50e1-4296-aacd-bd1d59b946d1"),
+                            AltCode = "13",
+                            Code = "DUI",
+                            ConcurrencyStamp = "acae8706-50e1-4296-aacd-bd1d59b946d1",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DUI"
+                        },
+                        new
+                        {
+                            Id = new Guid("429ff286-4d34-42c6-8e6b-254a8d4fa79e"),
+                            AltCode = "37",
+                            Code = "OTH",
+                            ConcurrencyStamp = "429ff286-4d34-42c6-8e6b-254a8d4fa79e",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Otro"
+                        },
+                        new
+                        {
+                            Id = new Guid("132a6258-f433-4345-9da1-cc9cfd0b64ac"),
+                            AltCode = "03",
+                            Code = "PAS",
+                            ConcurrencyStamp = "132a6258-f433-4345-9da1-cc9cfd0b64ac",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Pasaporte"
+                        },
+                        new
+                        {
+                            Id = new Guid("822ac932-46ab-4588-8f82-fbafb14e27eb"),
+                            AltCode = "02",
+                            Code = "CR",
+                            ConcurrencyStamp = "822ac932-46ab-4588-8f82-fbafb14e27eb",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Carnet Residente"
+                        },
+                        new
+                        {
+                            Id = new Guid("7ae985b6-e461-4a66-b028-badf1f16f9f0"),
+                            AltCode = "",
+                            Code = "NRC",
+                            ConcurrencyStamp = "7ae985b6-e461-4a66-b028-badf1f16f9f0",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Número Registro Contribuyente"
+                        });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoiceType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("RangeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("InvoiceType");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Material", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("MaterialTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OldCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PriceType")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<Guid>("UnitMeasureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("MaterialTypeId");
+
+                    b.ToTable("Material");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.MaterialBranch", b =>
+                {
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsLockedPurchase")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLockedSale")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("PricePurchase")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceSale")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("MaterialId", "BranchId");
+
+                    b.ToTable("MaterialBranch");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.MaterialFeatures", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<short>("NumType")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("RangeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RangeId")
+                        .IsUnique();
+
+                    b.ToTable("MaterialFeatures");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7ca98566-a39c-41fc-bd63-237dd34eb344"),
+                            ConcurrencyStamp = "7ca98566-a39c-41fc-bd63-237dd34eb344",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NumType = (short)0,
+                            RangeId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.MaterialType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Code")
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)");
@@ -1473,8 +2099,8 @@ namespace XDev_Model.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -1482,54 +2108,126 @@ namespace XDev_Model.Migrations
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
 
-                    b.ToTable("IDType");
+                    b.ToTable("MaterialType");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3e4d4e92-7932-4310-8cda-39b8bdba8d07"),
-                            Code = "36",
-                            ConcurrencyStamp = "3e4d4e92-7932-4310-8cda-39b8bdba8d07",
+                            Id = new Guid("0f8d6ce6-6177-4892-843a-11e2af8aa134"),
+                            Code = "B",
+                            ConcurrencyStamp = "0f8d6ce6-6177-4892-843a-11e2af8aa134",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "NIT"
+                            Name = "Bienes"
                         },
                         new
                         {
-                            Id = new Guid("acae8706-50e1-4296-aacd-bd1d59b946d1"),
-                            Code = "13",
-                            ConcurrencyStamp = "acae8706-50e1-4296-aacd-bd1d59b946d1",
+                            Id = new Guid("691f3725-3ef8-434b-aecf-b663791cc501"),
+                            Code = "S",
+                            ConcurrencyStamp = "691f3725-3ef8-434b-aecf-b663791cc501",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "DUI"
-                        },
-                        new
-                        {
-                            Id = new Guid("429ff286-4d34-42c6-8e6b-254a8d4fa79e"),
-                            Code = "37",
-                            ConcurrencyStamp = "429ff286-4d34-42c6-8e6b-254a8d4fa79e",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Otro"
-                        },
-                        new
-                        {
-                            Id = new Guid("132a6258-f433-4345-9da1-cc9cfd0b64ac"),
-                            Code = "03",
-                            ConcurrencyStamp = "132a6258-f433-4345-9da1-cc9cfd0b64ac",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pasaporte"
-                        },
-                        new
-                        {
-                            Id = new Guid("822ac932-46ab-4588-8f82-fbafb14e27eb"),
-                            Code = "02",
-                            ConcurrencyStamp = "822ac932-46ab-4588-8f82-fbafb14e27eb",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Carnet Residente"
+                            Name = "Servicios"
                         });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.MaterialWareHouse", b =>
+                {
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WareHouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("InTransitStock")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("LockedStock")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("PurchasedStock")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("SoldStock")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("Stock")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.HasKey("MaterialId", "BranchId", "WareHouseId");
+
+                    b.ToTable("MaterialWareHouse");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.NumberRange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("NumCurrent")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("NumEnd")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("NumStart")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NumberRange");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.Partner", b =>
@@ -1686,6 +2384,17 @@ namespace XDev_Model.Migrations
                         .IsUnique();
 
                     b.ToTable("PartnerFeatures");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7ca98566-a39c-41fc-bd63-237dd34eb344"),
+                            ConcurrencyStamp = "7ca98566-a39c-41fc-bd63-237dd34eb344",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NumType = (short)0,
+                            RangeId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.PartnerID", b =>
@@ -1727,6 +2436,10 @@ namespace XDev_Model.Migrations
                     b.Property<string>("LastUpdatedBy")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NIFNum")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<Guid>("PartnerId")
                         .HasColumnType("uniqueidentifier");
@@ -1782,6 +2495,26 @@ namespace XDev_Model.Migrations
                         .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("PartnerRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cf579d9d-18f9-432b-806a-4cad7311fb38"),
+                            Code = "D",
+                            ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Deudor"
+                        },
+                        new
+                        {
+                            Id = new Guid("099a35d5-fddf-486d-b3b7-ba8011b1a7ff"),
+                            Code = "A",
+                            ConcurrencyStamp = "099a35d5-fddf-486d-b3b7-ba8011b1a7ff",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Acreedor"
+                        });
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.PartnerRoles", b =>
@@ -1872,8 +2605,8 @@ namespace XDev_Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1904,6 +2637,148 @@ namespace XDev_Model.Migrations
                     b.HasIndex("Code");
 
                     b.ToTable("PointSale");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.PriceCondition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Edit")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<Guid>("SourceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ValueType")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("PriceCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.PriceScheme", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("PriceScheme");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.PriceSchemeCondition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("PriceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PriceSchemeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PriceConditionId");
+
+                    b.HasIndex("PriceSchemeId");
+
+                    b.ToTable("PriceSchemeCondition");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.Region", b =>
@@ -2089,6 +2964,435 @@ namespace XDev_Model.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "La Unión"
+                        });
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Delivered")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Invoiced")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Number")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Per1")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<Guid>("PointSaleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("RefDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefDocument")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("Ret1")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<decimal>("Ret10")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<Guid>("SaleOrderTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Sporadic")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique()
+                        .HasFilter("[Number] IS NOT NULL");
+
+                    b.ToTable("SaleOrder");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPosition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("MaterialCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MaterialName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MaterialTypeCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PriceType")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<Guid>("SaleOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UnitMeasureCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("UnitMeasureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WareHouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleOrderId");
+
+                    b.ToTable("SaleOrderPosition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPositionCondition", b =>
+                {
+                    b.Property<Guid>("SaleOrderPositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PriceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BaseCondition")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<bool>("Edit")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<Guid>("SourceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<decimal>("ValueCondition")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<string>("ValueType")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("SaleOrderPositionId", "PriceConditionId");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("SaleOrderPositionCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderSporadicPartner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("IDNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("IDTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("RegionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SaleOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleOrderId")
+                        .IsUnique();
+
+                    b.ToTable("SaleOrderSporadicPartner");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ApplyPer1")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ApplyRet1")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ApplyRet10")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Delivery")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Inventory")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<bool>("Invoice")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("InvoiceTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PdfFormName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("PriceSchemeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RangeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("SaleOrderType");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.UnitMeasure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AltCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("UnitMeasure");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("07f1cfbc-2b69-4c76-910c-e1c38eeaa9fc"),
+                            AltCode = "59",
+                            Code = "UN",
+                            ConcurrencyStamp = "07f1cfbc-2b69-4c76-910c-e1c38eeaa9fc",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Unidad"
                         });
                 });
 
@@ -2335,6 +3639,50 @@ namespace XDev_Model.Migrations
                     b.Navigation("IDType");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.EBillingCompany", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.EBilling", "EBilling")
+                        .WithMany("Companies")
+                        .HasForeignKey("EBillingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EBilling");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingCompanyInvoice", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.EBillingCompany", "EBillingCompany")
+                        .WithMany("Invoice")
+                        .HasForeignKey("EBillingId", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EBillingCompany");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingDocument", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.EBilling", "EBilling")
+                        .WithMany()
+                        .HasForeignKey("EBillingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EBilling");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Material", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.MaterialType", "MaterialType")
+                        .WithMany("Materials")
+                        .HasForeignKey("MaterialTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaterialType");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.Partner", b =>
                 {
                     b.HasOne("XDev_Model.Entities.PartnerType", "PartnerType")
@@ -2433,6 +3781,25 @@ namespace XDev_Model.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.PriceSchemeCondition", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.PriceCondition", "PriceCondition")
+                        .WithMany("PriceSchemeCondition")
+                        .HasForeignKey("PriceConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XDev_Model.Entities.PriceScheme", "PriceScheme")
+                        .WithMany("Conditions")
+                        .HasForeignKey("PriceSchemeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PriceCondition");
+
+                    b.Navigation("PriceScheme");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.Region", b =>
                 {
                     b.HasOne("XDev_Model.Entities.Country", "Country")
@@ -2442,6 +3809,39 @@ namespace XDev_Model.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPosition", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.SaleOrder", "SaleOrder")
+                        .WithMany("Positions")
+                        .HasForeignKey("SaleOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SaleOrder");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPositionCondition", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.SaleOrderPosition", "SaleOrderPosition")
+                        .WithMany("Conditions")
+                        .HasForeignKey("SaleOrderPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SaleOrderPosition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderSporadicPartner", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.SaleOrder", "SaleOrder")
+                        .WithOne("SaleOrderSporadicPartner")
+                        .HasForeignKey("XDev_Model.Entities.SaleOrderSporadicPartner", "SaleOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SaleOrder");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.WareHouse", b =>
@@ -2511,6 +3911,16 @@ namespace XDev_Model.Migrations
                     b.Navigation("Regions");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.EBilling", b =>
+                {
+                    b.Navigation("Companies");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingCompany", b =>
+                {
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.EconomicActivity", b =>
                 {
                     b.Navigation("CompanyEconomicActivities");
@@ -2523,6 +3933,11 @@ namespace XDev_Model.Migrations
                     b.Navigation("CompanyIDS");
 
                     b.Navigation("PartnerIDS");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.MaterialType", b =>
+                {
+                    b.Navigation("Materials");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.Partner", b =>
@@ -2548,11 +3963,33 @@ namespace XDev_Model.Migrations
                     b.Navigation("Partners");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.PriceCondition", b =>
+                {
+                    b.Navigation("PriceSchemeCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.PriceScheme", b =>
+                {
+                    b.Navigation("Conditions");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.Region", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrder", b =>
+                {
+                    b.Navigation("Positions");
+
+                    b.Navigation("SaleOrderSporadicPartner");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPosition", b =>
+                {
+                    b.Navigation("Conditions");
                 });
 #pragma warning restore 612, 618
         }

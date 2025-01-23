@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using XDev_Model.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace XDev_Model
 {
@@ -72,12 +73,55 @@ namespace XDev_Model
             modelBuilder.Entity<PartnerType>().HasData(new PartnerType { Id = Guid.Parse("cf579d9d-18f9-432b-806a-4cad7311fb38"), Code = "P", Name = "Persona", ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38" },
                                                        new PartnerType { Id = Guid.Parse("099a35d5-fddf-486d-b3b7-ba8011b1a7ff"), Code = "O", Name = "Organización", ConcurrencyStamp = "099a35d5-fddf-486d-b3b7-ba8011b1a7ff" });
 
+            // Personalización socios
+            modelBuilder.Entity<PartnerFeatures>().HasData(new PartnerFeatures { Id = Guid.Parse("7ca98566-a39c-41fc-bd63-237dd34eb344"), NumType = 0, ConcurrencyStamp = "7ca98566-a39c-41fc-bd63-237dd34eb344" });
+
+            // Roles socios            
+            modelBuilder.Entity<PartnerRole>().HasData(new PartnerRole { Id = Guid.Parse("cf579d9d-18f9-432b-806a-4cad7311fb38"), Code = "D", Name = "Deudor", ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38" },
+                                                       new PartnerRole { Id = Guid.Parse("099a35d5-fddf-486d-b3b7-ba8011b1a7ff"), Code = "A", Name = "Acreedor", ConcurrencyStamp = "099a35d5-fddf-486d-b3b7-ba8011b1a7ff" });
+
             // Tipos documento de identificación
-            modelBuilder.Entity<IDType>().HasData(new IDType { Id = Guid.Parse("3e4d4e92-7932-4310-8cda-39b8bdba8d07"), Code = "36", Name = "NIT", ConcurrencyStamp = "3e4d4e92-7932-4310-8cda-39b8bdba8d07" },
-                                                  new IDType { Id = Guid.Parse("acae8706-50e1-4296-aacd-bd1d59b946d1"), Code = "13", Name = "DUI", ConcurrencyStamp = "acae8706-50e1-4296-aacd-bd1d59b946d1" },
-                                                  new IDType { Id = Guid.Parse("429ff286-4d34-42c6-8e6b-254a8d4fa79e"), Code = "37", Name = "Otro", ConcurrencyStamp = "429ff286-4d34-42c6-8e6b-254a8d4fa79e" },
-                                                  new IDType { Id = Guid.Parse("132a6258-f433-4345-9da1-cc9cfd0b64ac"), Code = "03", Name = "Pasaporte", ConcurrencyStamp = "132a6258-f433-4345-9da1-cc9cfd0b64ac" },
-                                                  new IDType { Id = Guid.Parse("822ac932-46ab-4588-8f82-fbafb14e27eb"), Code = "02", Name = "Carnet Residente", ConcurrencyStamp = "822ac932-46ab-4588-8f82-fbafb14e27eb" });
+            modelBuilder.Entity<IDType>().HasData(new IDType { Id = Guid.Parse("3e4d4e92-7932-4310-8cda-39b8bdba8d07"), Code = "NIT", AltCode= "36", Name = "NIT", ConcurrencyStamp = "3e4d4e92-7932-4310-8cda-39b8bdba8d07" },
+                                                  new IDType { Id = Guid.Parse("acae8706-50e1-4296-aacd-bd1d59b946d1"), Code = "DUI", AltCode = "13", Name = "DUI", ConcurrencyStamp = "acae8706-50e1-4296-aacd-bd1d59b946d1" },
+                                                  new IDType { Id = Guid.Parse("429ff286-4d34-42c6-8e6b-254a8d4fa79e"), Code = "OTH", AltCode = "37", Name = "Otro", ConcurrencyStamp = "429ff286-4d34-42c6-8e6b-254a8d4fa79e" },
+                                                  new IDType { Id = Guid.Parse("132a6258-f433-4345-9da1-cc9cfd0b64ac"), Code = "PAS", AltCode = "03", Name = "Pasaporte", ConcurrencyStamp = "132a6258-f433-4345-9da1-cc9cfd0b64ac" },
+                                                  new IDType { Id = Guid.Parse("822ac932-46ab-4588-8f82-fbafb14e27eb"), Code = "CR", AltCode = "02", Name = "Carnet Residente", ConcurrencyStamp = "822ac932-46ab-4588-8f82-fbafb14e27eb" },
+                                                  new IDType { Id = Guid.Parse("7ae985b6-e461-4a66-b028-badf1f16f9f0"), Code = "NRC", AltCode = "", Name = "Número Registro Contribuyente", ConcurrencyStamp = "7ae985b6-e461-4a66-b028-badf1f16f9f0" });
+
+            // Moneda
+            modelBuilder.Entity<Currency>().HasData(new Currency { Id = Guid.Parse("cf579d9d-18f9-432b-806a-4cad7311fb38"), Code = "USD", Name = "Dólar Estadounidense", ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38" });
+
+            // Tipos de Material
+            modelBuilder.Entity<MaterialType>().HasData(new MaterialType { Id = Guid.Parse("0f8d6ce6-6177-4892-843a-11e2af8aa134"), Code = "B", Name = "Bienes", ConcurrencyStamp = "0f8d6ce6-6177-4892-843a-11e2af8aa134" },
+                                                        new MaterialType { Id = Guid.Parse("691f3725-3ef8-434b-aecf-b663791cc501"), Code = "S", Name = "Servicios", ConcurrencyStamp = "691f3725-3ef8-434b-aecf-b663791cc501" });
+
+            // Personalización materiales
+            modelBuilder.Entity<MaterialFeatures>().HasData(new MaterialFeatures { Id = Guid.Parse("7ca98566-a39c-41fc-bd63-237dd34eb344"), NumType = 0, ConcurrencyStamp = "7ca98566-a39c-41fc-bd63-237dd34eb344" });
+
+            // Unidades de medida
+            modelBuilder.Entity<UnitMeasure>().HasData(new UnitMeasure { Id = Guid.Parse("07f1cfbc-2b69-4c76-910c-e1c38eeaa9fc"), Code = "UN", AltCode = "59", Name = "Unidad", ConcurrencyStamp = "07f1cfbc-2b69-4c76-910c-e1c38eeaa9fc" });
+
+            // Facturación Eletrónica
+            modelBuilder.Entity<EBilling>().HasData(new EBilling { Id = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), 
+                                                                   UrlTest= "https://apitest.dtes.mh.gob.sv", 
+                                                                   UrlProd= "https://api.dtes.mh.gob.sv", 
+                                                                   UrlSigner= "http://localhost:8113", 
+                                                                   Name = "Ministerio de Hacienda de El Salvador", 
+                                                                   ConcurrencyStamp = "63be85df-6805-41c3-beb2-f6a44db746f6" });
+
+            modelBuilder.Entity<EBillingDocument>().HasData(new EBillingDocument { EBillingId = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), Id = Guid.Parse("6d339ff2-e58c-4eba-95e9-dd0df0d1abbe"), Code = "01", Name = "Factura", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           new EBillingDocument { EBillingId = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), Id = Guid.Parse("d4a32bf7-a3dd-4623-81f4-5a9994e6c9d0"), Code = "03", Name = "Comprobante crédito fiscal", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           //new EBillingDocument { Id = Guid.Parse("0ec19780-5f12-4b29-b862-8af8aa59e99d"), Code = "04", Name = "Nota de remisión", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           new EBillingDocument { EBillingId = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), Id = Guid.Parse("1dc5c31b-adb6-40b7-8523-5a91ecaea5a3"), Code = "05", Name = "Nota de crédito", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           new EBillingDocument { EBillingId = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), Id = Guid.Parse("9ca389cf-65aa-4b54-bb1b-0080efaa6cb2"), Code = "06", Name = "Nota de débito", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           //new EBillingDocument { Id = Guid.Parse("a27592f5-9804-4627-a06b-8dc04f196e96"), Code = "07", Name = "Comprobante de retención", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           //new EBillingDocument { Id = Guid.Parse("183736f4-7079-4662-bffa-062c5b27eda8"), Code = "08", Name = "Comprobante de liquidación", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           //new EBillingDocument { Id = Guid.Parse("165f0029-a831-4032-8c2e-8cc107858c6e"), Code = "09", Name = "Documento contable de liquidación", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },                                                           
+                                                           //new EBillingDocument { Id = Guid.Parse("87a90d09-33a8-4ef6-a0cb-9aa94d6d32d7"), Code = "14", Name = "Factura sujeto excluido", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           //new EBillingDocument { Id = Guid.Parse("dff8fa11-50ad-4ae6-b15f-38a32fa7507a"), Code = "15", Name = "Comprobante donación", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" },
+                                                           new EBillingDocument { EBillingId = Guid.Parse("63be85df-6805-41c3-beb2-f6a44db746f6"), Id = Guid.Parse("1f0e23ab-5e6b-4fca-936e-fb1ea18b40af"), Code = "11", Name = "Factura exportador", ConcurrencyStamp = "24dd7daf-bc2c-4a25-9a8e-c056b4eb1a8a" });
+
+                                                       
 
             // País
             modelBuilder.Entity<Country>().HasData(new Country() { Id = Guid.Parse(sv), Code = "SV", Name = "El Salvador", ConcurrencyStamp = sv });

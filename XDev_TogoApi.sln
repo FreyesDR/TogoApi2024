@@ -13,6 +13,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XDev_AIO", "XDev_AIO\XDev_AIO.csproj", "{A3AC46F3-7460-482F-9FC7-34D4B01C48AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDev_Reporting", "..\XDev_Reporting\XDev_Reporting.csproj", "{BDBD67DF-995A-4C7A-A0C5-E5D3B7FCDA77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A3AC46F3-7460-482F-9FC7-34D4B01C48AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3AC46F3-7460-482F-9FC7-34D4B01C48AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3AC46F3-7460-482F-9FC7-34D4B01C48AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDBD67DF-995A-4C7A-A0C5-E5D3B7FCDA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDBD67DF-995A-4C7A-A0C5-E5D3B7FCDA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDBD67DF-995A-4C7A-A0C5-E5D3B7FCDA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDBD67DF-995A-4C7A-A0C5-E5D3B7FCDA77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

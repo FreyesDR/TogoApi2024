@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Reporting.NETCore;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
@@ -32,6 +33,7 @@ namespace XDev_UnitWork.Custom
         internal static readonly string fieldNotFormat = "No tiene el formato correcto";
         internal static readonly string fieldPrecisionScale = "No debe tener más de {ExpectedPrecision} dígitos en total, con margen para {ExpectedScale} decimales. Se encontraron {Digits} y {ActualScale} decimales";
         internal static readonly string fieldInclusiveBetween = "Debe estar entre {From} y {To}. Actualmente tiene un valor de {PropertyValue}";
+        internal static readonly string fieldCount = "Debe ingregar al menos una posición";
 
         public static readonly string SectionKey = "Authentication:Schemes:Bearer:SigningKeys";
         public static readonly string SectionKeyIssuer = "Issuer";
@@ -98,6 +100,22 @@ namespace XDev_UnitWork.Custom
                 File.Delete(path);
 
             return Task.CompletedTask;
+        }
+
+        public static LocalReport ReadRDLCForm(string formName, IWebHostEnvironment env)
+        {
+            var filePath = $"{env.ContentRootPath}\\Reports\\{formName}.rdlc";
+
+            if (!File.Exists(filePath))
+                throw new CustomTogoException($"El formulario {formName} no existe");
+
+            var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            LocalReport localReport = new LocalReport();
+            localReport.LoadReportDefinition(fs);
+
+            fs.Close();
+
+            return localReport;
         }
 
         public static async Task<string> SaveImage(IWebHostEnvironment env, IHttpContextAccessor contextAccessor, string contenedor, IFormFile file)

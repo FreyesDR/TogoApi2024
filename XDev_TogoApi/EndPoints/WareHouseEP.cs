@@ -2,6 +2,7 @@
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_TogoApi.EndPoints
@@ -11,7 +12,8 @@ namespace XDev_TogoApi.EndPoints
         public static RouteGroupBuilder MapWareHouse(this RouteGroupBuilder builder)
         {
             builder.MapGet("/", GetAll);            
-            builder.MapGet("/list", GetList);
+            builder.MapGet("/list", GetListAll);
+            builder.MapGet("/{branchid}/list", GetList);
             builder.MapGet("/{branchid}/{id}", GetById);
             builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<WareHouseDTO>>(); ;
             builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<WareHouseDTO>>();
@@ -69,7 +71,12 @@ namespace XDev_TogoApi.EndPoints
             return TypedResults.Ok(await wareHouseBL.GetByIdAsync(branchid.GetGuid(), id.GetGuid()));
         }
 
-        private static async Task<Results<Ok<List<WareHouseDTO>>, BadRequest<ExceptionReturnDTO>>> GetList(IWareHouseBL wareHouseBL)
+        private static async Task<Results<Ok<List<WareHouseDTO>>, BadRequest<ExceptionReturnDTO>>> GetList(string branchid, IWareHouseBL wareHouseBL)
+        {
+            return TypedResults.Ok(await wareHouseBL.GetListAsync(branchid));
+        }
+
+        private static async Task<Results<Ok<List<WareHouseDTO>>, BadRequest<ExceptionReturnDTO>>> GetListAll(IWareHouseBL wareHouseBL)
         {
             return TypedResults.Ok(await wareHouseBL.GetListAsync());
         }

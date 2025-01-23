@@ -6,6 +6,7 @@ using XDev_Model;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
+using XDev_UnitWork.DTO.Company;
 
 namespace XDev_UnitWork.Business
 {
@@ -64,7 +65,7 @@ namespace XDev_UnitWork.Business
                          where ci.CompanyId == companyid.GetGuid()
                          select new CompanyIDDTO
                          {
-                             Id = ci.Id,
+                             Id = ci.Id,                             
                              IDType = it.Name,
                              DocumentNumber = ci.DocumentNumber,
                              DateIssue = ci.DateIssue,
@@ -91,6 +92,7 @@ namespace XDev_UnitWork.Business
                     model.IDTypeId = dto.IDTypeId;
                     model.DateIssue = dto.DateIssue;
                     model.DateExpira = dto.DateExpira;
+                    model.NIFNum = dto.NIFNum;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }
