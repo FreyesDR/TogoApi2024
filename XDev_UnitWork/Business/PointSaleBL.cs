@@ -32,6 +32,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<PointSale>(dto);
+                model.Branch = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El código [{model.Code}] ya existe"); ;

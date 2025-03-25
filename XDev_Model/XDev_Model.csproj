@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XDev_AIO\XDev_AIO.csproj" />
+    <ProjectReference Include="..\..\XDev_AvaLinkAIO\XDev_AvaLinkAIO.csproj" />
   </ItemGroup>
 
 </Project>

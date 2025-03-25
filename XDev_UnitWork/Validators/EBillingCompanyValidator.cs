@@ -15,27 +15,30 @@ namespace XDev_UnitWork.Validators
                                          return await companyBL.AnyAsync(coid);
                                      }).WithMessage("Sociedad no existe");
 
-            RuleFor(x => x.AddressId).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
-                                     .MustAsync(async (addid, _) =>
-                                     {
-                                         return await addressBL.AnyAsync(addid);
-                                     }).WithMessage("Dirección no existe");
+            RuleFor(x => x.ApiUser).MaximumLength(20).WithMessage(UtilsExtension.fieldMaxLength);
 
-            //When(x => x.Nif1Id != Guid.Empty, () =>
-            //{
-            //    RuleFor(nif => nif.Nif1Id).MustAsync(async (nifid, _) =>
-            //    {
-            //        return await iDTypeBL.AnyAsync(nifid);
-            //    }).WithMessage("Indentificador Fiscal 1, no existe");
-            //});
+            RuleFor(x => x.ApiKeyTest).MaximumLength(50).WithMessage(UtilsExtension.fieldMaxLength);
 
-            //When(x => x.Nif2Id != Guid.Empty, () =>
-            //{
-            //    RuleFor(nif => nif.Nif2Id).MustAsync(async (nifid, _) =>
-            //    {
-            //        return await iDTypeBL.AnyAsync(nifid);
-            //    }).WithMessage("Indentificador Fiscal 2, no existe");
-            //});
+            RuleFor(x => x.ApiKeyProd).MaximumLength(50).WithMessage(UtilsExtension.fieldMaxLength);
+
+            RuleFor(x => x.PrivateKeyTest).MaximumLength(50).WithMessage(UtilsExtension.fieldMaxLength);
+
+            RuleFor(x => x.PrivateKeyProd).MaximumLength(50).WithMessage(UtilsExtension.fieldMaxLength);
+
+            When(w => w.SmtpService == "1", () => {
+                RuleFor(x => x.SmtpHost).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
+                                        .MaximumLength(30).WithMessage(UtilsExtension.fieldMaxLength);
+
+                RuleFor(x => x.SmtpUserName).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
+                                            .MaximumLength(100).WithMessage(UtilsExtension.fieldMaxLength);
+
+                RuleFor(x => x.SmtpUserPassword).MaximumLength(30).WithMessage(UtilsExtension.fieldMaxLength);
+
+                RuleFor(x => x.FromName).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
+                                        .MaximumLength(100).WithMessage(UtilsExtension.fieldMaxLength);
+            });
+
+            
         }
     }
 }

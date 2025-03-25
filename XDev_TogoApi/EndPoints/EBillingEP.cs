@@ -14,9 +14,10 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapEBilling(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetPagination);
-            builder.MapGet("/{id}", GetByID);
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingDTO>>();
+            builder.MapGet("/", GetPagination).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Facturación Electrónica"));
+            builder.MapGet("/{id}", GetByID).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Facturación Electrónica"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingDTO>>()
+                                       .WithDescription("Actualizar").WithMetadata(new ModuleAttribute("Facturación Electrónica"));
             return builder;
         }
 

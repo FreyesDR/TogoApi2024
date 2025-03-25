@@ -11,13 +11,15 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapWareHouse(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);            
-            builder.MapGet("/list", GetListAll);
-            builder.MapGet("/{branchid}/list", GetList);
-            builder.MapGet("/{branchid}/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<WareHouseDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<WareHouseDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Almacén"));            
+            builder.MapGet("/list", GetListAll).WithDescription("Listado").WithMetadata(new ModuleAttribute("Almacén"));
+            builder.MapGet("/{branchid}/list", GetList).WithDescription("Listado por Sucursal").WithMetadata(new ModuleAttribute("Almacén"));
+            builder.MapGet("/{branchid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Almacén"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<WareHouseDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Almacén"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<WareHouseDTO>>()
+                                       .WithDescription("Actualizar").WithMetadata(new ModuleAttribute("Almacén"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Almacén"));
             return builder;
         }
 

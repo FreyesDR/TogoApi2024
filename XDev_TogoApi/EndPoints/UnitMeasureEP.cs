@@ -1,7 +1,4 @@
-﻿using NPOI.SS.Formula.Functions;
-using NPOI.Util;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using XDev_TogoApi.Code;
+﻿using XDev_TogoApi.Code;
 using XDev_UnitWork.DTO.Material;
 using Microsoft.AspNetCore.Http.HttpResults;
 using XDev_UnitWork.Custom;
@@ -14,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapUnitMeasure(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", Get);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<UnitMeasureDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<UnitMeasureDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Unidad de Medida"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Unidad de Medida"));
+            builder.MapGet("/{id}", Get).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Unidad de Medida"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<UnitMeasureDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Unidad de Medida"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<UnitMeasureDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Unidad de Medida"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Unidad de Medida"));
             return builder;
         }
 

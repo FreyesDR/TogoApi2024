@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using XDev_AvaLinkAIO;
 using XDev_Model;
 using XDev_Model.Entities;
 using XDev_Model.Interfaces;
@@ -32,6 +33,9 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<EBillingCompany>(dto);
+                model.EBilling = null;
+
+                model.SmtpUserPassword = AIO.Encrypt(dto.SmtpUserPassword);
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException("Sociedad ya está registrada para Facturación Electrónica");
@@ -47,6 +51,8 @@ namespace XDev_UnitWork.Business
             var model = await Repository.GetByIdAsync(ids);
             if (model is null)
                 return new EBillingCompanyDTO { EBillingId = ids[0].ToString().GetGuid() };
+
+            model.SmtpUserPassword = "";
 
             return Mapper.Map<EBillingCompanyDTO>(model);
         }
@@ -69,6 +75,7 @@ namespace XDev_UnitWork.Business
                              CompanyName = co.Name,
                              IsProd = ebc.IsProd,
                              Active = ebc.Active,
+                             Contingency = ebc.Contingency,
                          });
 
             query = query.CreateFilterAndOrder(pagination);
@@ -81,17 +88,32 @@ namespace XDev_UnitWork.Business
         }
 
         public async Task UpdateAsync(EBillingCompanyDTO dto)
-        {
+        {            
             var model = await Repository.GetFirstorDefaultAsync(f => f.EBillingId == dto.EBillingId && f.CompanyId == dto.CompanyId);
             try
             {
                 if (model is not null)
                 {
-                    model.AddressId = dto.AddressId;
-                    model.Nif1Id = dto.Nif1Id;
-                    model.Nif2Id = dto.Nif2Id;
+                    model.ApiUser = dto.ApiUser;
+                    model.ApiKeyTest = dto.ApiKeyTest;
+                    model.ApiKeyProd = dto.ApiKeyProd;
+                    model.PrivateKeyTest = dto.PrivateKeyTest;
+                    model.PrivateKeyProd = dto.PrivateKeyProd;
                     model.IsProd = dto.IsProd;
                     model.Active = dto.Active;
+                    model.Contingency = dto.Contingency;
+                    model.SmtpService = dto.SmtpService;
+                    model.SmtpHost = dto.SmtpHost;
+                    model.SmtpPort = dto.SmtpPort;
+                    model.SmtpUserName = dto.SmtpUserName;
+                    model.CcEmail1 = dto.CcEmail1;
+                    model.CcEmail2 = dto.CcEmail2;
+
+                    if(dto.SmtpUserPassword.IsNotNullOrEmpty())
+                        model.SmtpUserPassword = XDev_AvaLinkAIO.AIO.Encrypt(dto.SmtpUserPassword);
+
+                    model.SmtpEnableSsl = dto.SmtpEnableSsl;
+                    model.FromName = dto.FromName;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }
@@ -103,28 +125,6 @@ namespace XDev_UnitWork.Business
             }
         }
 
-        public async Task<List<EBillingCompanyAddressDTO>> GetCompanyAddress(string companyId)
-        {
-            return await (from addr in DbContext.Address.AsNoTracking()
-                          join addt in DbContext.AddressType.AsNoTracking() on addr.AddressTypeId equals addt.Id
-                          where addr.CompanyId == companyId.GetGuid()
-                          select new EBillingCompanyAddressDTO
-                          {
-                              AddressId = addr.Id,
-                              AddressName = addt.Name,
-                          }).ToListAsync();
-        }
-
-        public async Task<List<EBillingCompanyIDsDTO>> GetCompanyDocumentsIDs(string companyId)
-        {
-            return await (from coid in DbContext.CompanyID.AsNoTracking()
-                          join idty in DbContext.IDType.AsNoTracking() on coid.IDTypeId equals idty.Id
-                          where coid.CompanyId == companyId.GetGuid()
-                          select new EBillingCompanyIDsDTO
-                          {
-                              DocumentId = coid.Id,
-                              Document = $"{coid.DocumentNumber} - {idty.Name}"
-                          }).ToListAsync();
-        }
+        
     }
 }

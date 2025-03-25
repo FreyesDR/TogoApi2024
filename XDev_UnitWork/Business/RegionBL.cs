@@ -32,6 +32,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<Region>(dto);
+                model.Country = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"Código región [{model.Code}] ya existe");

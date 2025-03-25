@@ -32,6 +32,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<WareHouse>(dto);
+                model.Branch = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El código de almacén [{model.Code}] ya existe");

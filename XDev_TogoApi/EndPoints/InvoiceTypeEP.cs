@@ -1,12 +1,10 @@
 ﻿
 using Microsoft.AspNetCore.Http.HttpResults;
-using NPOI.SS.Formula.Functions;
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.DTO.Invoice;
 using XDev_UnitWork.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace XDev_TogoApi.EndPoints
 {
@@ -14,12 +12,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapInvoiceType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", Get);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<InvoiceTypeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<InvoiceTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Factura"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Factura"));
+            builder.MapGet("/{id}", Get).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Factura"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<InvoiceTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Factura"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<InvoiceTypeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Factura"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Factura"));
             return builder;
         }
 

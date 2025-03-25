@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCompanyType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyTypeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyTypeDTO>>()
+                                        .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Sociedad"));
             return builder;
         }
 

@@ -77,6 +77,7 @@ namespace XDev_UnitWork.Business
                 model.Value = dto.Value;
                 model.ValueType = dto.ValueType;
                 model.Edit = dto.Edit;
+                model.AltCode = dto.AltCode;
 
                 await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
             }

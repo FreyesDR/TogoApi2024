@@ -10,9 +10,9 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapAddress(this RouteGroupBuilder builder)
         {
-            builder.MapPost("/", Create);
-            builder.MapPut("/", Update);
-            builder.MapDelete("/{id}", Delete);
+            builder.MapPost("/", Create).WithDescription("Crear").WithMetadata(new ModuleAttribute("Dirección"));
+            builder.MapPut("/", Update).WithDescription("Modificar").WithMetadata(new ModuleAttribute("Dirección"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Dirección"));
             return builder;
         }
 

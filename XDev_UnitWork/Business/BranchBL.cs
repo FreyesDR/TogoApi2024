@@ -14,8 +14,11 @@ namespace XDev_UnitWork.Business
 {
     public class BranchBL : GenericBL<IBranchRep>, IBranchBL
     {
-        public BranchBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper) : base(dbContext, contextAccessor, mapper)
+        private readonly IAddressBL addressBL;
+
+        public BranchBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper, IAddressBL addressBL) : base(dbContext, contextAccessor, mapper)
         {
+            this.addressBL = addressBL;
         }
 
         public async Task<bool> AnyAsync(Guid id)
@@ -34,6 +37,9 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<Branch>(dto);
+                model.Company = null;
+                model.BranchType = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El código de la sucursal [{model.Code}] ya existe");
@@ -142,6 +148,64 @@ namespace XDev_UnitWork.Business
                 return new AddressDTO { BranchId = branchid.GetGuid() };
 
             return Mapper.Map<AddressDTO>(model);
+        }
+
+        public async Task<BranchInfoDTO> GetBranchInfoAsync(Guid branchid)
+        {
+            var dto = new BranchInfoDTO();
+
+            var branch = await DbContext.Branch.Include(i => i.BranchType)                                               
+                                               .AsNoTracking().FirstOrDefaultAsync(f => f.Id == branchid);
+            if (branch is not null)
+            {
+                dto.Code = branch.Code;
+                dto.Name = branch.Name;
+                dto.TypeCode = branch.BranchType.Code;
+
+                var addresses = await addressBL.GetByBranchId(branchid);                
+
+                if (addresses is not null)
+                {
+                    var address = addresses.FirstOrDefault(f => f.AddressTypeCode == "DO");
+
+                    if(address is null)
+                        address = addresses.FirstOrDefault();
+
+                    if(address is not null)
+                    {
+                        dto.Address = $"{address.Address1}, {address.City}, {address.Region}, {address.Country}";
+
+                        dto.CountryCode = address.CountryCode;
+                        dto.CountryName = address.Country;
+                        dto.RegionCode = address.RegionCode;
+                        dto.RegionName = address.Region;
+                        dto.CityCode = address.CityCode;
+                        dto.CityName = address.City;
+
+                        var emails = await addressBL.GetEmails(address.Id);
+                        if (emails.Any())
+                        {
+                            var email = emails.FirstOrDefault(f => f.Principal == true);
+                            if (email is null)
+                                email = emails.FirstOrDefault();
+
+                            if (email is not null)
+                                dto.Email = email.Email;
+                        }
+
+                        var phones = await addressBL.GetPhones(address.Id);
+                        if (phones.Any())
+                        {
+                            var tel = phones.FirstOrDefault();
+                            if (tel is not null)
+                                dto.Phone = tel.Phone;
+                        }
+                    }
+                    
+                }
+            }
+
+            return dto;
         }
     }
 }

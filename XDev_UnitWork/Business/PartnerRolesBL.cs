@@ -32,6 +32,9 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<PartnerRoles>(dto);
+                model.Partner = null;
+                model.Role = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"Rol [{model.Role.Name}] ya fue asignado");
@@ -82,5 +85,6 @@ namespace XDev_UnitWork.Business
         {
             throw new NotImplementedException();
         }
+        
     }
 }

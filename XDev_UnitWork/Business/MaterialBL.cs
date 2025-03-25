@@ -78,7 +78,7 @@ namespace XDev_UnitWork.Business
                                join mty in DbContext.MaterialType.AsNoTracking() on mat.MaterialTypeId equals mty.Id
                                join um in DbContext.UnitMeasure.AsNoTracking() on mat.UnitMeasureId equals um.Id
                                join br in DbContext.MaterialBranch.AsNoTracking() on mat.Id equals br.MaterialId                               
-                               where mat.Code == code && br.BranchId == branchid.GetGuid() && br.IsLockedSale == false
+                               where mat.Code == code && br.BranchId == branchid.GetGuid() && br.IsLockedSale == false && mat.IsDeleted == false
                                select new MaterialSaleDTO
                                {
                                    Id = mat.Id,
@@ -91,6 +91,7 @@ namespace XDev_UnitWork.Business
                                    PriceType = mat.PriceType,
                                    UnitMeasureId = mat.UnitMeasureId,
                                    UnitMeasureCode = um.Code,
+                                   UnitMeasureAltCode = um.AltCode,
                                    Active = mat.Active,
                                    IsDeleted = mat.IsDeleted,                                   
                                }).ToListAsync();
@@ -151,6 +152,7 @@ namespace XDev_UnitWork.Business
                              PriceType = mat.PriceType,
                              UnitMeasureCode= um.Code,
                              UnitMeasureId = mat.UnitMeasureId,                             
+                             UnitMeasureAltCode = um.AltCode,
                          }
                          ).AsQueryable();
 

@@ -1,7 +1,4 @@
-﻿using NPOI.SS.Formula.Functions;
-using NPOI.Util;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using XDev_TogoApi.Code;
+﻿using XDev_TogoApi.Code;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using XDev_UnitWork.Custom;
@@ -15,12 +12,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapMaterialType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", Get);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialTypeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Material"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Material"));
+            builder.MapGet("/{id}", Get).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Material"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Material"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialTypeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Material"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Material"));
             return builder;
         }
 

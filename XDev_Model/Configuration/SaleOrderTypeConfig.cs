@@ -16,7 +16,7 @@ namespace XDev_Model.Configuration
             builder.Property(p => p.Inventory).HasMaxLength(1);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
-            builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);
+            builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);           
         }
     }
 }

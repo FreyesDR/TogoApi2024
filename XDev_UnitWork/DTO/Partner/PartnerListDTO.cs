@@ -8,6 +8,7 @@
         public string OldCode { get; set; }
         public string Name { get; set; }
         public string TradeName { get; set; }
+        public Guid PaymentConditionId { get; set; }
         public bool Active { get; set; }
     }
 }

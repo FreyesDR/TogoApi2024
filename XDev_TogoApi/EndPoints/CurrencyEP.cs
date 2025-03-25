@@ -1,6 +1,4 @@
-﻿using NPOI.Util;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using XDev_TogoApi.Code;
+﻿using XDev_TogoApi.Code;
 using XDev_UnitWork.DTO;
 using Microsoft.AspNetCore.Http.HttpResults;
 using XDev_UnitWork.Custom;
@@ -13,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCurrency(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CurrencyDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CurrencyDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Moneda"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Moneda"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtner por Id").WithMetadata(new ModuleAttribute("Moneda"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CurrencyDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Moneda"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CurrencyDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Moneda"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Moneda"));
             return builder;
         }
 

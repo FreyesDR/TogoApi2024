@@ -54,25 +54,32 @@ namespace XDev_UnitWork.Business
 
         public async Task<List<MaterialBranchListDTO>> GetListAsync(string materialid)
         {
-            var query = await (from mb in DbContext.MaterialBranch.AsNoTracking()
-                               join br in DbContext.Branch.AsNoTracking() on mb.BranchId equals br.Id
-                               join co in DbContext.Company.AsNoTracking() on br.CompanyId equals co.Id
-                               where mb.MaterialId == materialid.GetGuid()
-                               select new MaterialBranchListDTO
-                               {
-                                   MaterialId = mb.MaterialId,
-                                   BranchId = mb.BranchId,
-                                   BranchName = br.Name,
-                                   CompanyId = br.CompanyId,
-                                   CompanyName = co.Name,
-                                   PriceSale= mb.PriceSale,
-                                   PricePurchase= mb.PricePurchase,
-                                   IsLockedPurchase= mb.IsLockedPurchase,
-                                   IsLockedSale= mb.IsLockedSale, 
-                                   ConcurrencyStamp = mb.ConcurrencyStamp,
-                               }).ToListAsync();
+            return await Task.Run<List<MaterialBranchListDTO>>(() =>
+            {
+                var query = DbContext.Database.SqlQuery<MaterialBranchListDTO>($"select a.MaterialId, a.BranchId, b.Code as BranchCode, b.Name as BranchName, b.CompanyId, c.Name as CompanyName, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, \r\n\tisnull(sum(d.Stock),0) as Stock, isnull(sum(d.SoldStock),0) as SoldStock, isnull(sum(d.PurchasedStock),0) as PurchasedStock, isnull(sum(d.LockedStock),0) as LockedStock, \r\n\tisnull(sum(d.InTransitStock),0) as InTransitStock, a.ConcurrencyStamp\r\nfrom MaterialBranch as a inner join Branch as b on b.id = a.BranchId\r\n\t\t\t\t\t     inner join Company as c on c.Id = b.CompanyId\r\n\t\t\t\t\t\t left join MaterialWareHouse as d on d.MaterialId = a.MaterialId and\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t d.BranchId = a.BranchId\r\nwhere a.MaterialId = {materialid.ToString()}\r\ngroup by a.MaterialId, a.BranchId, b.Code, b.Name, b.CompanyId, c.Name, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, a.ConcurrencyStamp");
+                return query.ToListAsync();
+            });
+            
+            //var query = await (from mb in DbContext.MaterialBranch.AsNoTracking()
+            //                   join br in DbContext.Branch.AsNoTracking() on mb.BranchId equals br.Id
+            //                   join co in DbContext.Company.AsNoTracking() on br.CompanyId equals co.Id
+            //                   where mb.MaterialId == materialid.GetGuid()
+            //                   select new MaterialBranchListDTO
+            //                   {
+            //                       MaterialId = mb.MaterialId,
+            //                       BranchId = mb.BranchId,
+            //                       BranchCode = br.Code,
+            //                       BranchName = br.Name,
+            //                       CompanyId = br.CompanyId,
+            //                       CompanyName = co.Name,
+            //                       PriceSale= mb.PriceSale,
+            //                       PricePurchase= mb.PricePurchase,
+            //                       IsLockedPurchase= mb.IsLockedPurchase,
+            //                       IsLockedSale= mb.IsLockedSale, 
+            //                       ConcurrencyStamp = mb.ConcurrencyStamp,
+            //                   }).ToListAsync();
 
-            return query;
+            
         }
 
         public Task<List<MaterialBranchDTO>> GetListAsync()

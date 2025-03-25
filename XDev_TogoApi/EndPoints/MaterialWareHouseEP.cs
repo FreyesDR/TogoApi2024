@@ -12,8 +12,9 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapMaterialWareHouse(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialWareHouseDTO>>();
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Material Almacén"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialWareHouseDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Material Almacén"));
             return builder;
         }
 

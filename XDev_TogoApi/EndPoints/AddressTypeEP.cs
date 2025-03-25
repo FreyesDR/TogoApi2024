@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapAddressType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<AddressTypeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<AddressTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Dirección"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Dirección"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Dirección"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<AddressTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Dirección"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<AddressTypeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Dirección"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Dirección"));
             return builder;
         }
         

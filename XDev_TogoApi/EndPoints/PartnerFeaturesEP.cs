@@ -10,8 +10,8 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerFeatures(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", Get);
-            builder.MapPut("/", Update);
+            builder.MapGet("/", Get).WithDescription("Obtener").WithMetadata(new ModuleAttribute("Personalización Socio"));
+            builder.MapPut("/", Update).WithDescription("Modificar").WithMetadata(new ModuleAttribute("Personalización Socio"));
             return builder;
         }
 

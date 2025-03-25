@@ -32,6 +32,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<PartnerCompany>(dto);
+                model.Partner = null;
+                model.Company = null;
 
                 await Repository.CreateAsync(model);
             }
@@ -58,6 +60,31 @@ namespace XDev_UnitWork.Business
         public Task<List<PartnerCompanyDTO>> GetListAsync(PaginationDTO pagination)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<PartnerListDTO>> GetPartnerCompanyListAsync(PaginationDTO pagination, string companyid)
+        {
+            var patype = DbContext.PartnerRole.AsNoTracking().FirstOrDefault(f => f.Code == "D");
+
+            var query = (from p in DbContext.Partner.AsNoTracking()
+                         join pt in DbContext.PartnerType.AsNoTracking() on p.PartnerTypeId equals pt.Id
+                         join pr in DbContext.PartnerRoles.AsNoTracking() on p.Id equals pr.PartnerId
+                         join cop in DbContext.PartnerCompany.AsNoTracking() on p.Id equals cop.PartnerId
+                         where cop.CompanyId == companyid.GetGuid() && pr.RoleId == patype.Id
+                         select new PartnerListDTO
+                         {
+                             Id = p.Id,
+                             Code = p.Code,
+                             OldCode = p.OldCode,
+                             Name = p.Name,
+                             TradeName = p.TradeName,
+                             Active = p.Active,
+                             PartnerType = pt.Name,
+                             PaymentConditionId = p.PaymentConditionId,
+                         });
+
+            query = query.CreateFilterAndOrder(pagination);
+            return await query.CreatePaging<PartnerListDTO, PartnerListDTO>(pagination, ContextAccessor.HttpContext);
         }
 
         public Task<List<PartnerCompanyDTO>> GetListAsync()

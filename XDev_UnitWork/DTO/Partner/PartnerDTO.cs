@@ -10,5 +10,10 @@
         public string TradeName { get; set; }
         public bool Active { get; set; }
         public string NumType { get; set; }
+        public Guid PaymentConditionId { get; set; }
+        public string ContactPersonName { get; set; }
+        public string ContactPersonIDNumber { get; set; }
+        public string ContactPersonPhone { get; set; }
+        public string ContactPersonEmail { get; set; }
     }
 }

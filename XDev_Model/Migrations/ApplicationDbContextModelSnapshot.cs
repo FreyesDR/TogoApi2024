@@ -437,6 +437,17 @@ namespace XDev_Model.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("IDCode")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("IDNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("IDTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -499,10 +510,11 @@ namespace XDev_Model.Migrations
                             Id = "8c5b29e5-fbb8-4cc9-871a-d61aaf739bf5",
                             AccessFailedCount = 0,
                             Active = true,
-                            ConcurrencyStamp = "1118fd0b-feb3-4444-b293-50907557cea5",
+                            ConcurrencyStamp = "0c6611ed-8018-49d4-8afb-c936387691dd",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@avalink.com",
                             EmailConfirmed = true,
+                            IDTypeId = new Guid("00000000-0000-0000-0000-000000000000"),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LockoutEnabled = false,
                             Name = "Administrador de Sistema",
@@ -510,7 +522,7 @@ namespace XDev_Model.Migrations
                             NormalizedUserName = "ADMIN@AVALINK.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEG3VrHMqyIN4gVB/lVaj6OGcuVKSCx3EJhfna64rRTI/0qlORLppSj2xkzKyeCrNKA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "27aa74fc-cd74-4e93-a446-142260b5f3d5",
+                            SecurityStamp = "d6552f94-3883-4e82-9d20-5d47b5b34df5",
                             TwoFactorEnabled = false,
                             UserName = "admin@avalink.com"
                         });
@@ -1474,6 +1486,18 @@ namespace XDev_Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CertPathProd")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CertPathTest")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -1510,12 +1534,17 @@ namespace XDev_Model.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
                     b.ToTable("EBilling");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            Code = "MHSV",
                             ConcurrencyStamp = "63be85df-6805-41c3-beb2-f6a44db746f6",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1537,12 +1566,32 @@ namespace XDev_Model.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ApiKeyProd")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ApiKeyTest")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ApiUser")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("CcEmail1")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CcEmail2")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Contingency")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1550,6 +1599,10 @@ namespace XDev_Model.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("FromName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsProd")
                         .HasColumnType("bit");
@@ -1561,11 +1614,34 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<Guid>("Nif1Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PrivateKeyProd")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("Nif2Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PrivateKeyTest")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("SmtpEnableSsl")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SmtpHost")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("SmtpPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SmtpService")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("SmtpUserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SmtpUserPassword")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EBillingId", "CompanyId");
 
@@ -1717,6 +1793,181 @@ namespace XDev_Model.Migrations
                         });
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.EBillingLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Cancel")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("CancelInvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CodGen")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NumControl")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PointSaleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Request")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Response")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ResponseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseStatus")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ResponseStatusCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("SaleOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SelloRecibido")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatusCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("TipoDte")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CodGen");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("PointSaleId");
+
+                    b.HasIndex("SaleOrderId");
+
+                    b.ToTable("EBillingLog");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EBillingTax", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("EBillingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("TaxCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("TaxName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EBillingId");
+
+                    b.HasIndex("TaxCode");
+
+                    b.ToTable("EBillingTax");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6b1fe653-82f8-43f5-a674-c4d5cba0b1b9"),
+                            ConcurrencyStamp = "6b1fe653-82f8-43f5-a674-c4d5cba0b1b9",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TaxCode = "20",
+                            TaxName = "Impuesto al valor agregado"
+                        },
+                        new
+                        {
+                            Id = new Guid("5714c5db-4033-4c8f-a425-13186fb02220"),
+                            ConcurrencyStamp = "5714c5db-4033-4c8f-a425-13186fb02220",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TaxCode = "C3",
+                            TaxName = "Impuesto al valor agregado (exportaciones)"
+                        },
+                        new
+                        {
+                            Id = new Guid("845ee146-38ca-4041-90f4-b8411274fa15"),
+                            ConcurrencyStamp = "845ee146-38ca-4041-90f4-b8411274fa15",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TaxCode = "59",
+                            TaxName = "Turismo: por alojamiento"
+                        },
+                        new
+                        {
+                            Id = new Guid("8507b0ca-b579-4c2a-90fc-d8ec516ba909"),
+                            ConcurrencyStamp = "8507b0ca-b579-4c2a-90fc-d8ec516ba909",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EBillingId = new Guid("63be85df-6805-41c3-beb2-f6a44db746f6"),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TaxCode = "71",
+                            TaxName = "Turismo: salida del país por vía aérea"
+                        });
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.EconomicActivity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1756,6 +2007,64 @@ namespace XDev_Model.Migrations
                         .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("EconomicActivities");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EndPointPolicy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("MethodHttp")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("MethodPath")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Module")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("PolicyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PolicyParams")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MethodHttp");
+
+                    b.HasIndex("MethodPath");
+
+                    b.HasIndex("PolicyId");
+
+                    b.ToTable("EndPointPolicy");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.IDType", b =>
@@ -1865,6 +2174,502 @@ namespace XDev_Model.Migrations
                         });
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.IncoTerms", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("IncoTerms");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Invoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Assignment")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Canceled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CanceledDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CanceledUserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CodGeneracion")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Contingency")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DiscountPorcent")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("EBillingDoc")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<DateTime>("FechaRecepcion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IncoTerms")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("IncoTermsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvoiceTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NumControl")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Number")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PaymentConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Per1")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<string>("PointSaleCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("PointSaleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecintoFiscalCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("RecintoFiscalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("RefDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefDocument")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("RegimenExportCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("RegimenExportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Ret1")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<decimal>("Ret10")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<Guid>("SaleOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SelloRecepcion")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("SentEmail")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Sporadic")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodGeneracion")
+                        .IsUnique()
+                        .HasFilter("[CodGeneracion] IS NOT NULL");
+
+                    b.HasIndex("InvoiceTypeId");
+
+                    b.HasIndex("Number")
+                        .IsUnique()
+                        .HasFilter("[Number] IS NOT NULL");
+
+                    b.HasIndex("PaymentConditionId");
+
+                    b.ToTable("Invoice");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePayment", b =>
+                {
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MeanOfPaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MeanOfPaymentCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int>("Periodo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Plazo")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Tipo")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("InvoiceId", "MeanOfPaymentId", "Position");
+
+                    b.ToTable("InvoicePayment");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePosition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrossPrice")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MaterialCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MaterialName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MaterialTypeCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetPrice")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PriceType")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UnitMeasureAltCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("UnitMeasureCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("UnitMeasureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WareHouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoicePosition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePositionCondition", b =>
+                {
+                    b.Property<Guid>("InvoicePositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PriceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AltCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<decimal>("BaseCondition")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<bool>("Edit")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<Guid>("SourceConditionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<decimal>("ValueCondition")
+                        .HasPrecision(18, 7)
+                        .HasColumnType("decimal(18,7)");
+
+                    b.Property<string>("ValueType")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("InvoicePositionId", "PriceConditionId");
+
+                    b.HasIndex("Code");
+
+                    b.ToTable("InvoicePositionCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoiceSporadicPartner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CityCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CityName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CountryCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid?>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountryName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EcoActivityCode")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<Guid>("EcoActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EcoActivityName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("IDCode")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("IDCode2")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("IDNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("IDNumber2")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("IDTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IDTypeId2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("RegionCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid?>("RegionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RegionName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TypePerson")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId")
+                        .IsUnique();
+
+                    b.ToTable("InvoiceSporadicPartner");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.InvoiceType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1885,6 +2690,13 @@ namespace XDev_Model.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Export")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FormName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
@@ -2185,6 +2997,148 @@ namespace XDev_Model.Migrations
                     b.ToTable("MaterialWareHouse");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.MeanOfPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("MeanOfPayment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0674f1dd-e567-4ddd-90d6-500f01aaed2e"),
+                            Code = "01",
+                            ConcurrencyStamp = "0674f1dd-e567-4ddd-90d6-500f01aaed2e",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Billetes y monedas"
+                        },
+                        new
+                        {
+                            Id = new Guid("76c955a3-0c97-4f18-846f-2b0765ce3a66"),
+                            Code = "02",
+                            ConcurrencyStamp = "76c955a3-0c97-4f18-846f-2b0765ce3a66",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tarjeta de débito"
+                        },
+                        new
+                        {
+                            Id = new Guid("ba614885-ea45-463a-8e3f-7e894902f74f"),
+                            Code = "03",
+                            ConcurrencyStamp = "ba614885-ea45-463a-8e3f-7e894902f74f",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tarjeta de crédito"
+                        },
+                        new
+                        {
+                            Id = new Guid("b5b02924-fd31-4790-a220-3218698aac6e"),
+                            Code = "04",
+                            ConcurrencyStamp = "b5b02924-fd31-4790-a220-3218698aac6e",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Cheque"
+                        },
+                        new
+                        {
+                            Id = new Guid("199b7755-1265-4cda-a1e3-535c867bac21"),
+                            Code = "05",
+                            ConcurrencyStamp = "199b7755-1265-4cda-a1e3-535c867bac21",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Transferencia-Depósito Bancario"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f6abca4-6b6a-4d13-8d32-761097171581"),
+                            Code = "08",
+                            ConcurrencyStamp = "0f6abca4-6b6a-4d13-8d32-761097171581",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Dinero electrónico"
+                        },
+                        new
+                        {
+                            Id = new Guid("2084c2e1-5b24-4c79-bdab-ef75e18d559c"),
+                            Code = "09",
+                            ConcurrencyStamp = "2084c2e1-5b24-4c79-bdab-ef75e18d559c",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Monedero electrónico"
+                        },
+                        new
+                        {
+                            Id = new Guid("8f305418-ec29-4231-a0fc-1ff523933f68"),
+                            Code = "11",
+                            ConcurrencyStamp = "8f305418-ec29-4231-a0fc-1ff523933f68",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bitcoin"
+                        },
+                        new
+                        {
+                            Id = new Guid("a4dd8f5b-cd62-4157-9912-130b8ffccf27"),
+                            Code = "12",
+                            ConcurrencyStamp = "a4dd8f5b-cd62-4157-9912-130b8ffccf27",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Otras criptomonedas"
+                        },
+                        new
+                        {
+                            Id = new Guid("99b7591d-c073-4506-87d1-f01363444b66"),
+                            Code = "13",
+                            ConcurrencyStamp = "a4dd8f5b-cd62-4157-9912-130b8ffccf27",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Cuentas por pagar del receptor"
+                        },
+                        new
+                        {
+                            Id = new Guid("0ddf88a1-d603-4ec3-80e2-de7fccc4a1c4"),
+                            Code = "14",
+                            ConcurrencyStamp = "a4dd8f5b-cd62-4157-9912-130b8ffccf27",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Giro bancario"
+                        });
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.NumberRange", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2247,6 +3201,22 @@ namespace XDev_Model.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContactPersonEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContactPersonIDNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("ContactPersonName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ContactPersonPhone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -2272,6 +3242,9 @@ namespace XDev_Model.Migrations
                     b.Property<Guid>("PartnerTypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("PaymentConditionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("TradeName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -2285,6 +3258,8 @@ namespace XDev_Model.Migrations
                     b.HasIndex("OldCode");
 
                     b.HasIndex("PartnerTypeId");
+
+                    b.HasIndex("PaymentConditionId");
 
                     b.ToTable("Partner");
                 });
@@ -2504,7 +3479,7 @@ namespace XDev_Model.Migrations
                             ConcurrencyStamp = "cf579d9d-18f9-432b-806a-4cad7311fb38",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Deudor"
+                            Name = "Cliente (Deudor)"
                         },
                         new
                         {
@@ -2513,7 +3488,16 @@ namespace XDev_Model.Migrations
                             ConcurrencyStamp = "099a35d5-fddf-486d-b3b7-ba8011b1a7ff",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Acreedor"
+                            Name = "Proveedor (Acreedor)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f8d6ce6-6177-4892-843a-11e2af8aa134"),
+                            Code = "C",
+                            ConcurrencyStamp = "0f8d6ce6-6177-4892-843a-11e2af8aa134",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Contacto"
                         });
                 });
 
@@ -2595,6 +3579,108 @@ namespace XDev_Model.Migrations
                         });
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.PaymentCondition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Plazo")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int>("PlazoCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tipo")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("PaymentCondition");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b3d138d6-0f3d-48be-a96a-e9d6f3922c05"),
+                            Code = "D00",
+                            ConcurrencyStamp = "b3d138d6-0f3d-48be-a96a-e9d6f3922c05",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Contado",
+                            Plazo = "",
+                            PlazoCount = 0,
+                            Tipo = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("5fd46367-0c46-4fe0-b648-29dafd49b80c"),
+                            Code = "D08",
+                            ConcurrencyStamp = "5fd46367-0c46-4fe0-b648-29dafd49b80c",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Crédito 8 días",
+                            Plazo = "01",
+                            PlazoCount = 8,
+                            Tipo = "2"
+                        },
+                        new
+                        {
+                            Id = new Guid("b500120a-72f0-47cf-b4a0-edfd4fca7abb"),
+                            Code = "D15",
+                            ConcurrencyStamp = "b500120a-72f0-47cf-b4a0-edfd4fca7abb",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Crédito 15 días",
+                            Plazo = "01",
+                            PlazoCount = 15,
+                            Tipo = "2"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1484b56-6de2-46fb-97f8-a22aae14480d"),
+                            Code = "D30",
+                            ConcurrencyStamp = "c1484b56-6de2-46fb-97f8-a22aae14480d",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Crédito 30 días",
+                            Plazo = "01",
+                            PlazoCount = 30,
+                            Tipo = "2"
+                        });
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.PointSale", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2639,11 +3725,57 @@ namespace XDev_Model.Migrations
                     b.ToTable("PointSale");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.Policy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Policy");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3cefd509-9d98-4295-bb45-0b7624b13b3d"),
+                            Name = "Lectura"
+                        },
+                        new
+                        {
+                            Id = new Guid("5fdca958-95a0-4656-bc19-688d60d4ffe6"),
+                            Name = "Creación"
+                        },
+                        new
+                        {
+                            Id = new Guid("35efe9e5-c406-492c-bc8f-af5589bad426"),
+                            Name = "Actualización"
+                        },
+                        new
+                        {
+                            Id = new Guid("db8f9a1e-39f4-4ce8-bbb7-479843ee9ef3"),
+                            Name = "Eliminación"
+                        },
+                        new
+                        {
+                            Id = new Guid("81630d88-7dd9-4100-bc3b-85dc36b8ae9c"),
+                            Name = "Listado"
+                        });
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.PriceCondition", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AltCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("Code")
                         .HasMaxLength(3)
@@ -2779,6 +3911,88 @@ namespace XDev_Model.Migrations
                     b.HasIndex("PriceSchemeId");
 
                     b.ToTable("PriceSchemeCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.RecintoFiscal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("RecintoFiscal");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.RegimenExport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("RegimenExport");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.Region", b =>
@@ -2973,6 +4187,13 @@ namespace XDev_Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Assignment")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
@@ -2990,6 +4211,10 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("CurrencyCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<Guid>("CurrencyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -2998,6 +4223,17 @@ namespace XDev_Model.Migrations
 
                     b.Property<bool>("Delivered")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("DiscountPorcent")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("IncoTerms")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("IncoTermsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Invoiced")
                         .HasColumnType("bit");
@@ -3020,11 +4256,25 @@ namespace XDev_Model.Migrations
                     b.Property<Guid?>("PartnerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("PaymentConditionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Per1")
                         .HasPrecision(18, 5)
                         .HasColumnType("decimal(18,5)");
 
+                    b.Property<string>("PointSaleCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<Guid>("PointSaleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecintoFiscalCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<Guid>("RecintoFiscalId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("RefDate")
@@ -3033,6 +4283,13 @@ namespace XDev_Model.Migrations
                     b.Property<string>("RefDocument")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("RegimenExportCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("RegimenExportId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Ret1")
                         .HasPrecision(18, 5)
@@ -3058,7 +4315,50 @@ namespace XDev_Model.Migrations
                         .IsUnique()
                         .HasFilter("[Number] IS NOT NULL");
 
+                    b.HasIndex("PaymentConditionId");
+
+                    b.HasIndex("SaleOrderTypeId");
+
                     b.ToTable("SaleOrder");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPayment", b =>
+                {
+                    b.Property<Guid>("SaleOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MeanOfPaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MeanOfPaymentCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int>("Periodo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Plazo")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Tipo")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.HasKey("SaleOrderId", "MeanOfPaymentId", "Position");
+
+                    b.ToTable("SaleOrderPayment");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.SaleOrderPosition", b =>
@@ -3081,6 +4381,10 @@ namespace XDev_Model.Migrations
                     b.Property<decimal>("DiscountAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrossPrice")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
@@ -3108,6 +4412,10 @@ namespace XDev_Model.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("NetPrice")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
+
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
@@ -3125,6 +4433,10 @@ namespace XDev_Model.Migrations
                     b.Property<decimal>("TaxAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UnitMeasureAltCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("UnitMeasureCode")
                         .HasMaxLength(4)
@@ -3150,6 +4462,10 @@ namespace XDev_Model.Migrations
 
                     b.Property<Guid>("PriceConditionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AltCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<decimal>("BaseCondition")
                         .HasPrecision(18, 7)
@@ -3209,15 +4525,31 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("CityCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<Guid?>("CityId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CityName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CountryCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<Guid?>("CountryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountryName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -3226,15 +4558,41 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("EcoActivityCode")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<Guid>("EcoActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EcoActivityName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("IDCode")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("IDCode2")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<string>("IDNumber")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("IDNumber2")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<Guid>("IDTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IDTypeId2")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdatedAt")
@@ -3252,11 +4610,23 @@ namespace XDev_Model.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("RegionCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<Guid?>("RegionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("RegionName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<Guid>("SaleOrderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TypePerson")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.HasKey("Id");
 
@@ -3281,6 +4651,9 @@ namespace XDev_Model.Migrations
                     b.Property<bool>("ApplyRet10")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("AssignmentRequired")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Code")
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
@@ -3297,6 +4670,9 @@ namespace XDev_Model.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("Delivery")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Export")
                         .HasColumnType("bit");
 
                     b.Property<string>("Inventory")
@@ -3406,8 +4782,8 @@ namespace XDev_Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -3672,6 +5048,91 @@ namespace XDev_Model.Migrations
                     b.Navigation("EBilling");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.EBillingTax", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.EBilling", "EBilling")
+                        .WithMany("Taxs")
+                        .HasForeignKey("EBillingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EBilling");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.EndPointPolicy", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.Policy", "Policy")
+                        .WithMany("EndPointPolicies")
+                        .HasForeignKey("PolicyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Policy");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Invoice", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.InvoiceType", "InvoiceType")
+                        .WithMany()
+                        .HasForeignKey("InvoiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XDev_Model.Entities.PaymentCondition", "PaymentCondition")
+                        .WithMany("Invoices")
+                        .HasForeignKey("PaymentConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("InvoiceType");
+
+                    b.Navigation("PaymentCondition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePayment", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.Invoice", "Invoice")
+                        .WithMany("Payments")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePosition", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.Invoice", "Invoice")
+                        .WithMany("Positions")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePositionCondition", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.InvoicePosition", "InvoicePosition")
+                        .WithMany("Conditions")
+                        .HasForeignKey("InvoicePositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InvoicePosition");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoiceSporadicPartner", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.Invoice", "Invoice")
+                        .WithOne("InvoiceSporadicPartner")
+                        .HasForeignKey("XDev_Model.Entities.InvoiceSporadicPartner", "InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.Material", b =>
                 {
                     b.HasOne("XDev_Model.Entities.MaterialType", "MaterialType")
@@ -3691,7 +5152,15 @@ namespace XDev_Model.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("XDev_Model.Entities.PaymentCondition", "PaymentCondition")
+                        .WithMany("Partners")
+                        .HasForeignKey("PaymentConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("PartnerType");
+
+                    b.Navigation("PaymentCondition");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.PartnerCompany", b =>
@@ -3811,6 +5280,36 @@ namespace XDev_Model.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrder", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.PaymentCondition", "PaymentCondition")
+                        .WithMany("SaleOrders")
+                        .HasForeignKey("PaymentConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XDev_Model.Entities.SaleOrderType", "SaleOrderType")
+                        .WithMany()
+                        .HasForeignKey("SaleOrderTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentCondition");
+
+                    b.Navigation("SaleOrderType");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.SaleOrderPayment", b =>
+                {
+                    b.HasOne("XDev_Model.Entities.SaleOrder", "SaleOrder")
+                        .WithMany("Payments")
+                        .HasForeignKey("SaleOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SaleOrder");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.SaleOrderPosition", b =>
                 {
                     b.HasOne("XDev_Model.Entities.SaleOrder", "SaleOrder")
@@ -3914,6 +5413,8 @@ namespace XDev_Model.Migrations
             modelBuilder.Entity("XDev_Model.Entities.EBilling", b =>
                 {
                     b.Navigation("Companies");
+
+                    b.Navigation("Taxs");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.EBillingCompany", b =>
@@ -3933,6 +5434,20 @@ namespace XDev_Model.Migrations
                     b.Navigation("CompanyIDS");
 
                     b.Navigation("PartnerIDS");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Invoice", b =>
+                {
+                    b.Navigation("InvoiceSporadicPartner");
+
+                    b.Navigation("Payments");
+
+                    b.Navigation("Positions");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.InvoicePosition", b =>
+                {
+                    b.Navigation("Conditions");
                 });
 
             modelBuilder.Entity("XDev_Model.Entities.MaterialType", b =>
@@ -3963,6 +5478,20 @@ namespace XDev_Model.Migrations
                     b.Navigation("Partners");
                 });
 
+            modelBuilder.Entity("XDev_Model.Entities.PaymentCondition", b =>
+                {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("Partners");
+
+                    b.Navigation("SaleOrders");
+                });
+
+            modelBuilder.Entity("XDev_Model.Entities.Policy", b =>
+                {
+                    b.Navigation("EndPointPolicies");
+                });
+
             modelBuilder.Entity("XDev_Model.Entities.PriceCondition", b =>
                 {
                     b.Navigation("PriceSchemeCondition");
@@ -3982,6 +5511,8 @@ namespace XDev_Model.Migrations
 
             modelBuilder.Entity("XDev_Model.Entities.SaleOrder", b =>
                 {
+                    b.Navigation("Payments");
+
                     b.Navigation("Positions");
 
                     b.Navigation("SaleOrderSporadicPartner");

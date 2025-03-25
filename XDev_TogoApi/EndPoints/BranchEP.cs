@@ -13,16 +13,18 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapBranch(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetListAll);
-            builder.MapGet("/{companyid}/{id}", GetById);
-            builder.MapGet("/{companyid}/list", GetList);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<BranchDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<BranchDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapGet("/list", GetListAll).WithDescription("Listado").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapGet("/{companyid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapGet("/{companyid}/list", GetList).WithDescription("Listado por Sociedad").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<BranchDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<BranchDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Sucursal"));
 
-            builder.MapGet("/{branchid}/address", GetAddresses);
-            builder.MapGet("/{branchid}/address/{id}", GetAddress);
+            builder.MapGet("/{branchid}/address", GetAddresses).WithDescription("Listar Direcciones").WithMetadata(new ModuleAttribute("Sucursal"));
+            builder.MapGet("/{branchid}/address/{id}", GetAddress).WithDescription("Obtener dirección por Id").WithMetadata(new ModuleAttribute("Sucursal"));
 
             
             return builder;

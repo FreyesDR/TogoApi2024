@@ -13,11 +13,13 @@ namespace XDev_TogoApi.EndPoints
         public static RouteGroupBuilder MapCompanyID(this RouteGroupBuilder builder)
         {
             // Documentos de identificación
-            builder.MapGet("/", GetCompanyIDS);
-            builder.MapGet("/{companyid}/{id}", GetCompanyID);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyIDDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyIDDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetCompanyIDS).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Documentos Identificación Sociedad"));
+            builder.MapGet("/{companyid}/{id}", GetCompanyID).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Documentos Identificación Sociedad"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyIDDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Documentos Identificación Sociedad"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyIDDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Documentos Identificación Sociedad"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Documentos Identificación Sociedad"));
             return builder;
         }
 

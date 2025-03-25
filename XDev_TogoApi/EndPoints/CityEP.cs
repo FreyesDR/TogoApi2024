@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCity(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/all", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CityDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CityDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/all", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado por Región").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
+            builder.MapGet("/", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CityDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CityDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Ciudad/Municipio"));
             return builder;
         }
 

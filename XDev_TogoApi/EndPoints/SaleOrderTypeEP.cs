@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using NPOI.Util;
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
-using XDev_UnitWork.DTO.Invoice;
 using XDev_UnitWork.DTO.SaleOrder;
 using XDev_UnitWork.Interfaces;
 
@@ -13,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapSaleOrderType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", Get);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<SaleOrderTypeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<SaleOrderTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
+            builder.MapGet("/{id}", Get).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<SaleOrderTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<SaleOrderTypeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Pedido de Venta"));
             return builder;
         }
 

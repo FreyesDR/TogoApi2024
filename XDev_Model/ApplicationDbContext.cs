@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Security.Claims;
-using XDev_AIO;
+using XDev_AvaLinkAIO;
 using XDev_Model.Entities;
 using XDev_Model.Interfaces;
 
@@ -21,9 +21,14 @@ namespace XDev_Model
             this.configuration = configuration;
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+
         private string GetUserId()
         {
-            if (contentAccessor.HttpContext.User.Identity.IsAuthenticated)
+            if (contentAccessor.HttpContext != null && contentAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 var idClaim = contentAccessor.HttpContext.User.Identities.FirstOrDefault().Claims.Where(w => w.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
                 if (idClaim is not null)
@@ -62,8 +67,8 @@ namespace XDev_Model
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var config = JsonConvert.DeserializeObject<ConfigDTO>(Utils.GetConfig(""));
+        {            
+            var config = AIO.GetConfig("WebConfig.enc");
             optionsBuilder.UseSqlServer(config.SQLConnectionString);
             
             base.OnConfiguring(optionsBuilder);
@@ -107,7 +112,13 @@ namespace XDev_Model
         public DbSet<SaleOrderPosition> SaleOrderPosition { get; set; }
         public DbSet<SaleOrderType> SaleOrderType { get; set; }
         public DbSet<SaleOrderSporadicPartner> SaleOrderSporadicPartner { get; set; }
+        public DbSet<SaleOrderPayment> SaleOrderPayment {  get; set; }
         public DbSet<InvoiceType> InvoiceType { get; set; }
+        public DbSet<Invoice> Invoice { get; set; }
+        public DbSet<InvoicePosition> InvoicePosition { get; set; }
+        public DbSet<InvoiceSporadicPartner> InvoiceSporadicPartner { get; set; }
+        public DbSet<InvoicePositionCondition> InvoicePositionCondition {  get; set; }
+        public DbSet<InvoicePayment> InvoicePayment { get; set; }
 
         public DbSet<UnitMeasure> UnitMeasure { get; set; }
         public DbSet<MaterialFeatures> MaterialFeatures { get; set; }
@@ -123,11 +134,19 @@ namespace XDev_Model
         public DbSet<EBillingDocument> EBillingDocument { get; set; }
         public DbSet<EBillingCompany> EBillingCompany { get; set; }
         public DbSet<EBillingCompanyInvoice> EBillingCompanyInvoice { get; set; }
+        public DbSet<EBillingLog> EBillingLog { get; set; }
+        public DbSet<EBillingTax> EBillingTax { get; set; }
+
+        public DbSet<PaymentCondition> PaymentCondition { get; set; }
+        public DbSet<MeanOfPayment> MeanOfPayment { get; set; }
+
+        public DbSet<RecintoFiscal> RecintoFiscal { get;    set; }
+        public DbSet<RegimenExport> RegimenExport { get; set; }
+        public DbSet<IncoTerms> IncoTerms { get; set; } 
+
+        public DbSet<Policy> Policy { get; set; }
+        public DbSet<EndPointPolicy> EndPointPolicy { get; set; }
     }
 
-    internal class ConfigDTO
-    {
-        public string FrontEndUrl { get; set; }                
-        public string SQLConnectionString { get; set; }
-    }
+    
 }

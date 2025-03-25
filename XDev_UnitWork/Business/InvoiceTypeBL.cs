@@ -80,6 +80,8 @@ namespace XDev_UnitWork.Business
                 {
                     model.Name = dto.Name;
                     model.RangeId = dto.RangeId;
+                    model.FormName = dto.FormName;
+                    model.Export = dto.Export;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }

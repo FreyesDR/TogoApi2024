@@ -9,11 +9,17 @@ namespace XDev_UnitWork.DTO.SaleOrder
         public string Name { get; set; } = string.Empty;
         public Guid IDTypeId { get; set; }
         public string IDNumber { get; set; } = string.Empty ;
+
+        public Guid IDTypeId2 { get; set; }
+        public string IDNumber2 { get; set; } = string.Empty;
+
         public string Address { get; set; } = string.Empty;
         public Guid? CountryId { get; set; }        
         public Guid? RegionId { get; set; }        
         public Guid? CityId { get; set; }        
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+        public Guid EcoActivityId { get; set; } = Guid.Empty;
+        public string TypePerson { get; set; }
     }
 }

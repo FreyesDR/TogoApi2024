@@ -12,6 +12,8 @@ namespace XDev_UnitWork.Validators
             RuleFor(x => x.Code).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
                                 .MaximumLength(3).WithMessage(UtilsExtension.fieldMaxLength);
 
+            RuleFor(x => x.AltCode).MaximumLength(4).WithMessage(UtilsExtension.fieldMaxLength);
+
             RuleFor(x => x.Name).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
                                 .MaximumLength(30).WithMessage(UtilsExtension.fieldMaxLength);
 

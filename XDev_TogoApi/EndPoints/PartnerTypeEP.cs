@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.DTO.Partner;
 using XDev_UnitWork.Interfaces;
@@ -9,8 +10,8 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Socio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Socio"));
             return builder;
         }
 

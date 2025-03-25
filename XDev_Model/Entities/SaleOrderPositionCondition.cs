@@ -7,6 +7,7 @@
         public int Position { get; set; }
         public Guid PriceConditionId { get; set; }
         public string Code { get; set; }
+        public string AltCode { get; set; }
         public string Name { get; set; }
         public string Type { get; set; } // B - Precio base del producto, I - Impuesto, O - Otros Impuestos, R - Recargo, D - Descuento
         public string Source { get; set; } // A - Precio base del producto, B - Resultado condición anterior, C - Condición especifica

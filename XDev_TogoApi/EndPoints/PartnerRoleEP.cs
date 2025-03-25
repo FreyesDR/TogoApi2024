@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerRole(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerRoleDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerRoleDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Roles Socio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Roles Socio"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtner por Id").WithMetadata(new ModuleAttribute("Roles Socio"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerRoleDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Roles Socio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerRoleDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Roles Socio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Roles Socio"));
             return builder;
         }
 

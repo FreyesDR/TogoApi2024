@@ -15,6 +15,10 @@ namespace XDev_Model.Configuration
             builder.Property(p => p.OldCode).HasMaxLength(15);
             builder.Property(p => p.Name).HasMaxLength(100);
             builder.Property(p => p.TradeName).HasMaxLength(100);
+            builder.Property(p => p.ContactPersonEmail).HasMaxLength(256);
+            builder.Property(p => p.ContactPersonIDNumber).HasMaxLength(30);
+            builder.Property(p => p.ContactPersonName).HasMaxLength(100);
+            builder.Property(p => p.ContactPersonPhone).HasMaxLength(50);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
             builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);

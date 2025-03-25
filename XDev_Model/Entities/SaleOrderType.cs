@@ -15,5 +15,7 @@
         public bool ApplyRet1 { get; set; }
         public bool ApplyRet10 { get; set; }
         public bool ApplyPer1 { get; set; }
+        public bool AssignmentRequired {  get; set; }
+        public bool Export {  get; set; }
     }
 }

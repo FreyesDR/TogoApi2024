@@ -32,6 +32,9 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<PartnerID>(dto);
+                model.Partner = null;
+                model.IDType = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException("Tipo identificación ya existe");

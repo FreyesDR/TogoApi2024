@@ -32,7 +32,12 @@ namespace XDev_UnitWork.Business
             var model = await Repository.GetFirstorDefaultAsync(f => f.Code == dto.Code);
             if (model is null)
             {
-                model = Mapper.Map<PriceScheme>(dto);
+                for (int i = 0; i < dto.Conditions.Count; i++)
+                {
+                    dto.Conditions[i].Position = Convert.ToInt16(i);
+                }
+
+                model = Mapper.Map<PriceScheme>(dto);                
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El código [{dto.Code}] ya existe");
@@ -98,8 +103,11 @@ namespace XDev_UnitWork.Business
                     {
                         var exists = model.Conditions.FirstOrDefault(f => f.Id == dto.Conditions[i].Id);
                         if (exists is not null)
-                            exists.Position = Convert.ToInt16(i);                        
-                            
+                            exists.Position = Convert.ToInt16(i);   
+                        
+                        if(exists is null)
+                            dto.Conditions[i].Position = Convert.ToInt16(i);
+
                     }
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
 

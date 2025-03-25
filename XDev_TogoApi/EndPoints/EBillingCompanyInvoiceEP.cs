@@ -13,10 +13,12 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapEBillingCompanyInvoice(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetPagination);
-            builder.MapGet("/{ebillingid}/{companyid}/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingCompanyInvoiceDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingCompanyInvoiceDTO>>();
+            builder.MapGet("/", GetPagination).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad Documento"));
+            builder.MapGet("/{ebillingid}/{companyid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad Documento"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingCompanyInvoiceDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad Documento"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingCompanyInvoiceDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad Documento"));
             return builder;
         }
 

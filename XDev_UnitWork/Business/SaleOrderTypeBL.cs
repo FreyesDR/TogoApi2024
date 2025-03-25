@@ -69,6 +69,8 @@ namespace XDev_UnitWork.Business
                 Name = s.Name,
                 Code = s.Code,
                 PriceSchemeId = s.PriceSchemeId,
+                AssignmentRequired = s.AssignmentRequired,
+                Export = s.Export,
             }).OrderBy(o => o.Code).ToList());
         }
 
@@ -86,6 +88,8 @@ namespace XDev_UnitWork.Business
                     model.Inventory = dto.Inventory;
                     model.RangeId = dto.RangeId;
                     model.PriceSchemeId = dto.PriceSchemeId;
+                    model.AssignmentRequired = dto.AssignmentRequired;
+                    model.Export = dto.Export;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }

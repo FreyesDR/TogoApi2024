@@ -123,5 +123,16 @@ namespace XDev_UnitWork.Custom
                 };
             return base.InvalidToken();
         }
+
+        public override IdentityError PasswordMismatch()
+        {
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Contains("es"))
+                return new IdentityError
+                {
+                    Code = nameof(PasswordMismatch),
+                    Description = "Contraseña incorrecta"
+                };
+            return base.InvalidToken();
+        }
     }
 }

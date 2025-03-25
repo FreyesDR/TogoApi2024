@@ -33,6 +33,7 @@ namespace XDev_UnitWork.DTO.Material
         public decimal Price { get; set; }
         public Guid UnitMeasureId { get; set; }
         public string UnitMeasureCode { get; set; }
+        public string UnitMeasureAltCode { get; set; }
         public bool Active { get; set; }
         public bool IsDeleted { get; set; }
         public short NumType { get; set; }

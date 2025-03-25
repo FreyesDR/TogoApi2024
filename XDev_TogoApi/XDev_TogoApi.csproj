@@ -13,14 +13,32 @@
 
   <ItemGroup>
     <None Remove="Reports\GenericSaleOrder.rdlc" />
+    <None Remove="Reports\InvoiceFormCCF.rdlc" />
+    <None Remove="Reports\InvoiceFormExp.rdlc" />
+    <None Remove="Reports\InvoiceFormFC.rdlc" />
+    <None Remove="Reports\InvoiceFormNC.rdlc" />
+    <None Remove="Reports\InvoiceFormND.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\GenericSaleOrder.rdlc" />
+    <EmbeddedResource Include="Reports\InvoiceFormCCF.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\InvoiceFormEXP.rdlc" />
+    <EmbeddedResource Include="Reports\InvoiceFormFC.rdlc" />
+    <EmbeddedResource Include="Reports\InvoiceFormNC.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\InvoiceFormND.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
+    <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" />

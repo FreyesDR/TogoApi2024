@@ -1,8 +1,4 @@
-﻿using NPOI.SS.Formula.Functions;
-using NPOI.Util;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using XDev_TogoApi.Code;
-using XDev_UnitWork.DTO.SaleOrder;
+﻿using XDev_TogoApi.Code;
 using Microsoft.AspNetCore.Http.HttpResults;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
@@ -15,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPriceCondition(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", Get);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PriceConditionDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PriceConditionDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Condición de Precio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Condición de Precio"));
+            builder.MapGet("/{id}", Get).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Condición de Precio"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PriceConditionDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Condición de Precio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PriceConditionDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Condición de Precio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Condición de Precio"));
             return builder;
         }
 

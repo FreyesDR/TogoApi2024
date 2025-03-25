@@ -32,6 +32,9 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<EBillingDocument>(dto);
+                model.EBilling = null;
+
+                await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El documento {dto.Code} ya existe");
         }

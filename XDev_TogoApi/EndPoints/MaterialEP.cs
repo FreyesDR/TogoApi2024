@@ -1,14 +1,10 @@
 ﻿
 using Microsoft.AspNetCore.Http.HttpResults;
-using NPOI.SS.Formula.Functions;
-using NPOI.Util;
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
-using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.DTO.Material;
 using XDev_UnitWork.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace XDev_TogoApi.EndPoints
 {
@@ -16,13 +12,15 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapMaterial(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetPagination);
-            builder.MapGet("/search/{branchid}", GetActives);
-            builder.MapGet("/{id}", GetById);
-            builder.MapGet("/code/{code}", GetByCode);            
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetPagination).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Material"));
+            builder.MapGet("/search/{branchid}", GetActives).WithDescription("Listado por Sucursal").WithMetadata(new ModuleAttribute("Material"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Material"));
+            builder.MapGet("/code/{code}", GetByCode).WithDescription("Obtener por Código").WithMetadata(new ModuleAttribute("Material"));            
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Material"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Material"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Material"));
             return builder;
         }
 

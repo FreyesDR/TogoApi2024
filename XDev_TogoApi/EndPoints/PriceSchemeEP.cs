@@ -14,12 +14,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPriceScheme(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PriceSchemeDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PriceSchemeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Esquema de Precio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Esquema de Precio"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Esquema de Precio"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PriceSchemeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Esquema de Precio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PriceSchemeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Esquema de Precio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Esquema de Precio"));
             return builder;
         }
 

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using XDev_UnitWork.DTO.ElectronicBilling;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
-using NPOI.SS.Formula.Functions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using XDev_TogoApi.Code;
 using XDev_UnitWork.Custom;
 
@@ -14,11 +12,13 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapEBillingDocument(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetPagination);
-            builder.MapGet("/{ebillingid}/{id}", GetById);
-            builder.MapGet("/{ebillingid}/list", GetList);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingDocumentDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingDocumentDTO>>();
+            builder.MapGet("/", GetPagination).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Facturación Electrónica Tipo Documento"));
+            builder.MapGet("/{ebillingid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Facturación Electrónica Tipo Documento")); ;
+            builder.MapGet("/{ebillingid}/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Facturación Electrónica Tipo Documento")); ;
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingDocumentDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Facturación Electrónica Tipo Documento"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingDocumentDTO>>()
+                                        .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Facturación Electrónica Tipo Documento"));
             return builder;
         }
 

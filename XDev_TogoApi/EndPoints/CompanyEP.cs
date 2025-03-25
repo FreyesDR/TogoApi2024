@@ -14,17 +14,19 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCompany(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/{id}", GetById);
-            builder.MapGet("/code/{code}", GetByCode);
-            builder.MapGet("/list", GetList);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Sociedad"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Sociedad")); 
+            builder.MapGet("/code/{code}", GetByCode).WithDescription("Obtener por código").WithMetadata(new ModuleAttribute("Sociedad")); 
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Sociedad")); 
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CompanyDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Sociedad"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyDTO>>()
+                                        .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Sociedad"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Sociedad")); 
 
             // Direcciones
-            builder.MapGet("/{companyid}/address", GetAddresses);
-            builder.MapGet("/{companyid}/address/{id}", GetAddress);                        
+            builder.MapGet("/{companyid}/address", GetAddresses).WithDescription("Obtener direcciones").WithMetadata(new ModuleAttribute("Sociedad")); 
+            builder.MapGet("/{companyid}/address/{id}", GetAddress).WithDescription("Obtener dirección por Id").WithMetadata(new ModuleAttribute("Sociedad"));                         
 
             return builder;
         }

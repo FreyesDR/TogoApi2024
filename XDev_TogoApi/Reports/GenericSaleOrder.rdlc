@@ -652,11 +652,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(Fields!DiscountAmount.Value &lt; 0, Fields!DiscountAmount.Value / Fields!Quantity.Value,"")</Value>
+                              <Value>=IIf(Fields!DiscountAmount.Value &gt; 0, Fields!DiscountAmount.Value,"")</Value>
                               <Style>
                                 <FontFamily>Arial Narrow</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>n5</Format>
+                                <Format>n2</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>

@@ -13,6 +13,11 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Encodings.Web;
 using System.Text;
 using XDev_Model.Entities;
+using XDev_UnitWork.Interfaces;
+using XDev_AvaLinkAIO;
+using XDev_RazorTemplate.Views;
+using Razor.Templating.Core;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalWeb.EndPoints
 {
@@ -29,7 +34,8 @@ namespace PortalWeb.EndPoints
 
             var timeProvider = endpoints.ServiceProvider.GetRequiredService<TimeProvider>();
             var bearerTokenOptions = endpoints.ServiceProvider.GetRequiredService<IOptionsMonitor<BearerTokenOptions>>();
-            var emailSender = endpoints.ServiceProvider.GetRequiredService<IEmailSender<TUser>>();
+            //var emailSender = endpoints.ServiceProvider.GetRequiredService<IEmailSender<TUser>>();
+            var emailSender = endpoints.ServiceProvider.GetRequiredService<IEmailSenderService>();
             var linkGenerator = endpoints.ServiceProvider.GetRequiredService<LinkGenerator>();
 
             // Get Token
@@ -96,93 +102,93 @@ namespace PortalWeb.EndPoints
             });
 
             // Registro de usuario
-            routeGroup.MapPost("/register", async Task<Results<Ok, BadRequest<ExceptionReturnDTO>>>
-            ([FromBody] RegisterDTO registration, HttpContext context, [FromServices] IServiceProvider sp) =>
-            {
-                var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            //routeGroup.MapPost("/register", async Task<Results<Ok, BadRequest<ExceptionReturnDTO>>>
+            //([FromBody] RegisterDTO registration, HttpContext context, [FromServices] IServiceProvider sp) =>
+            //{
+            //    var userManager = sp.GetRequiredService<UserManager<TUser>>();
 
-                if (!userManager.SupportsUserEmail)
-                {
-                    throw new NotSupportedException($"{nameof(MapSecurity)} requires a user store with email support.");
-                }
+            //    if (!userManager.SupportsUserEmail)
+            //    {
+            //        throw new NotSupportedException($"{nameof(MapSecurity)} requires a user store with email support.");
+            //    }
 
-                var userStore = sp.GetRequiredService<IUserStore<TUser>>();
-                var emailStore = (IUserEmailStore<TUser>)userStore;
-                var email = registration.Email;
+            //    var userStore = sp.GetRequiredService<IUserStore<TUser>>();
+            //    var emailStore = (IUserEmailStore<TUser>)userStore;
+            //    var email = registration.Email;
 
-                if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
-                {
-                    return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
-                }
+            //    if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
+            //    {
+            //        return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
+            //    }
 
-                var user = new TUser();
-                await userStore.SetUserNameAsync(user, email, CancellationToken.None);
-                await emailStore.SetEmailAsync(user, email, CancellationToken.None);
+            //    var user = new TUser();
+            //    await userStore.SetUserNameAsync(user, email, CancellationToken.None);
+            //    await emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
-                // Custom fields
-                user.Name = registration.Name;
+            //    // Custom fields
+            //    user.Name = registration.Name;
                 
-                var result = await userManager.CreateAsync(user, registration.Password);
+            //    var result = await userManager.CreateAsync(user, registration.Password);
 
-                if (!result.Succeeded)
-                {
-                    return CreateValidationProblem(result);
-                }
+            //    if (!result.Succeeded)
+            //    {
+            //        return CreateValidationProblem(result);
+            //    }
 
-                await SendConfirmationEmailAsync(user, userManager, context, email);
-                return TypedResults.Ok();
-            }).AddEndpointFilter<ValidationFilter<RegisterDTO>>(); ;
+            //    await SendConfirmationEmailAsync(user, userManager, context, email);
+            //    return TypedResults.Ok();
+            //}).AddEndpointFilter<ValidationFilter<RegisterDTO>>(); ;
          
             // Confirmación Email
-            routeGroup.MapGet("/confirmEmail", async Task<Results<ContentHttpResult, UnauthorizedHttpResult>>
-            ([FromQuery] string userId, [FromQuery] string code, [FromServices] IServiceProvider sp) =>
-            {
-                var userManager = sp.GetRequiredService<UserManager<TUser>>();
-                if (await userManager.FindByIdAsync(userId) is not { } user)
-                {
-                    // We could respond with a 404 instead of a 401 like Identity UI, but that feels like unnecessary information.
-                    return TypedResults.Unauthorized();
-                }
+            //routeGroup.MapGet("/confirmEmail", async Task<Results<ContentHttpResult, UnauthorizedHttpResult>>
+            //([FromQuery] string userId, [FromQuery] string code, [FromServices] IServiceProvider sp) =>
+            //{
+            //    var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            //    if (await userManager.FindByIdAsync(userId) is not { } user)
+            //    {
+            //        // We could respond with a 404 instead of a 401 like Identity UI, but that feels like unnecessary information.
+            //        return TypedResults.Unauthorized();
+            //    }
 
-                try
-                {
-                    code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-                }
-                catch (FormatException)
-                {
-                    return TypedResults.Unauthorized();
-                }
+            //    try
+            //    {
+            //        code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            //    }
+            //    catch (FormatException)
+            //    {
+            //        return TypedResults.Unauthorized();
+            //    }
 
-                IdentityResult result;
+            //    IdentityResult result;
 
-                //if (string.IsNullOrEmpty(changedEmail))
-                //{
-                result = await userManager.ConfirmEmailAsync(user, code);
-                //}
-                //else
-                //{
-                //    // As with Identity UI, email and user name are one and the same. So when we update the email,
-                //    // we need to update the user name.
-                //    result = await userManager.ChangeEmailAsync(user, changedEmail, code);
+            //    //if (string.IsNullOrEmpty(changedEmail))
+            //    //{
+            //    result = await userManager.ConfirmEmailAsync(user, code);
+            //    //}
+            //    //else
+            //    //{
+            //    //    // As with Identity UI, email and user name are one and the same. So when we update the email,
+            //    //    // we need to update the user name.
+            //    //    result = await userManager.ChangeEmailAsync(user, changedEmail, code);
 
-                //    if (result.Succeeded)
-                //    {
-                //        result = await userManager.SetUserNameAsync(user, changedEmail);
-                //    }
-                //}
+            //    //    if (result.Succeeded)
+            //    //    {
+            //    //        result = await userManager.SetUserNameAsync(user, changedEmail);
+            //    //    }
+            //    //}
 
-                if (!result.Succeeded)
-                {
-                    return TypedResults.Unauthorized();
-                }
+            //    if (!result.Succeeded)
+            //    {
+            //        return TypedResults.Unauthorized();
+            //    }
 
-                return TypedResults.Text("Thank you for confirming your email.");
-            }).Add(endpointBuilder =>
-            {
-                var finalPattern = ((RouteEndpointBuilder)endpointBuilder).RoutePattern.RawText;
-                confirmEmailEndpointName = $"{nameof(MapSecurity)}-{finalPattern}";
-                endpointBuilder.Metadata.Add(new EndpointNameMetadata(confirmEmailEndpointName));
-            });
+            //    return TypedResults.Text("Thank you for confirming your email.");
+            //}).Add(endpointBuilder =>
+            //{
+            //    var finalPattern = ((RouteEndpointBuilder)endpointBuilder).RoutePattern.RawText;
+            //    confirmEmailEndpointName = $"{nameof(MapSecurity)}-{finalPattern}";
+            //    endpointBuilder.Metadata.Add(new EndpointNameMetadata(confirmEmailEndpointName));
+            //});
 
             async Task SendConfirmationEmailAsync(TUser user, UserManager<TUser> userManager, HttpContext context, string email, bool isChange = false)
             {
@@ -212,26 +218,28 @@ namespace PortalWeb.EndPoints
                 var confirmEmailUrl = linkGenerator.GetUriByName(context, confirmEmailEndpointName, routeValues)
                     ?? throw new NotSupportedException($"Could not find endpoint named '{confirmEmailEndpointName}'.");
 
-                await emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(confirmEmailUrl));
+                //await emailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(confirmEmailUrl));
             }
 
             // Reenviar confirmación
-            routeGroup.MapPost("/resendConfirmationEmail", async Task<Ok>
-            ([FromBody] ResendConfirmationEmailRequest resendRequest, HttpContext context, [FromServices] IServiceProvider sp) =>
-            {
-                var userManager = sp.GetRequiredService<UserManager<TUser>>();
-                if (await userManager.FindByEmailAsync(resendRequest.Email) is not { } user)
-                {
-                    return TypedResults.Ok();
-                }
+            //routeGroup.MapPost("/resendConfirmationEmail", async Task<Ok>
+            //([FromBody] ResendConfirmationEmailRequest resendRequest, HttpContext context, [FromServices] IServiceProvider sp) =>
+            //{
+            //    var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            //    if (await userManager.FindByEmailAsync(resendRequest.Email) is not { } user)
+            //    {
+            //        return TypedResults.Ok();
+            //    }
 
-                await SendConfirmationEmailAsync(user, userManager, context, resendRequest.Email);
-                return TypedResults.Ok();
-            });
+            //    await SendConfirmationEmailAsync(user, userManager, context, resendRequest.Email);
+            //    return TypedResults.Ok();
+            //});
 
             routeGroup.MapPost("/forgotPassword", async Task<Results<Ok, ValidationProblem>>
                 ([FromBody] ForgotPasswordRequest resetRequest, [FromServices] IServiceProvider sp) =>
             {
+                var cfg = AIO.GetConfig("WebConfig.enc");
+
                 var userManager = sp.GetRequiredService<UserManager<TUser>>();
                 var user = await userManager.FindByEmailAsync(resetRequest.Email);
 
@@ -240,7 +248,19 @@ namespace PortalWeb.EndPoints
                     var code = await userManager.GeneratePasswordResetTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-                    await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
+                    var url = string.Format("{0}/public/resetPassword?email={1}&code={2}", cfg.FrontEndUrl, resetRequest.Email, HtmlEncoder.Default.Encode(code));
+
+                    ForgotPassword dto = new ForgotPassword
+                    {
+                        Name = user.Name,
+                        Url = url,
+                    };
+
+                    var body = await RazorTemplateEngine.RenderAsync("~/Views/ForgotPassword.cshtml", dto);
+
+                    await emailSender.SendEmailAsync(user.Email!,"Restablecer Contraseña",body);
+
+                    //await emailSender.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
                 }
 
                 // Don't reveal that the user does not exist or is not confirmed, so don't return a 200 if we would have
@@ -319,10 +339,10 @@ namespace PortalWeb.EndPoints
                 errorDictionary[error.Code] = newDescriptions;
             }
 
-            string rtmsg = "Register failed";
+            string rtmsg = "Request failed";
 
             if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Contains("es"))
-                rtmsg = "Registro fallido";
+                rtmsg = "Solicitud Incorrecta";
 
             return TypedResults.BadRequest(new ExceptionReturnDTO { Message = rtmsg, StatusCode = StatusCodes.Status400BadRequest.ToString(),Errors = errorDictionary.Select(k => string.Format("{0}:{1}",k.Key, k.Value.FirstOrDefault())).ToArray() });
         }

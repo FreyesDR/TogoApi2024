@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapBranchType(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<BranchTypeDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<BranchTypeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Tipo Sucursal"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Tipo Sucursal"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Tipo Sucursal"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<BranchTypeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Tipo Sucursal")); 
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<BranchTypeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Tipo Sucursal"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Tipo Sucursal"));
             return builder;
         }
 

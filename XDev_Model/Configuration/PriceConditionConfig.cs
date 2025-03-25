@@ -11,6 +11,7 @@ namespace XDev_Model.Configuration
             builder.HasKey("Id");
             builder.HasIndex(i => i.Code).IsUnique(false);
             builder.Property(p => p.Code).HasMaxLength(3);
+            builder.Property(p => p.AltCode).HasMaxLength(4);
             builder.Property(p => p.Name).HasMaxLength(30);
             builder.Property(p => p.Type).HasMaxLength(1);    
             builder.Property(p => p.Source).HasMaxLength(1);

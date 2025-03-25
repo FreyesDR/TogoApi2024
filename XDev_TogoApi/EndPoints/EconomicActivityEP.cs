@@ -11,13 +11,15 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapEconomicActivity(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EconomicActivityDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EconomicActivityDTO>>();
-            builder.MapDelete("/{id}", Delete);
-            builder.MapPost("/upload", UploadFile).DisableAntiforgery();
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Actividad Económica")); 
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Actividad Económica"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtner por Id").WithMetadata(new ModuleAttribute("Actividad Económica"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EconomicActivityDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Actividad Económica"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EconomicActivityDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Actividad Económica"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Actividad Económica"));
+            builder.MapPost("/upload", UploadFile).DisableAntiforgery().WithDescription("Cargar Archivo").WithMetadata(new ModuleAttribute("Actividad Económica"));
             return builder;
         }
 

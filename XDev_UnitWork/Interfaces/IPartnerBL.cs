@@ -9,6 +9,7 @@ namespace XDev_UnitWork.Interfaces
         Task<List<AddressDTO>> GetAddressAsync(PaginationDTO pagination, string partnerid);
         Task<AddressDTO> GetAddressById(string partnerid, string id);
         Task<PartnerDTO> GetByCodeAsync(string code, string companyid);
+        Task<PartnerInfoDTO> GetInfoAsync(Guid partnerid);
         Task<List<PartnerListDTO>> GetPartnerListAsync(PaginationDTO pagination);
     }
 }

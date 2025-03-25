@@ -13,8 +13,11 @@ namespace XDev_UnitWork.Business
 {
     public class CompanyBL : GenericBL<ICompanyRep>, ICompanyBL
     {
-        public CompanyBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper) : base(dbContext, contextAccessor, mapper)
+        private readonly IAddressBL addressBL;
+
+        public CompanyBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper, IAddressBL addressBL) : base(dbContext, contextAccessor, mapper)
         {
+            this.addressBL = addressBL;
         }
 
         public async Task<bool> AnyAsync(Guid id)
@@ -33,6 +36,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<Company>(dto);
+                model.CompanyType = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException($"El código [{dto.Code}] ya existe");
@@ -156,6 +161,77 @@ namespace XDev_UnitWork.Business
                 return new AddressDTO { CompanyId = companyid.GetGuid() };
 
             return Mapper.Map<AddressDTO>(model);
+        }
+
+        public async Task<CompanyInfoDTO> GetCompanyInfoAsync(Guid coid)
+        {                     
+            var company = await DbContext.Company.Include(i => i.CompanyIDS)
+                                                 .Include(i => i.CompanyEconomicActivities)
+                                                 .ThenInclude(t => t.EconomicActivity)
+                                                 .AsNoTracking().FirstOrDefaultAsync(f => f.Id == coid);
+
+            var dto = new CompanyInfoDTO
+            {
+                Code = company.Code,
+                Name = company.Name,
+                TradeName = company.TradeName,
+                Active = company.Active,
+            };
+
+            if(company.CompanyIDS is not null)
+            {
+                var nif = company.CompanyIDS.FirstOrDefault(f => f.NIFNum == "1");
+                if (nif is not null)
+                    dto.Nif1 = nif.DocumentNumber;
+
+                nif = company.CompanyIDS.FirstOrDefault(f => f.NIFNum == "2");
+                if (nif is not null)
+                    dto.Nif2 = nif.DocumentNumber;
+            }
+
+            if (company.CompanyEconomicActivities is not null)
+            {
+                var act = company.CompanyEconomicActivities.FirstOrDefault(f => f.Principal == true);
+                if(act is null)
+                    act = company.CompanyEconomicActivities.FirstOrDefault();
+
+                if(act is not null)
+                {
+                    dto.EconomicActivityCode = act.EconomicActivity.Code;
+                    dto.EconomicActivityName = act.EconomicActivity.Name;
+                }
+                    
+            }
+
+            var addresses = await addressBL.GetByCompanyId(coid);
+
+            if (addresses is not null)
+            {
+                var address = addresses.FirstOrDefault(f => f.AddressTypeCode == "DO");
+                if(address is null)
+                    address = addresses.FirstOrDefault();
+
+                var emails = await addressBL.GetEmails(address.Id);
+                if (emails.Any())
+                {
+                    var email = emails.FirstOrDefault(f => f.Principal == true);
+                    if (email is null)
+                        email = emails.FirstOrDefault();
+
+                    if (email is not null)
+                        dto.Email = email.Email;
+                }
+
+                var phones = await addressBL.GetPhones(address.Id);
+                if (phones.Any())
+                {
+                    var tel = phones.FirstOrDefault();
+                    if (tel is not null)
+                        dto.Phone = tel.Phone;
+                }
+            }
+
+            return dto;
         }
     }
 }

@@ -32,6 +32,13 @@ using Microsoft.Reporting.NETCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using XDev_UnitWork.DTO.ElectronicBilling;
+using XDev_UnitWork.DTO.Admin;
+using System.Net.Mail;
+using XDev_AvaLinkAIO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +73,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
   .AddDefaultTokenProviders()
   .AddErrorDescriber<CustomIdentityError>();
 
+var config = AIO.GetConfig("WebConfig.enc");
 
 builder.Services.AddScoped<IClaimsTransformation, UserClaimsTransformation>();
 builder.Services.AddHttpClient();
@@ -74,7 +82,7 @@ builder.Services.AddCors(opc =>
 {
     opc.AddDefaultPolicy(pol =>
     {
-        pol.WithOrigins("*")
+        pol.WithOrigins(config.FrontEndUrl)
            .AllowAnyHeader()
            .AllowAnyMethod()
            .WithExposedHeaders(new string[] { "page", "pages", "items", "www-authenticate" });
@@ -112,6 +120,16 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+builder.Services.AddFluentEmail(config.SmtpSettings.FromEmail, config.SmtpSettings.FromName)
+                .AddSmtpSender(new SmtpClient(config.SmtpSettings.Host)
+                {
+                    UseDefaultCredentials = false,
+                    Port = config.SmtpSettings.Port,
+                    Credentials = new System.Net.NetworkCredential(config.SmtpSettings.UserName, config.SmtpSettings.Password),
+                    EnableSsl = config.SmtpSettings.EnableSsl,
+                    DeliveryFormat = SmtpDeliveryFormat.International,
+                });
+
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new CultureInfo[] { new("es-SV"), new("en-US") };
@@ -136,12 +154,24 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AutorizacionDinamica", policy => policy.Requirements.Add(new DynamicAuthorizationRequirement()));
+});
 
+builder.Services.AddScoped<IAuthorizationHandler, DynamicAuthorizationHandler>();
+builder.Services.AddScoped<IEndPointPolicyService, EndPointPolicyService>();
+builder.Services.AddScoped<IUserPolicyService, UserPolicyService>();
 builder.Services.AddOutputCache();
 
 #region Servicios
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
+builder.Services.AddTransient<ISignerService, SignerService>();
+
+builder.Services.AddScoped<IEndPointPolicyBL, EndPointPolicyBL>();
+
+builder.Services.AddScoped<IDashBoardBL, DashBoardBL>();
+
 builder.Services.AddScoped<IValidator<RegisterDTO>, RegisterRequestValidator>();
 
 builder.Services.AddScoped<IAccountBL, AccountBL>();
@@ -262,7 +292,42 @@ builder.Services.AddScoped<IValidator<EBillingDocumentDTO>, EBillingDocumentVali
 
 builder.Services.AddScoped<IEBillingCompanyInvoiceBL, EBillingCompanyInvoiceBL>();
 builder.Services.AddScoped<IValidator<EBillingCompanyInvoiceDTO>, EBillingCompanyInvoiceValidator>();
+
+builder.Services.AddScoped<IInvoiceBL, InvoiceBL>();
+
+builder.Services.AddScoped<IFeSvBL, FeSvBL>();
+
+builder.Services.AddScoped<IPaymentConditionBL, PaymentConditionBL>();
+builder.Services.AddScoped<IValidator<PaymentConditionDTO>, PaymentConditionValidator>();
+
+builder.Services.AddScoped<IMeanOfPaymentBL, MeanOfPaymentBL>();
+builder.Services.AddScoped<IValidator<MeanOfPaymentDTO>, MeanOfPaymentValidator>();
+
+builder.Services.AddScoped<IUsersBL, UsersBL>();
+builder.Services.AddScoped<IValidator<UserCreateDTO>, UserCreateValidator>();
+builder.Services.AddScoped<IValidator<UserDTO>, UserValidator>();
+
+builder.Services.AddScoped<IEBillingLogBL, EBillingLogBL>();
+
+builder.Services.AddScoped<IEBillingTaxBL, EBillingTaxBL>();
+builder.Services.AddScoped<IValidator<EBillingTaxDTO>, EBillingTaxValidator>();
+
+builder.Services.AddScoped<IRecintoFiscalBL, RecintoFiscalBL>();
+builder.Services.AddScoped<IValidator<RecintoFiscalDTO>, RecintoFiscalValidator>();
+
+builder.Services.AddScoped<IRegimenExportBL, RegimenExportBL>();
+builder.Services.AddScoped<IValidator<RegimenExportDTO>, RegimenExportValidator>();
+
+builder.Services.AddScoped<IIncoTermsBL, IncoTermsBL>();
+builder.Services.AddScoped<IValidator<IncoTermsDTO>, IncoTermsValidator>();
 #endregion
+
+#region Servicios Background
+builder.Services.AddHostedService<ContingencyService>().AddSingleton<IFeSvContingencyBL, FeSvContingencyBL>();
+builder.Services.AddHostedService<InvoiceSendEmailService>().AddSingleton<IInvoiceSendEmailBL, InvoiceSendEmailBL>();
+#endregion
+
+builder.Services.AddHostedService<EndpointsInitializer>();
 
 var app = builder.Build();
 
@@ -310,86 +375,70 @@ app.UseAuthorization();
 
 #region EndPoints
 app.MapGroup("/auth").MapSecurity<ApplicationUser>();
-app.MapGroup("/account").MapAccount().RequireAuthorization();
-app.MapGroup("/company").MapCompany().RequireAuthorization();
-app.MapGroup("/company/type").MapCompanyType().RequireAuthorization();
-app.MapGroup("/company/idtype").MapCompanyID().RequireAuthorization();
-app.MapGroup("/company/eactivity").MapCompanyEconomicActivity().RequireAuthorization();
-app.MapGroup("/branch/type").MapBranchType().RequireAuthorization();
-app.MapGroup("/branch").MapBranch().RequireAuthorization();
-app.MapGroup("/warehouse").MapWareHouse().RequireAuthorization();
-app.MapGroup("/pointsale").MapPointSale().RequireAuthorization();
-app.MapGroup("/address/type").MapAddressType().RequireAuthorization();
-app.MapGroup("/address").MapAddress().RequireAuthorization();
-app.MapGroup("/partner").MapPartner().RequireAuthorization();
-app.MapGroup("/partner/type").MapPartnerType().RequireAuthorization();
-app.MapGroup("/partner/features").MapPartnerFeatures().RequireAuthorization();
-app.MapGroup("/partner/role").MapPartnerRole().RequireAuthorization();
-app.MapGroup("/partner/roles").MapPartnerRoles().RequireAuthorization();
-app.MapGroup("/partner/idtype").MapPartnerID().RequireAuthorization();
-app.MapGroup("/partner/eactivity").MapPartnerEconomicActivity().RequireAuthorization();
-app.MapGroup("/partner/company").MapPartnerCompany().RequireAuthorization();
-app.MapGroup("/country").MapCountry().RequireAuthorization();
-app.MapGroup("/region").MapRegion().RequireAuthorization();
-app.MapGroup("/city").MapCity().RequireAuthorization();
-app.MapGroup("/idtype").MapIDType().RequireAuthorization();
-app.MapGroup("/eactivity").MapEconomicActivity().RequireAuthorization();
-app.MapGroup("/nrange").MapNumberRange().RequireAuthorization();
-app.MapGroup("/currency").MapCurrency().RequireAuthorization();
-app.MapGroup("/log").MapAppLog().RequireAuthorization();
+app.MapGroup("/account").MapAccount().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/company").MapCompany().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/company/type").MapCompanyType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/company/idtype").MapCompanyID().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/company/eactivity").MapCompanyEconomicActivity().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/branch/type").MapBranchType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/branch").MapBranch().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/warehouse").MapWareHouse().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/pointsale").MapPointSale().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/address/type").MapAddressType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/address").MapAddress().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner").MapPartner().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/type").MapPartnerType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/features").MapPartnerFeatures().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/role").MapPartnerRole().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/roles").MapPartnerRoles().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/idtype").MapPartnerID().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/eactivity").MapPartnerEconomicActivity().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/partner/company").MapPartnerCompany().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/country").MapCountry().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/region").MapRegion().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/city").MapCity().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/idtype").MapIDType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/eactivity").MapEconomicActivity().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/nrange").MapNumberRange().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/currency").MapCurrency().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/log").MapAppLog().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-app.MapGroup("/invoice/type").MapInvoiceType().RequireAuthorization();
-app.MapGroup("/saleorder/type").MapSaleOrderType().RequireAuthorization();
-app.MapGroup("/saleorder").MapSaleOrder().RequireAuthorization();
-app.MapGroup("/pricecond").MapPriceCondition().RequireAuthorization();
-app.MapGroup("/pricescheme").MapPriceScheme().RequireAuthorization();
+app.MapGroup("/invoice/type").MapInvoiceType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/invoice").MapInvoice().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-app.MapGroup("/unitm").MapUnitMeasure().RequireAuthorization();
-app.MapGroup("/material").MapMaterial().RequireAuthorization();
-app.MapGroup("/material/type").MapMaterialType().RequireAuthorization();
-app.MapGroup("/material/features").MapMaterialFeature().RequireAuthorization();
-app.MapGroup("/material/branch").MapMaterialBranch().RequireAuthorization();
-app.MapGroup("/material/warehouse").MapMaterialWareHouse().RequireAuthorization();
+app.MapGroup("/saleorder/type").MapSaleOrderType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/saleorder").MapSaleOrder().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/pricecond").MapPriceCondition().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/pricescheme").MapPriceScheme().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-app.MapGroup("/ebilling").MapEBilling().RequireAuthorization();
-app.MapGroup("/ebilling/company").MapEBillingCompany().RequireAuthorization();
-app.MapGroup("/ebilling/companyinvoice").MapEBillingCompanyInvoice().RequireAuthorization();
-app.MapGroup("/ebilling/document").MapEBillingDocument().RequireAuthorization();
+app.MapGroup("/unitm").MapUnitMeasure().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/material").MapMaterial().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/material/type").MapMaterialType().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/material/features").MapMaterialFeature().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/material/branch").MapMaterialBranch().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/material/warehouse").MapMaterialWareHouse().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//app.MapGroup("/auth").MapIdentityApi<ApplicationUser>();
+app.MapGroup("/ebilling").MapEBilling().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/ebilling/company").MapEBillingCompany().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/ebilling/companyinvoice").MapEBillingCompanyInvoice().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/ebilling/document").MapEBillingDocument().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/ebilling/log").MapEBillingLog().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/ebilling/tax").MapEBillingTax().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//app.MapGet("/testpdf", (IWebHostEnvironment env) =>
-//{
-//    var filePath = $"{env.ContentRootPath}\\Reports\\GenericSaleOrder.rdlc";
+app.MapGroup("/paymentcond").MapPaymentCondition().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/meanpayment").MapMeanOfPayment().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//    if (!File.Exists(filePath))
-//        throw new Exception($"El formulario {filePath} no existe");
+app.MapGroup("/recintofiscal").MapRecintoFiscal().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/regimenexport").MapRegimenExport().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/incoterms").MapIncoTerms().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//    var fs = new FileStream(filePath, FileMode.Open);
-//    LocalReport localReport = new LocalReport();
-//    localReport.LoadReportDefinition(fs);
+app.MapGroup("/admin/users").MapUser().RequireAuthorization(policyNames: "AutorizacionDinamica");
+app.MapGroup("/admin/authorize").MapEndPointPolicy().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//    var dto = new List<SaleOrderPdfFormDTO>();
+app.MapGroup("/dashboard").MapDashBoard().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
-//    var imagePath = $"{env.WebRootPath}\\image\\LogoAvaLink.png";
-//    var image = File.ReadAllBytes(imagePath);
-
-//    dto.Add(new SaleOrderPdfFormDTO
-//    {
-//        SOType = "Documento de Prueba",
-//        SODate = DateTime.Now,
-//        SONumber = "1234567890",
-//        CompanyLogo = image
-//    });
-
-//    localReport.DataSources.Add(new ReportDataSource("SaleOrderHeaderDataSet", dto));
-//    localReport.DataSources.Add(new ReportDataSource("SaleOrderPositionDataSet", new List<SaleOrderPositionDTO>()));
-
-//    fs.Close();
-
-//    var ms = new MemoryStream(localReport.Render("PDF"));
-
-//    return Results.File(ms, "application/pdf", "SaleOrderPDF.pdf");
-//});
 #endregion
-app.Run();
+
+await app.RunAsync();
+
+

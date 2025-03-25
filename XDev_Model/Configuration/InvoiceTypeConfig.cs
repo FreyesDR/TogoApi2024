@@ -12,6 +12,7 @@ namespace XDev_Model.Configuration
             builder.HasIndex(p => p.Code).IsUnique();
             builder.Property(p => p.Code).HasMaxLength(5);            
             builder.Property(p => p.Name).HasMaxLength(50);
+            builder.Property(p => p.FormName).HasMaxLength(50);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
             builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);

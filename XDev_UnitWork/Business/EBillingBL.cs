@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using XDev_Model;
+using XDev_Model.Entities;
 using XDev_Model.Interfaces;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
@@ -38,7 +39,7 @@ namespace XDev_UnitWork.Business
         public async Task<EBillingDTO> GetByIdAsync(params object[] ids)
         {
             var model = await Repository.GetByIdAsync(ids);
-            if(model is null)
+            if (model is null)
                 return new EBillingDTO();
 
             return Mapper.Map<EBillingDTO>(model);
@@ -47,7 +48,7 @@ namespace XDev_UnitWork.Business
         public async Task<List<EBillingDTO>> GetListAsync(PaginationDTO pagination)
         {
             var query = await Repository.QueryAsync();
-            var list = query.Select(s => new EBillingDTO { Id = s.Id, Name = s.Name}).AsQueryable();
+            var list = query.Select(s => new EBillingDTO { Id = s.Id, Name = s.Name }).AsQueryable();
             list = list.CreateFilterAndOrder(pagination);
             return await list.CreatePaging<EBillingDTO, EBillingDTO>(pagination, ContextAccessor.HttpContext);
 
@@ -69,6 +70,8 @@ namespace XDev_UnitWork.Business
                     model.UrlTest = dto.UrlTest;
                     model.UrlSigner = dto.UrlSigner;
                     model.UrlProd = dto.UrlProd;
+                    model.CertPathTest = dto.CertPathTest;
+                    model.CertPathProd = dto.CertPathProd;
 
                     await Repository.UpdateAsync(model, dto.ConcurrencyStamp);
                 }
@@ -79,5 +82,6 @@ namespace XDev_UnitWork.Business
                 throw new CustomTogoException($"El registro fue modificado por el usuario '{user.UserName}'");
             }
         }
+        
     }
 }

@@ -14,9 +14,21 @@ namespace XDev_Model.Configuration
             builder.Property(p => p.Address).HasMaxLength(500);
             builder.Property(p => p.Email).HasMaxLength(256);
             builder.Property(p => p.Phone).HasMaxLength(20);
+            builder.Property(p => p.IDCode).HasMaxLength(5);
+            builder.Property(p => p.IDCode2).HasMaxLength(5);
+            builder.Property(p => p.IDNumber2).HasMaxLength(20);
+            builder.Property(p => p.CountryCode).HasMaxLength(4);
+            builder.Property(p => p.CountryName).HasMaxLength(50);
+            builder.Property(p => p.RegionCode).HasMaxLength(4);
+            builder.Property(p => p.RegionName).HasMaxLength(50);
+            builder.Property(p => p.CityCode).HasMaxLength(4);
+            builder.Property(p => p.CityName).HasMaxLength(50);
+            builder.Property(p => p.EcoActivityCode).HasMaxLength(5);
+            builder.Property(p => p.EcoActivityName).HasMaxLength(200);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
             builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);
+            builder.Property(p => p.TypePerson).HasMaxLength(1);
         }
     }
 }

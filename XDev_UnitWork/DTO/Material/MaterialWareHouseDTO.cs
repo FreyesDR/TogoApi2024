@@ -22,6 +22,7 @@ namespace XDev_UnitWork.DTO.Material
         public Guid BranchId { get; set; }
         public string BranchName {  get; set; }
         public Guid WareHouseId { get; set; }
+        public string WareHouseCode { get; set; }
         public string WareHouseName { get; set; }
 
         public decimal Stock { get; set; }

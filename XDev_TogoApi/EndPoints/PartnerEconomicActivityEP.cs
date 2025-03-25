@@ -10,11 +10,13 @@ namespace XDev_TogoApi.EndPoints
     public static class PartnerEconomicActivityEP
     {
         public static RouteGroupBuilder MapPartnerEconomicActivity(this RouteGroupBuilder builder) {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/{partnerid}/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerEconomicActivityDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerEconomicActivityDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Actividad Económica Socio")); 
+            builder.MapGet("/{partnerid}/{id}", GetById).WithDescription("Obtner por Id").WithMetadata(new ModuleAttribute("Actividad Económica Socio"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerEconomicActivityDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Actividad Económica Socio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerEconomicActivityDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Actividad Económica Socio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Actividad Económica Socio"));
             return builder;
         }
 

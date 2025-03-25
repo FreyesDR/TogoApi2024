@@ -10,9 +10,9 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerRoles(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapPost("/", Create);
-            builder.MapDelete("/{partnerid}/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Roles del Socio"));
+            builder.MapPost("/", Create).WithDescription("Crear").WithMetadata(new ModuleAttribute("Roles del Socio"));
+            builder.MapDelete("/{partnerid}/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Roles del Socio"));
             return builder;
         }
 

@@ -10,10 +10,16 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerCompany(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapPost("/", Create);
-            builder.MapDelete("/{partnerid}/{companyid}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Sociedades Socio"));
+            builder.MapGet("/actives", GetPartnerCompany).WithDescription("Listar activos").WithMetadata(new ModuleAttribute("Sociedades Socio"));
+            builder.MapPost("/", Create).WithDescription("Crear").WithMetadata(new ModuleAttribute("Sociedades Socio"));
+            builder.MapDelete("/{partnerid}/{companyid}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Sociedades Socio"));
             return builder;
+        }
+
+        private static async Task<Results<Ok<List<PartnerListDTO>>, BadRequest<ExceptionReturnDTO>>> GetPartnerCompany(PaginationDTO pagination, string companyid, IPartnerCompanyBL partnerCompanyBL)
+        {
+            return TypedResults.Ok(await partnerCompanyBL.GetPartnerCompanyListAsync(pagination, companyid));
         }
 
         private static async Task<Results<Ok<List<PartnerCompanyDTO>>, BadRequest<ExceptionReturnDTO>>> GetAll(string partnerid, IPartnerCompanyBL partnerCompanyBL)

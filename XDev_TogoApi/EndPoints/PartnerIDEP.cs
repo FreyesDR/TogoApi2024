@@ -11,11 +11,13 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartnerID(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/{partnerid}/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerIDDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerIDDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Documento Identificación Socio"));
+            builder.MapGet("/{partnerid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Documento Identificación Socio")); ;
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerIDDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Documento Identificación Socio")); ;
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerIDDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Documento Identificación Socio")); ;
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Documento Identificación Socio")); ;
             return builder;
         }
 

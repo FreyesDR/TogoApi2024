@@ -7,8 +7,6 @@ using XDev_Model;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
 using XDev_UnitWork.Custom;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using XDev_UnitWork.DTO.DM;
 
 namespace XDev_UnitWork.Business
@@ -93,34 +91,9 @@ namespace XDev_UnitWork.Business
             }
         }
 
-        public async Task CreateFromXlsx(Stream stream)
+        public Task CreateFromXlsx(Stream stream)
         {
-            IWorkbook excel = new XSSFWorkbook(stream);
-            ISheet sheet = excel.GetSheetAt(0);
-            List<EconomicActivity> list = new List<EconomicActivity>();
-            var model = await Repository.GetListAsync();
-
-            for (int i = 1; i <= sheet.LastRowNum; i++)
-            {
-                IRow row = sheet.GetRow(i);
-
-                if (row.Cells.Count == 2)
-                {
-                    var exists = model.FirstOrDefault(f => f.Code == row.GetCell(0).ToString());
-
-                    if (exists is null)
-                        list.Add(new EconomicActivity
-                        {
-                            Code = row.GetCell(0).ToString(),
-                            Name = row.GetCell(1).ToString()
-                        });
-                }
-            }
-
-            if (list.Count > 0)
-            {
-                await Repository.CreateAsync(list.ToArray());
-            }
+            throw new NotImplementedException();
         }
     }
 }

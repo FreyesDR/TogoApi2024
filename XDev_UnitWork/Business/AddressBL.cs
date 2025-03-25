@@ -10,7 +10,7 @@ using XDev_UnitWork.DTO.Address;
 
 namespace XDev_UnitWork.Business
 {
-    public class AddressBL: GenericBL<IAddressRep>, IAddressBL
+    public class AddressBL : GenericBL<IAddressRep>, IAddressBL
     {
         public AddressBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper) : base(dbContext, contextAccessor, mapper)
         {
@@ -39,7 +39,15 @@ namespace XDev_UnitWork.Business
                     model.BranchId = null;
 
                 if (model.PartnerId == Guid.Empty)
-                    model.PartnerId = null;
+                    model.PartnerId = null;                
+
+                model.Country = null;
+                model.Region = null;
+                model.City = null;
+                model.Company = null;
+                model.Branch = null;
+                model.Partner = null;
+                model.AddressType = null;
 
                 await Repository.CreateAsync(model);
             }
@@ -126,7 +134,6 @@ namespace XDev_UnitWork.Business
 
                     DbContext.Entry(model).Property(p => p.ConcurrencyStamp).OriginalValue = dto.ConcurrencyStamp;
                     await DbContext.SaveChangesAsync();
-
                 }
             }
             catch (DbUpdateConcurrencyException ex)
@@ -134,6 +141,127 @@ namespace XDev_UnitWork.Business
                 var user = await DbContext.Users.AsNoTracking().FirstOrDefaultAsync(f => f.Id == model.LastUpdatedBy);
                 throw new CustomTogoException($"El registro fue modificado por el usuario '{user.UserName}'");
             }
+        }
+
+        public async Task<List<AddressDTO>> GetByPartnerId(Guid partnerid)
+        {
+            var address = DbContext.Address.AsNoTracking();            
+            var addrtype = DbContext.AddressType.AsNoTracking();            
+            var country = DbContext.Country.AsNoTracking();
+            var region = DbContext.Region.AsNoTracking();
+            var city = DbContext.City.AsNoTracking();
+
+            var query = await (from addr in address
+                               join addt in addrtype on addr.AddressTypeId equals addt.Id                               
+                               join addco in country on addr.CountryId equals addco.Id
+                               join addre in region on addr.RegionId equals addre.Id
+                               join addci in city on addr.CityId equals addci.Id
+                               
+                               where addr.PartnerId == partnerid
+                               select new AddressDTO
+                               {
+                                   Id = addr.Id,
+                                   AddressTypeCode = addt.Code,
+                                   Address1 = addr.Address1,
+                                   Country = addco.Name,
+                                   CountryCode = addco.Code,
+                                   CountryAltCode = addco.CodeMH,
+                                   Region = addre.Name,
+                                   RegionCode = addre.Code,
+                                   City = addci.Name,
+                                   CityCode = addci.Code,                                   
+                               }).ToListAsync();
+
+
+            return query;            
+        }
+
+        public async Task<List<AddressDTO>> GetByBranchId(Guid branchid)
+        {
+            var address = DbContext.Address.AsNoTracking();            
+            var addrtype = DbContext.AddressType.AsNoTracking();            
+            var country = DbContext.Country.AsNoTracking();
+            var region = DbContext.Region.AsNoTracking();
+            var city = DbContext.City.AsNoTracking();
+
+            var query = await (from addr in address
+                               join addt in addrtype on addr.AddressTypeId equals addt.Id
+                               join addco in country on addr.CountryId equals addco.Id
+                               join addre in region on addr.RegionId equals addre.Id
+                               join addci in city on addr.CityId equals addci.Id
+
+                               where addr.BranchId == branchid
+                               select new AddressDTO
+                               {
+                                   Id = addr.Id,
+                                   AddressTypeCode = addt.Code,
+                                   Address1 = addr.Address1,
+                                   Country = addco.Name,
+                                   CountryCode = addco.Code,
+                                   CountryAltCode = addco.CodeMH,
+                                   Region = addre.Name,
+                                   RegionCode = addre.Code,
+                                   City = addci.Name,
+                                   CityCode = addci.Code
+                               }).ToListAsync();
+
+
+            return query;            
+        }
+
+        public async Task<List<AddressDTO>> GetByCompanyId(Guid companyid)
+        {
+            var address = DbContext.Address.AsNoTracking();            
+            var addrtype = DbContext.AddressType.AsNoTracking();            
+            var country = DbContext.Country.AsNoTracking();
+            var region = DbContext.Region.AsNoTracking();
+            var city = DbContext.City.AsNoTracking();
+
+            var query = await (from addr in address
+                               join addt in addrtype on addr.AddressTypeId equals addt.Id
+                               join addco in country on addr.CountryId equals addco.Id
+                               join addre in region on addr.RegionId equals addre.Id
+                               join addci in city on addr.CityId equals addci.Id
+
+                               where addr.CompanyId == companyid
+                               select new AddressDTO
+                               {
+                                   Id = addr.Id,
+                                   AddressTypeCode = addt.Code,
+                                   Address1 = addr.Address1,
+                                   Country = addco.Name,
+                                   CountryCode = addco.Code,
+                                   CountryAltCode = addco.CodeMH,
+                                   Region = addre.Name,
+                                   RegionCode = addre.Code,
+                                   City = addci.Name,
+                                   CityCode = addci.Code,                                   
+                               }).ToListAsync();
+
+
+            return query;
+        }
+
+        public async Task<List<AddressEmailDTO>> GetEmails(Guid addressid)
+        {
+            return await (from e in DbContext.AddressEmail.AsNoTracking()
+                          where e.AddressId == addressid
+                          select new AddressEmailDTO
+                          {
+                              Email = e.Email,
+                              Principal = e.Principal,
+                          }).ToListAsync();
+        }
+
+        public async Task<List<AddressPhoneDTO>> GetPhones(Guid addressid)
+        {
+            return await (from e in DbContext.AddressPhone.AsNoTracking()
+                          where e.AddressId == addressid
+                          select new AddressPhoneDTO
+                          {
+                              Phone = e.Phone,
+                              PhoneExt = e.PhoneExt,
+                          }).ToListAsync();
         }
     }
 }

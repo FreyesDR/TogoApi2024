@@ -12,8 +12,8 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapAccount(this RouteGroupBuilder builder)
         {
-            builder.MapPost("/changepassword", ChangePassword);
-            builder.MapGet("/", GetUser);
+            builder.MapPost("/changepassword", ChangePassword).WithDescription("Cambiar contraseña").WithMetadata(new ModuleAttribute("Cuenta"));
+            builder.MapGet("/", GetUser).WithDescription("Información de Usuario").WithMetadata(new ModuleAttribute("Cuenta"));
             return builder;
         }
 

@@ -32,6 +32,8 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<EBillingCompanyInvoice>(dto);
+                model.EBillingCompany = null;
+
                 await Repository.CreateAsync(model);
             }
             else throw new CustomTogoException("Tipo Factura ya existe para esta Sociedad");
@@ -102,6 +104,8 @@ namespace XDev_UnitWork.Business
                     model.Current = dto.Current;
                     model.ReStartYear = dto.ReStartYear;
                     model.NextReStart = dto.NextReStart;
+
+                    await Repository.UpdateAsync(model,dto.ConcurrencyStamp);
                 }
             }
             catch (DbUpdateConcurrencyException ex)

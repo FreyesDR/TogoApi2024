@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCountry(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CountryDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CountryDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("País"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("País"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtner por Id").WithMetadata(new ModuleAttribute("País"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<CountryDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("País"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CountryDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("País"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("País"));
 
             return builder;
         }

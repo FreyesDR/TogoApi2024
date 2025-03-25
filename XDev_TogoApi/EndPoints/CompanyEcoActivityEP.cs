@@ -11,11 +11,13 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapCompanyEconomicActivity(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetEconomicActivities);
-            builder.MapGet("/{companyid}/{id}", GetEconomicActivity);
-            builder.MapPost("/", CreateEconomicActivity).AddEndpointFilter<ValidationFilter<CompanyEconomicActivityDTO>>(); ;
-            builder.MapPut("/", UpdateEconomicActivity).AddEndpointFilter<ValidationFilter<CompanyEconomicActivityDTO>>();
-            builder.MapDelete("/{id}", DeleteEconomicActivity);
+            builder.MapGet("/", GetEconomicActivities).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Actividad Económica Sociedad"));
+            builder.MapGet("/{companyid}/{id}", GetEconomicActivity).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Actividad Económica Sociedad"));
+            builder.MapPost("/", CreateEconomicActivity).AddEndpointFilter<ValidationFilter<CompanyEconomicActivityDTO>>()
+                                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Actividad Económica Sociedad"));
+            builder.MapPut("/", UpdateEconomicActivity).AddEndpointFilter<ValidationFilter<CompanyEconomicActivityDTO>>()
+                                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Actividad Económica Sociedad"));
+            builder.MapDelete("/{id}", DeleteEconomicActivity).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Actividad Económica Sociedad"));
             return builder;
         }
 

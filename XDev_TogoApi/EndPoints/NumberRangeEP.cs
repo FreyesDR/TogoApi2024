@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapNumberRange(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<NumberRangeDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<NumberRangeDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Rango de Número"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Rango de Número"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Rango de Número"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<NumberRangeDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Rango de Número"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<NumberRangeDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Rango de Número"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Rango de Número"));
             return builder;
         }
 

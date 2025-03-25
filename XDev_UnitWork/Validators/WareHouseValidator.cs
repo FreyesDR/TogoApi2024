@@ -9,7 +9,7 @@ namespace XDev_UnitWork.Validators
         public WareHouseValidator()
         {
             RuleFor(x => x.Code).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
-                                .MaximumLength(2).WithMessage(UtilsExtension.fieldMaxLength);
+                                .MaximumLength(4).WithMessage(UtilsExtension.fieldMaxLength);
 
             RuleFor(x => x.Name).NotEmpty().WithMessage(UtilsExtension.fieldRequired)
                                 .MaximumLength(100).WithMessage(UtilsExtension.fieldMaxLength);

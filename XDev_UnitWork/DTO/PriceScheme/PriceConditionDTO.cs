@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Code { get; set; }
+        public string AltCode { get; set; }
         public string Name { get; set; }
         public string Type { get; set; } // B - Precio base del producto, I - Impuesto, R - Recargo - O - Otros Impuestos, D - Descuento
         public string Source { get; set; } // A - Precio base del producto, B - Resultado condición anterior, C - Condición especifica

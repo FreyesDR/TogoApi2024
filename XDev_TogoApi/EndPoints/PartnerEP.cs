@@ -12,20 +12,22 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPartner(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/list", GetList);
-            builder.MapGet("/{id}", GetById);
-            builder.MapGet("/code/{companyid}/{code}", GetByCode);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapGet("/list", GetList).WithDescription("Listado").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapGet("/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapGet("/code/{companyid}/{code}", GetByCode).WithDescription("Obtener por Sociedad y Código").WithMetadata(new ModuleAttribute("Socio"));            
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PartnerDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PartnerDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Socio"));
 
             // Direcciones
-            builder.MapGet("/{partnerid}/address", GetAddresses);
-            builder.MapGet("/{partnerid}/address/{id}", GetAddress);            
+            builder.MapGet("/{partnerid}/address", GetAddresses).WithDescription("Obtener Direcciones").WithMetadata(new ModuleAttribute("Socio"));
+            builder.MapGet("/{partnerid}/address/{id}", GetAddress).WithDescription("Obtener Dirección por Id").WithMetadata(new ModuleAttribute("Socio"));            
 
             return builder;
-        }
+        }        
 
         private static async Task<Results<Ok<PartnerDTO>, BadRequest<ExceptionReturnDTO>>> GetByCode(string companyid,string code, IPartnerBL partnerBL)
         {

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using NPOI.SS.Formula.Functions;
 using XDev_UnitWork.Custom;
-using XDev_UnitWork.DTO.Partner;
 using XDev_UnitWork.DTO;
 using XDev_UnitWork.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using XDev_UnitWork.DTO.Material;
 
 namespace XDev_TogoApi.EndPoints
@@ -13,8 +10,8 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapMaterialFeature(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", Get);
-            builder.MapPut("/", Update);
+            builder.MapGet("/", Get).WithDescription("Obtener").WithMetadata(new ModuleAttribute("Personalización Material"));
+            builder.MapPut("/", Update).WithDescription("Modificar").WithMetadata(new ModuleAttribute("Personalización Material"));
             return builder;
         }
 

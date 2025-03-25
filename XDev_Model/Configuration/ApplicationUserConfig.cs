@@ -11,7 +11,9 @@ namespace XDev_Model.Configuration
             builder.ToTable("Users");
             builder.Property(p => p.Name).HasMaxLength(100);
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
-            builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);            
+            builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);  
+            builder.Property(p => p.IDNumber).HasMaxLength(30);
+            builder.Property(p => p.IDCode).HasMaxLength(5);
         }
     }
 }

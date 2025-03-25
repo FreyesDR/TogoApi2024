@@ -13,12 +13,12 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapEBillingCompany(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetPagination);
-            builder.MapGet("/{ebillingid}/{companyid}", GetById);
-            builder.MapGet("/address", GetListCompanyAddress);
-            builder.MapGet("/idstype", GetListCompanyIDs);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingCompanyDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingCompanyDTO>>();
+            builder.MapGet("/", GetPagination).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
+            builder.MapGet("/{ebillingid}/{companyid}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));            
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<EBillingCompanyDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingCompanyDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
             return builder;
         }
 
@@ -54,17 +54,7 @@ namespace XDev_TogoApi.EndPoints
                     Message = ex.Message
                 });
             }
-        }
-
-        private static async Task<Results<Ok<List<EBillingCompanyIDsDTO>>, BadRequest<ExceptionReturnDTO>>> GetListCompanyIDs(string companyid, IEBillingCompanyBL eBillingCompanyBL)
-        {
-            return TypedResults.Ok(await eBillingCompanyBL.GetCompanyDocumentsIDs(companyid));
-        }
-
-        private static async Task<Results<Ok<List<EBillingCompanyAddressDTO>>, BadRequest<ExceptionReturnDTO>>> GetListCompanyAddress(string companyid, IEBillingCompanyBL eBillingCompanyBL)
-        {
-            return TypedResults.Ok(await eBillingCompanyBL.GetCompanyAddress(companyid));
-        }
+        }        
 
         private static async Task<Results<Ok<EBillingCompanyDTO>, BadRequest<ExceptionReturnDTO>>> GetById(string companyid, string ebillingid, IEBillingCompanyBL eBillingCompanyBL)
         {

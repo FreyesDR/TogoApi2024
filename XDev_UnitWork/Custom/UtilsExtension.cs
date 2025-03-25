@@ -1,14 +1,20 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Reporting.NETCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
+using XDev_Model;
+using XDev_Model.Entities;
 using XDev_UnitWork.DTO;
 
 namespace XDev_UnitWork.Custom
@@ -47,7 +53,11 @@ namespace XDev_UnitWork.Custom
         private static readonly MethodInfo OrderByDescendingMethod = typeof(Queryable).GetMethods().Single(method =>
             method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
 
-
+        public static Stream ToStream(this string str, Encoding encoding = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            return new MemoryStream(encoding.GetBytes(str));
+        }
         public static Guid GetGuid(this string str)
         {
             if (str.IsNullOrEmpty()) return Guid.Empty;
@@ -68,6 +78,73 @@ namespace XDev_UnitWork.Custom
         }
 
         #region Utilizades Http
+
+        public static async Task SynchronizeEndPoint(IReadOnlyList<Endpoint> endpoints, ApplicationDbContext dbContext)
+        {
+            foreach (var endpoint in endpoints.OfType<RouteEndpoint>())
+            {
+                // Obtener metadata del endpoint
+                var httpMethodMetadata = endpoint.Metadata.GetMetadata<HttpMethodMetadata>();
+                var routePattern = endpoint.RoutePattern.RawText;
+                var authAttr = endpoint.Metadata.GetMetadata<AuthorizeAttribute>();
+
+                if (authAttr is null)
+                    continue;
+
+                if(authAttr is not null && authAttr.Policy != "AutorizacionDinamica")
+                    continue;
+
+                if (httpMethodMetadata == null || routePattern == null)
+                    continue;
+
+                foreach (var method in httpMethodMetadata.HttpMethods)
+                {
+                    // Filtrar endpoints que no son de API (ej: Swagger, health checks)
+                    // Verificar si el endpoint ya existe en la BD
+                    var existeEndpoint = await dbContext.EndPointPolicy.AsNoTracking()
+                        .AnyAsync(ep => ep.MethodHttp == method && ep.MethodPath == routePattern);
+
+                    if (!existeEndpoint)
+                    {
+                        var descrip = endpoint.Metadata.GetMetadata<EndpointDescriptionAttribute>().Description;
+                        var module = endpoint.Metadata.GetMetadata<ModuleAttribute>().Module;
+
+                        // Crear un registro por defecto (puedes asignar una política inicial si quieres)
+                        var endPoint = new EndPointPolicy
+                        {
+                            MethodHttp = method,
+                            MethodPath = routePattern,
+                            PolicyParams = "admin",
+                            Description = descrip,
+                            Module = module
+                        };
+
+                        switch (endPoint.MethodHttp)
+                        {
+                            case "GET":
+                                endPoint.PolicyId = Guid.Parse("3cefd509-9d98-4295-bb45-0b7624b13b3d");
+                                break;
+                            case "POST":
+                                endPoint.PolicyId = Guid.Parse("5fdca958-95a0-4656-bc19-688d60d4ffe6");
+                                break;
+                            case "PUT":
+                                endPoint.PolicyId = Guid.Parse("35efe9e5-c406-492c-bc8f-af5589bad426");
+                                break;
+                            case "DELETE":
+                                endPoint.PolicyId = Guid.Parse("db8f9a1e-39f4-4ce8-bbb7-479843ee9ef3");
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if(endPoint.PolicyId != Guid.Empty)
+                            dbContext.EndPointPolicy.Add(endPoint);
+                    }
+                }
+            }
+
+            await dbContext.SaveChangesAsync();
+        }
 
         public static string GetCurrentUserId(IHttpContextAccessor contextAccessor)
         {
@@ -414,6 +491,35 @@ namespace XDev_UnitWork.Custom
                 cnn.Open();
                 return Convert.ToInt64(cmd.ExecuteScalar());
             }
+        }
+
+        public static CurrentUserDTO GetCurrentUserClaim(IHttpContextAccessor contextAccessor)
+        {
+            if (contextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                var idClaim = contextAccessor.HttpContext.User.Identities.FirstOrDefault().Claims.Where(w => w.Type == ClaimTypes.UserData).FirstOrDefault();
+                if (idClaim is not null)
+                {
+                    return JsonConvert.DeserializeObject<CurrentUserDTO>(idClaim.Value);
+                }                
+            }
+
+            return new CurrentUserDTO();
+        }
+
+        public static string GetCurrentUserEmail(IHttpContextAccessor contextAccessor)
+        {
+            if (contextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                var idClaim = contextAccessor.HttpContext.User.Identities.FirstOrDefault().Claims.Where(w => w.Type == ClaimTypes.Email).FirstOrDefault();
+                if (idClaim is not null)
+                {
+                    return idClaim.Value;
+                }
+                return Guid.Empty.ToString();
+            }
+
+            return string.Empty;
         }
 
         //public static long MySQLNumberNextRangeDte(Guid rangeid, string dbconnection)

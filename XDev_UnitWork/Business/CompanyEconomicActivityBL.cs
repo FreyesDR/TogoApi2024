@@ -32,6 +32,7 @@ namespace XDev_UnitWork.Business
             if (model is null)
             {
                 model = Mapper.Map<CompanyEconomicActivity>(dto);
+                model.Company = null;
                 model.EconomicActivity = null;
 
                 if (dto.Principal)

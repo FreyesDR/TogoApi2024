@@ -14,9 +14,11 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapMaterialBranch(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialBranchDTO>>();
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialBranchDTO>>();
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Material Sucursal"));
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<MaterialBranchDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Material Sucursal"));
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<MaterialBranchDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Material Sucursal"));
             return builder;
         }
 

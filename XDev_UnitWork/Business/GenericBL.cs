@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
+
 using System.Reflection;
 using XDev_Model;
 
 namespace XDev_UnitWork.Business
 {
-    public class GenericBL<T>
+    public class GenericBL<T>:IDisposable where T : class
     {
         public GenericBL(ApplicationDbContext dbContext,
                          IHttpContextAccessor contextAccessor,
                          IMapper mapper)
         {
-            DbContext = dbContext;
+            DbContext = dbContext;            
             ContextAccessor = contextAccessor;
             Mapper = mapper;
             Repository = CreateInstance();
@@ -28,9 +29,15 @@ namespace XDev_UnitWork.Business
             return tipo;
         }
 
+        public void Dispose()
+        {
+            DbContext.Dispose();
+        }
+
         public ApplicationDbContext DbContext { get; }
         public IHttpContextAccessor ContextAccessor { get; }
         public IMapper Mapper { get; }
         public T Repository { get; internal set; }
+             
     }
 }

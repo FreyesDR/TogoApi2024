@@ -13,11 +13,14 @@ namespace XDev_Model.Configuration
             builder.Property(p => p.MaterialTypeCode).HasMaxLength(2);
             builder.Property(p => p.MaterialName).HasMaxLength(100);
             builder.Property(p => p.UnitMeasureCode).HasMaxLength(4);
+            builder.Property(p => p.UnitMeasureAltCode).HasMaxLength(2);
             builder.Property(p => p.Quantity).HasPrecision(18, 3);            
             builder.Property(p => p.DiscountAmount).HasPrecision(18, 2);
             builder.Property(p => p.TaxAmount).HasPrecision(18, 2);
             builder.Property(p => p.NetAmount).HasPrecision(18, 2);
             builder.Property(p => p.PriceType).HasMaxLength(2);
+            builder.Property(p => p.GrossPrice).HasPrecision(18, 5);
+            builder.Property(p => p.NetPrice).HasPrecision(18, 5);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);
             builder.Property(p => p.LastUpdatedBy).HasMaxLength(256);

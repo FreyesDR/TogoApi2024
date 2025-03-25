@@ -11,12 +11,14 @@ namespace XDev_TogoApi.EndPoints
     {
         public static RouteGroupBuilder MapPointSale(this RouteGroupBuilder builder)
         {
-            builder.MapGet("/", GetAll);
-            builder.MapGet("/{branchid}/list", GetList);
-            builder.MapGet("/{branchid}/{id}", GetById);
-            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PointSaleDTO>>(); ;
-            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PointSaleDTO>>();
-            builder.MapDelete("/{id}", Delete);
+            builder.MapGet("/", GetAll).WithDescription("Listar todo").WithMetadata(new ModuleAttribute("Punto de Venta"));
+            builder.MapGet("/{branchid}/list", GetList).WithDescription("Listar por Sucursal").WithMetadata(new ModuleAttribute("Punto de Venta")); 
+            builder.MapGet("/{branchid}/{id}", GetById).WithDescription("Obtener por Id").WithMetadata(new ModuleAttribute("Punto de Venta")); 
+            builder.MapPost("/", Create).AddEndpointFilter<ValidationFilter<PointSaleDTO>>()
+                                        .WithDescription("Crear").WithMetadata(new ModuleAttribute("Punto de Venta")); 
+            builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<PointSaleDTO>>()
+                                       .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Punto de Venta")); 
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Punto de Venta")); 
             return builder;
         }
 

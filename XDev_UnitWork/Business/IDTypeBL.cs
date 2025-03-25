@@ -67,7 +67,8 @@ namespace XDev_UnitWork.Business
             {
                 Id = s.Id,
                 Name = s.Name,
-                Code = s.Code
+                Code = s.Code,
+                AltCode = s.AltCode,
             }).OrderBy(o => o.Code).ToList());
         }
 

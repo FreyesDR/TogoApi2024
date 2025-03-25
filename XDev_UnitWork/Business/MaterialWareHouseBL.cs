@@ -70,6 +70,7 @@ namespace XDev_UnitWork.Business
                                    BranchId = mwh.BranchId,
                                    BranchName = br.Name,
                                    WareHouseId = mwh.WareHouseId,
+                                   WareHouseCode = wh.Code,
                                    WareHouseName = wh.Name,
                                    Stock = mwh.Stock,
                                    SoldStock = mwh.SoldStock,

@@ -16,7 +16,7 @@ namespace XDev_Model.Repository
 
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await dbContext.Set<TEntity>().AnyAsync(filter);
+            return await dbContext.Set<TEntity>().AsNoTracking().AnyAsync(filter);
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity)
