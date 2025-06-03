@@ -13,6 +13,7 @@ namespace XDev_Model.Configuration
             builder.HasIndex(p => p.Code).IsUnique();
             builder.Property(p => p.Code).HasMaxLength(4);
             builder.Property(p => p.Name).HasMaxLength(100);
+            builder.Property(p => p.UrlLogo).HasMaxLength(500);
             builder.Property(p => p.TradeName).HasMaxLength(100);
             builder.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(p => p.CreatedBy).HasMaxLength(256);

@@ -21,12 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\GenericSaleOrder.rdlc" />
+    <EmbeddedResource Include="Reports\GenericSaleOrder.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\InvoiceFormCCF.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\InvoiceFormEXP.rdlc" />
-    <EmbeddedResource Include="Reports\InvoiceFormFC.rdlc" />
+    <EmbeddedResource Include="Reports\InvoiceFormEXP.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\InvoiceFormFC.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\InvoiceFormNC.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

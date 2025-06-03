@@ -195,6 +195,39 @@ namespace XDev_UnitWork.Custom
             return localReport;
         }
 
+        public static string GetImageMimeType(byte[] imageData)
+        {
+            // Los primeros bytes de un archivo contienen su "firma"
+            if (imageData.Length < 4)
+                return "application/octet-stream";
+
+            // JPEG: FF D8 FF
+            if (imageData[0] == 0xFF && imageData[1] == 0xD8 && imageData[2] == 0xFF)
+                return "image/jpeg";
+
+            // PNG: 89 50 4E 47 0D 0A 1A 0A
+            if (imageData[0] == 0x89 && imageData[1] == 0x50 && imageData[2] == 0x4E &&
+                imageData[3] == 0x47 && imageData[4] == 0x0D && imageData[5] == 0x0A &&
+                imageData[6] == 0x1A && imageData[7] == 0x0A)
+                return "image/png";
+
+            // GIF: "GIF" en ASCII (47 49 46)
+            if (imageData[0] == 0x47 && imageData[1] == 0x49 && imageData[2] == 0x46)
+                return "image/gif";
+
+            // BMP: "BM" en ASCII (42 4D)
+            if (imageData[0] == 0x42 && imageData[1] == 0x4D)
+                return "image/bmp";
+
+            // WEBP: "RIFF" seguido de "WEBP"
+            if (imageData.Length > 12 &&
+                imageData[0] == 0x52 && imageData[1] == 0x49 && imageData[2] == 0x46 && imageData[3] == 0x46 &&
+                imageData[8] == 0x57 && imageData[9] == 0x45 && imageData[10] == 0x42 && imageData[11] == 0x50)
+                return "image/webp";
+
+            return "application/octet-stream";
+        }
+
         public static async Task<string> SaveImage(IWebHostEnvironment env, IHttpContextAccessor contextAccessor, string contenedor, IFormFile file)
         {
             var fileSaveName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);

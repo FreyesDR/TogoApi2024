@@ -2,7 +2,9 @@
 using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Razor.Templating.Core;
+using SendGrid;
 using System.Net;
 using System.Net.Mail;
 using XDev_AvaLinkAIO;
@@ -10,6 +12,7 @@ using XDev_Model;
 using XDev_Model.Entities;
 using XDev_RazorTemplate.Views;
 using XDev_UnitWork.Custom;
+using XDev_UnitWork.DTO.ElectronicBilling;
 using XDev_UnitWork.Interfaces;
 
 namespace XDev_UnitWork.Business
@@ -17,6 +20,7 @@ namespace XDev_UnitWork.Business
     public class InvoiceSendEmailBL : IInvoiceSendEmailBL
     {
         private readonly ILogger<FeSvContingencyBL> logger;
+        private readonly IWebHostEnvironment env;
         private readonly IEmailSenderService emailSender;
         private ApplicationDbContext dbContext;
         private IInvoiceBL invoiceBL;
@@ -25,12 +29,14 @@ namespace XDev_UnitWork.Business
 
         public InvoiceSendEmailBL(IServiceScopeFactory scopeFactory,
                                   ILogger<FeSvContingencyBL> logger,
+                                  IWebHostEnvironment env,
                                   IEmailSenderService emailSender)
         {
             var scope = scopeFactory.CreateScope();
             dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
             invoiceBL = scope.ServiceProvider.GetService<IInvoiceBL>();
             this.logger = logger;
+            this.env = env;
             this.emailSender = emailSender;
         }
 
@@ -52,6 +58,7 @@ namespace XDev_UnitWork.Business
                                                           s.NumControl,
                                                           s.SelloRecepcion,
                                                           s.InvoiceType,
+                                                          s.Date
                                                       }).ToListAsync();
 
                 if (invoices.Any())
@@ -94,6 +101,7 @@ namespace XDev_UnitWork.Business
 
                 var to = string.Empty;
                 var subject = "Facturación Electrónica";
+
                 EmailDte dte = new EmailDte
                 {
                     CodGen = invoice.CodGeneracion,
@@ -101,8 +109,27 @@ namespace XDev_UnitWork.Business
                     SelloRecepcion = invoice.SelloRecepcion,
                     InvoiceType = invoice.InvoiceType.Name,
                     Sociedad = company.TradeName.IsNotNullOrEmpty() ? company.TradeName : company.Name,
-                    UrlLogo = "https://res.cloudinary.com/dfrys4gpn/image/upload/v1740433625/Togo_epheb9.png"
+                    UrlBtn = $"https://admin.factura.gob.sv/consultaPublica?ambiente={(log.IsProd ? "01" : "00")}&codGen={invoice.CodGeneracion}&fechaEmi={invoice.Date.ToString("yyy-MM-dd")}"
                 };
+
+                var imagePath = company.UrlLogo;                                                
+
+                if (imagePath is not null)
+                {
+                    var imageName = imagePath.Split("/");
+                    dte.UrlLogo = imageName[imageName.Length - 1];
+
+                    var pathFile = Path.Combine(env.WebRootPath, "image", dte.UrlLogo);
+
+                    if (File.Exists(pathFile))
+                    {
+                        dte.Logo = File.ReadAllBytes(pathFile);
+                        //var base64 = Convert.ToBase64String(image);
+                        //var mimetype = UtilsExtension.GetImageMimeType(image);
+
+                        //dte.UrlLogo = String.Format("data:{0};base64,{1}", mimetype, base64);
+                    }
+                }
 
                 if (invoice.Sporadic)
                 {
@@ -140,10 +167,8 @@ namespace XDev_UnitWork.Business
                             ccemails.Add(new FluentEmail.Core.Models.Address { EmailAddress = ebillingCompany.CcEmail2 });
                     }
 
-                    if (ebillingCompany.SmtpService.IsNullOrEmpty())
-                    {
-                        // Envío de correo por configuración global
-                        var result = await emailSender.SendEmailAsync(to, subject, body, new List<FluentEmail.Core.Models.Attachment>
+                    // Archivos adjuntos
+                    var attachList = new List<FluentEmail.Core.Models.Attachment>
                         {
                             new FluentEmail.Core.Models.Attachment {
                                  Data = pdf,
@@ -155,7 +180,26 @@ namespace XDev_UnitWork.Business
                                  Filename = $"{invoice.CodGeneracion}.json",
                                  ContentType = "application/json"
                             }
-                        }, ccemails);
+                        };
+
+                    // Adjuntar Logo de la sociedad
+                    if (!dte.Logo.IsNullOrEmpty() && dte.Logo.Length > 0)
+                    {
+                        var mimetype = UtilsExtension.GetImageMimeType(dte.Logo);
+                        attachList.Add(new FluentEmail.Core.Models.Attachment
+                        {                            
+                            Filename = dte.UrlLogo, // Nombre del archivo
+                            ContentType = mimetype, // Tipo MIME (ajustar según formato)
+                            Data = new MemoryStream(dte.Logo), // Convertir byte[] a Stream
+                            IsInline = true, // false para adjunto, true para incrustado
+                            ContentId = dte.UrlLogo,
+                        });
+                    }
+
+                    if (ebillingCompany.SmtpService.IsNullOrEmpty())
+                    {
+                        // Envío de correo por configuración global
+                        var result = await emailSender.SendEmailAsync(to, subject, body, attachList, ccemails);
 
                         if (result.Successful)
                             await dbContext.Database.ExecuteSqlAsync($"UPDATE Invoice SET SentEmail = {false} WHERE Id={invid.ToString()}");
@@ -187,19 +231,7 @@ namespace XDev_UnitWork.Business
                                                 .CC(ccemails)
                                                 .Subject(subject)
                                                 .Body(body, true)
-                                                .Attach(new List<FluentEmail.Core.Models.Attachment>
-                                                    {
-                                                        new FluentEmail.Core.Models.Attachment {
-                                                             Data = pdf,
-                                                             Filename = $"{invoice.CodGeneracion}.pdf",
-                                                             ContentType = "application/pdf"
-                                                        },
-                                                        new FluentEmail.Core.Models.Attachment {
-                                                             Data = json,
-                                                             Filename = $"{invoice.CodGeneracion}.json",
-                                                             ContentType = "application/json"
-                                                        }
-                                                    })
+                                                .Attach(attachList)
                                                 .SendAsync();
 
                         if (result.Successful)

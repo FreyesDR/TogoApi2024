@@ -100,19 +100,19 @@ namespace XDev_UnitWork.Business
 					if (log.TipoDte == "01")
 						dte = JsonConvert.DeserializeObject<JsonFeFcV1>(log.Request);
 
-					//if (ebillingDoc.Code == "03")
-					//	return await SendCreditoFiscalAsync(invoice);
+					if (log.TipoDte == "03")
+                        dte = JsonConvert.DeserializeObject<JsonFeCcfV3>(log.Request);                    
 
-					//if (ebillingDoc.Code == "05")
-					//	return await SendNotaCredito(invoice);
+                    if (log.TipoDte == "05")
+                        dte = JsonConvert.DeserializeObject<JsonNcV3>(log.Request);
 
-					//if (ebillingDoc.Code == "06")
-					//	return await SendNotaDebito(invoice);
+                    if (log.TipoDte == "06")
+                        dte = JsonConvert.DeserializeObject<JsonNdV3>(log.Request);
 
-					//if (ebillingDoc.Code == "11")
-					//	return await SendFacturaExportador(invoice);
+                    if (log.TipoDte == "11")
+                        dte = JsonConvert.DeserializeObject<JsonFexV1>(log.Request);
 
-					if (dte is not null)
+                    if (dte is not null)
 					{
 						logger.LogInformation($"Procesando Factura {invoiceid.ToString()}");
 						var jsondto = new JsonContingencyV3();
@@ -127,11 +127,11 @@ namespace XDev_UnitWork.Business
 						#region Emisor
 						jsondto.emisor.nit = dte.emisor.nit;
 						jsondto.emisor.nombre = dte.emisor.nombre;
-						jsondto.emisor.nombreResponsable = dte.extension.nombEntrega;
-						jsondto.emisor.tipoDocResponsable = "13"; // cambiar después
-						jsondto.emisor.numeroDocResponsable = dte.extension.docuEntrega;
+						jsondto.emisor.nombreResponsable = "Administrador de Sistema"; //dte.extension.nombEntrega;
+						jsondto.emisor.tipoDocResponsable = "37"; // cambiar después
+						jsondto.emisor.numeroDocResponsable = "1"; //dte.extension.docuEntrega;
 						jsondto.emisor.tipoEstablecimiento = dte.emisor.tipoEstablecimiento;
-						jsondto.emisor.codPuntoVenta = dte.emisor.codPuntoVenta;
+						//jsondto.emisor.codPuntoVenta = dte.emisor.codPuntoVenta; // Se comento porque la NC y ND no tienen este campo
 						jsondto.emisor.telefono = dte.emisor.telefono;
 						jsondto.emisor.correo = dte.emisor.correo;
 						#endregion
@@ -189,6 +189,7 @@ namespace XDev_UnitWork.Business
 								logger.LogInformation(res.estado);
 								if (res.estado == "RECIBIDO")
 								{
+									// Enviar DTE
 									logger.LogInformation("Contingencia: Enviada correctamente");
 
 									// Actualizar DTE
@@ -202,7 +203,6 @@ namespace XDev_UnitWork.Business
 									dteSigned = await signerService.SignDocument(pathCert, key, strJson);
 									
 									// Enviando a MH									
-
 									RequestDte req = new RequestDte()
 									{
 										ambiente = dte.identificacion.ambiente,

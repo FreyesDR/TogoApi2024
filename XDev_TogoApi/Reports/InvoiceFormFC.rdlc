@@ -1929,7 +1929,7 @@
   <Width>20.16106cm</Width>
   <Page>
     <PageHeader>
-      <Height>7.28322cm</Height>
+      <Height>7.5478cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2549,11 +2549,19 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Punto de Venta:</Value>
+                  <Value>Punto de Venta: </Value>
                   <Style>
                     <FontFamily>Arial Narrow</FontFamily>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=First(Fields!PointSale.Value, "InvoiceDataSet")</Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Normal</FontWeight>
                   </Style>
                 </TextRun>
               </TextRuns>
@@ -2563,7 +2571,7 @@
           <rd:DefaultName>Textbox11</rd:DefaultName>
           <Top>4.87523cm</Top>
           <Left>0.1905cm</Left>
-          <Height>2.40799cm</Height>
+          <Height>2.53146cm</Height>
           <Width>9.75cm</Width>
           <ZIndex>7</ZIndex>
           <Style>
@@ -2690,11 +2698,40 @@
               </TextRuns>
               <Style />
             </Paragraph>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Condición de pago:</Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value xml:space="preserve"> </Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Normal</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=First(Fields!PartnerPayCondition.Value, "InvoiceDataSet")</Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Normal</FontWeight>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
           <Top>4.87523cm</Top>
           <Left>10.20933cm</Left>
-          <Height>2.40799cm</Height>
+          <Height>2.53146cm</Height>
           <Width>9.81944cm</Width>
           <ZIndex>8</ZIndex>
           <Style>

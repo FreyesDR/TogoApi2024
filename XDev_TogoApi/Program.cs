@@ -437,6 +437,10 @@ app.MapGroup("/admin/authorize").MapEndPointPolicy().RequireAuthorization(policy
 
 app.MapGroup("/dashboard").MapDashBoard().RequireAuthorization(policyNames: "AutorizacionDinamica");
 
+app.MapGet("test", () => {
+    return "Exito";
+});
+
 #endregion
 
 await app.RunAsync();

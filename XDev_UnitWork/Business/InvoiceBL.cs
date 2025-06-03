@@ -11,6 +11,7 @@ using XDev_UnitWork.DTO.FeSv;
 using XDev_UnitWork.DTO.Invoice;
 using XDev_UnitWork.Interfaces;
 using QRCoder;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace XDev_UnitWork.Business
 {
@@ -434,11 +435,11 @@ namespace XDev_UnitWork.Business
             var totNoGravado = model.Positions.Where(w => w.PriceType == "NG").Sum(s => s.NetAmount);
             var totNoSujeto = model.Positions.Where(w => w.PriceType == "NS").Sum(s => s.NetAmount);
 
-            var imagePath = $"{env.WebRootPath}\\image\\LogoAvaLink.png";
-            var image = File.ReadAllBytes(imagePath);
+            //var imagePath = $"{env.WebRootPath}\\image\\LogoAvaLink.png";
+            //var image = File.ReadAllBytes(imagePath);
 
             var taxRate = model.Positions.Where(w => w.Conditions.Any(a => a.Type == "I")).FirstOrDefault();
-
+            
             var dto = new InvoiceFormDTO
             {
                 CodGen = model.CodGeneracion,
@@ -456,9 +457,9 @@ namespace XDev_UnitWork.Business
                 TaxAmount = model.TaxAmount,
                 Percepcion1 = model.Per1,
                 Retencion1 = model.Ret1,
-                Retencion10 = model.Ret10,
-                CompanyLogo = image,
+                Retencion10 = model.Ret10,                
                 TaxRate = $"{Math.Round(taxRate.Conditions.FirstOrDefault(f => f.Type == "I").Value, 2)}%",
+                PartnerPayCondition = model.PaymentCondition.Name,
             };
 
             var user = await userManager.FindByIdAsync(model.CreatedBy);
@@ -477,6 +478,21 @@ namespace XDev_UnitWork.Business
             dto.CompanyPhone = company.Phone;
             dto.CompanyEmail = company.Email;
 
+            var imagePath = company.UrlLogo;
+
+            if (imagePath is not null)
+            {
+                var imageName = imagePath.Split("/");
+                var logoName = imageName[imageName.Length - 1];
+
+                var pathFile = Path.Combine(env.WebRootPath, "image", logoName);
+
+                if (File.Exists(pathFile))
+                {
+                    dto.CompanyLogo = File.ReadAllBytes(pathFile);                    
+                }
+            }
+
             // Datos Sucursal
             var branch = await branchBL.GetBranchInfoAsync(model.BranchId);
             dto.BranchName = branch.Name;
@@ -485,6 +501,11 @@ namespace XDev_UnitWork.Business
             dto.BranchRegionName = branch.RegionName;
             dto.BranchEmail = branch.Email;
             dto.BranchPhone = branch.Phone;
+
+            // Punto de venta
+            var pointSale = await DbContext.PointSale.AsNoTracking().FirstOrDefaultAsync(f => f.Id == model.PointSaleId);
+            if (pointSale is not null)
+                dto.PointSale = $"{pointSale.Code} - {pointSale.Name}";
 
             // Datos Socio
             if (model.Sporadic)
@@ -552,6 +573,9 @@ namespace XDev_UnitWork.Business
             dto.Seguro = sumSeguro;
 
             dto.TotalLetras = dto.TotalPagar.AmountToLetters();
+
+            if (model.CurrencyCode == "USD")
+                dto.TotalLetras = $"{dto.TotalLetras} DÓLARES";
 
             var ebillingCo = await DbContext.EBillingCompany.FirstOrDefaultAsync(f => f.CompanyId == model.CompanyId);
             if (ebillingCo is not null)

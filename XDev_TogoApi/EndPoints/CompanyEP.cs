@@ -22,13 +22,23 @@ namespace XDev_TogoApi.EndPoints
                                         .WithDescription("Crear").WithMetadata(new ModuleAttribute("Sociedad"));
             builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<CompanyDTO>>()
                                         .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Sociedad"));
-            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Sociedad")); 
+            builder.MapDelete("/{id}", Delete).WithDescription("Eliminar").WithMetadata(new ModuleAttribute("Sociedad"));
+
+            builder.MapPost("/uploadlogo", UploadImage).DisableAntiforgery().WithDescription("Cargar Archivo Imagen").WithMetadata(new ModuleAttribute("Sociedad"));
 
             // Direcciones
             builder.MapGet("/{companyid}/address", GetAddresses).WithDescription("Obtener direcciones").WithMetadata(new ModuleAttribute("Sociedad")); 
             builder.MapGet("/{companyid}/address/{id}", GetAddress).WithDescription("Obtener dirección por Id").WithMetadata(new ModuleAttribute("Sociedad"));                         
 
             return builder;
+        }
+
+        private static async Task<Results<Ok<string>, BadRequest<ExceptionReturnDTO>>>
+            UploadImage(IFormFile file, string coid, ICompanyBL companyBL, HttpContext httpContext)
+        {            
+            var url = await companyBL.UploadLogo(file, coid);
+
+            return TypedResults.Ok(url);
         }
 
         private static async Task<Results<Ok<CompanyDTO>, NotFound<string>>> GetByCode(string code, ICompanyBL companyBL)

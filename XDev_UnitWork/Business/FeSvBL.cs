@@ -191,7 +191,8 @@ namespace XDev_UnitWork.Business
 				PointSaleId = invoice.PointSaleId,
 				CancelInvoiceId = invoice.Id,
 				CodGen = jsondto.identificacion.codigoGeneracion.GetGuid(),
-			};
+                IsProd = ebillingCom.IsProd
+            };
 
 			var result = await PostCancelAsync(jsondto);
 
@@ -393,7 +394,8 @@ namespace XDev_UnitWork.Business
 				NumControl = invoice.NumControl,
 				InvoiceId = invoice.Id,
                 SaleOrderId = invoice.SaleOrderId,
-                Request = JsonConvert.SerializeObject(jsondto)
+                Request = JsonConvert.SerializeObject(jsondto),
+                IsProd = ebillingCom.IsProd
             };
 
 			var result = await PostDteAsyn(jsondto);
@@ -630,7 +632,8 @@ namespace XDev_UnitWork.Business
 				NumControl = invoice.NumControl,
 				InvoiceId = invoice.Id,
                 SaleOrderId = invoice.SaleOrderId,
-                Request = JsonConvert.SerializeObject(jsondto)
+                Request = JsonConvert.SerializeObject(jsondto),
+                IsProd = ebillingCom.IsProd
             };
 
 			var result = await PostDteAsyn(jsondto);
@@ -867,7 +870,8 @@ namespace XDev_UnitWork.Business
 				NumControl = invoice.NumControl,
 				InvoiceId = invoice.Id,
                 SaleOrderId = invoice.SaleOrderId,
-                Request = JsonConvert.SerializeObject(jsondto)
+                Request = JsonConvert.SerializeObject(jsondto),
+                IsProd = ebillingCom.IsProd
             };
 
 			var result = await PostDteAsyn(jsondto);
@@ -1114,7 +1118,8 @@ namespace XDev_UnitWork.Business
 				NumControl = invoice.NumControl,
 				InvoiceId = invoice.Id,
                 SaleOrderId = invoice.SaleOrderId,
-                Request = JsonConvert.SerializeObject(jsondto)
+                Request = JsonConvert.SerializeObject(jsondto),
+                IsProd = ebillingCom.IsProd
             };
 
 			var result = await PostDteAsyn(jsondto);
@@ -1337,8 +1342,9 @@ namespace XDev_UnitWork.Business
 				NumControl = invoice.NumControl,
 				InvoiceId = invoice.Id,
 				SaleOrderId = invoice.SaleOrderId,
-				Request = JsonConvert.SerializeObject(jsondto)
-			};
+				Request = JsonConvert.SerializeObject(jsondto),
+				IsProd = ebillingCom.IsProd
+            };
 
 			var result = await PostDteAsyn(jsondto);
 

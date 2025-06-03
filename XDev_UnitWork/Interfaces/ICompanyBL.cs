@@ -12,5 +12,6 @@ namespace XDev_UnitWork.Interfaces
         Task<CompanyInfoDTO> GetCompanyInfoAsync(Guid coid);
         Task<List<CompanyListDTO>> GetCompanyListAsync();
         Task<List<CompanyListDTO>> GetCompanyListAsync(PaginationDTO pagination);
+        Task<string> UploadLogo(IFormFile formFile, string coid);
     }
 }

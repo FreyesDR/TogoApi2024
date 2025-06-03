@@ -23,5 +23,6 @@
         public Guid SaleOrderId {  get; set; }
         public bool Cancel {  get; set; }
         public Guid CancelInvoiceId { get; set; }
+        public bool IsProd {  get; set; }
     }
 }

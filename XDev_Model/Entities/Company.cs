@@ -11,6 +11,7 @@ namespace XDev_Model.Entities
         public string Name { get; set; }
         public string TradeName { get; set; }
         public bool Active { get; set; }
+        public string UrlLogo {  get; set; }
         public HashSet<Address> Addresses { get; set; }
         public HashSet<Branch> Branches { get; set; }
         public HashSet<CompanyID> CompanyIDS { get; set; }

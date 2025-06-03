@@ -15,9 +15,16 @@ namespace XDev_UnitWork.Business
     {
         private readonly IAddressBL addressBL;
 
-        public CompanyBL(ApplicationDbContext dbContext, IHttpContextAccessor contextAccessor, IMapper mapper, IAddressBL addressBL) : base(dbContext, contextAccessor, mapper)
+        public IWebHostEnvironment Env { get; }
+
+        public CompanyBL(ApplicationDbContext dbContext, 
+                        IHttpContextAccessor contextAccessor, 
+                        IMapper mapper, 
+                        IAddressBL addressBL,
+                        IWebHostEnvironment env) : base(dbContext, contextAccessor, mapper)
         {
             this.addressBL = addressBL;
+            Env = env;
         }
 
         public async Task<bool> AnyAsync(Guid id)
@@ -176,6 +183,7 @@ namespace XDev_UnitWork.Business
                 Name = company.Name,
                 TradeName = company.TradeName,
                 Active = company.Active,
+                UrlLogo = company.UrlLogo,
             };
 
             if(company.CompanyIDS is not null)
@@ -232,6 +240,21 @@ namespace XDev_UnitWork.Business
             }
 
             return dto;
+        }
+
+        public async Task<string> UploadLogo(IFormFile formFile, string coid)
+        {
+            var co = await Repository.GetByIdAsync(coid.GetGuid());
+
+            if (co is not null) {
+                var urlfile = await UtilsExtension.SaveImage(Env, ContextAccessor, "image", formFile);
+
+                await DbContext.Database.ExecuteSqlAsync($"UPDATE COMPANY SET URLLOGO = {urlfile} WHERE ID={co.Id.ToString()}");
+
+                return urlfile;
+            }
+            
+            return string.Empty;
         }
     }
 }

@@ -8,5 +8,6 @@
         public string Name { get; set; }
         public string TradeName { get; set; }
         public bool Active { get; set; }
+        public string UrlLogo { get; set; }
     }
 }

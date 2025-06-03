@@ -1837,7 +1837,7 @@
   <Width>20.16106cm</Width>
   <Page>
     <PageHeader>
-      <Height>9.2676cm</Height>
+      <Height>9.9026cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2479,7 +2479,7 @@
           <rd:DefaultName>Textbox11</rd:DefaultName>
           <Top>4.87523cm</Top>
           <Left>0.1905cm</Left>
-          <Height>2.40799cm</Height>
+          <Height>3.04299cm</Height>
           <Width>9.75cm</Width>
           <ZIndex>7</ZIndex>
           <Style>
@@ -2643,11 +2643,40 @@
               </TextRuns>
               <Style />
             </Paragraph>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Condición de pago:</Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value xml:space="preserve"> </Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Normal</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=First(Fields!PartnerPayCondition.Value, "InvoiceDataSet")</Value>
+                  <Style>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Normal</FontWeight>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
           <Top>4.87523cm</Top>
           <Left>10.20933cm</Left>
-          <Height>2.40799cm</Height>
+          <Height>3.04299cm</Height>
           <Width>9.81944cm</Width>
           <ZIndex>8</ZIndex>
           <Style>
@@ -2755,7 +2784,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
-          <Top>8.05961cm</Top>
+          <Top>8.69461cm</Top>
           <Left>0.1905cm</Left>
           <Height>1.13799cm</Height>
           <Width>6.60388cm</Width>
@@ -2800,7 +2829,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
-          <Top>7.45961cm</Top>
+          <Top>8.09461cm</Top>
           <Left>0.1905cm</Left>
           <Height>0.6cm</Height>
           <Width>19.83828cm</Width>
@@ -2858,7 +2887,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
-          <Top>8.05961cm</Top>
+          <Top>8.69461cm</Top>
           <Left>6.79438cm</Left>
           <Height>1.13799cm</Height>
           <Width>6.71494cm</Width>
@@ -2915,7 +2944,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
-          <Top>8.05961cm</Top>
+          <Top>8.69461cm</Top>
           <Left>13.50932cm</Left>
           <Height>1.13799cm</Height>
           <Width>6.51945cm</Width>
