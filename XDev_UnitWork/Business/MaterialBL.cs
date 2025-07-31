@@ -31,8 +31,12 @@ namespace XDev_UnitWork.Business
         {
             if (dto.NumType == 1)
             {
-                var matcfg = DbContext.MaterialFeatures.AsNoTracking().FirstOrDefault();
-                dto.Code = UtilsExtension.NumberNextRange(matcfg.RangeId, DbContext.Database.GetConnectionString()).ToString();
+                var matcfg = DbContext.MaterialFeatures.AsNoTracking().FirstOrDefault();                
+                var result = DbContext.Database.SqlQuery<long>($"select * from xsp_gen_next_number({matcfg.RangeId}::uuid)").ToList();
+                if (result.Count == 0)
+                    throw new CustomTogoException("Error generando rango de número, validar configuración");
+                
+                dto.Code = result[0].ToString();
             }
             else
             {
