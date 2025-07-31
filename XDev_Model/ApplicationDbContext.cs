@@ -19,6 +19,7 @@ namespace XDev_Model
         {
             this.contentAccessor = contentAccessor;
             this.configuration = configuration;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public override void Dispose()
@@ -67,10 +68,13 @@ namespace XDev_Model
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {            
-            var config = AIO.GetConfig("WebConfig.enc");
-            optionsBuilder.UseSqlServer(config.SQLConnectionString);
-            
+        {
+            //var config = AIO.GetConfig("WebConfig.enc");
+            //optionsBuilder.UseSqlServer(config.SQLConnectionString);
+
+            var cnx = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            optionsBuilder.UseNpgsql(cnx);
+
             base.OnConfiguring(optionsBuilder);
         }
 

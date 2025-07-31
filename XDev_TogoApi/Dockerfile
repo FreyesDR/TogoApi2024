@@ -6,11 +6,11 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 #ENV DB_CONNECTION_STRING="Server=sqlserverdocker;Database=TogoDBDocker;User Id=sa;Password=Xcontra1256$;TrustServerCertificate=true"
+ENV DB_CONNECTION_STRING="USER ID = postgres; Password = Xcontra1256; Server = host.docker.internal; Port = 5433; Database = TogoDBDev;"
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["XDev_AIO/XDev_AIO.csproj", "XDev_AIO/"]
 COPY ["XDev_TogoApi/XDev_TogoApi.csproj", "XDev_TogoApi/"]
 COPY ["XDev_Model/XDev_Model.csproj", "XDev_Model/"]
 COPY ["XDev_UnitWork/XDev_UnitWork.csproj", "XDev_UnitWork/"]

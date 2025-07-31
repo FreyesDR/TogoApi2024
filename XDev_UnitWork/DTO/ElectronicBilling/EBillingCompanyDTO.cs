@@ -40,4 +40,11 @@ namespace XDev_UnitWork.DTO.ElectronicBilling
         public bool Active { get; set; }
         public bool Contingency { get; set; }
     }
+
+    public class EBillinCertsDTO
+    {
+        public IFormFile FileTest { get; set; }
+        public IFormFile FilePrd { get; set; }
+        public string CompanyId { get; set; }
+    }
 }

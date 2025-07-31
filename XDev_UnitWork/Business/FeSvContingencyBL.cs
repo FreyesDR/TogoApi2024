@@ -1,21 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Sockets;
+using System.Text;
+using System.Xml.Serialization;
 using XDev_Model;
 using XDev_Model.Entities;
 using XDev_UnitWork.Custom;
-using XDev_UnitWork.DTO.Company;
 using XDev_UnitWork.DTO;
+using XDev_UnitWork.DTO.Company;
+using XDev_UnitWork.DTO.Dte;
 using XDev_UnitWork.DTO.FeSv;
 using XDev_UnitWork.Interfaces;
 using XDev_UnitWork.Services;
-using Newtonsoft.Json;
-using XDev_UnitWork.DTO.Dte;
-using Microsoft.AspNetCore.Components.Forms;
-using Newtonsoft.Json.Linq;
-using System.Net.Sockets;
-using System.Net;
-using System.Net.Http.Headers;
-using AutoMapper;
 
 namespace XDev_UnitWork.Business
 {
@@ -30,15 +33,19 @@ namespace XDev_UnitWork.Business
 		private TimeSpan timeOutHttpClient = TimeSpan.FromMinutes(3);
 		private EBillingLog log;
 		private ISignerService signerService;
+        private readonly IDataProtector _protectorCert;
+        private readonly IDataProtector _protectorCred;
 
-		public FeSvContingencyBL(ILogger<FeSvContingencyBL> logger, IServiceScopeFactory scopeFactory)
+        public FeSvContingencyBL(ILogger<FeSvContingencyBL> logger, IServiceScopeFactory scopeFactory, IDataProtectionProvider dataProtectionProvider)
 		{
 			this.logger = logger;
 			var scope = scopeFactory.CreateScope();
 			dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
 			httpClientFactory = scope.ServiceProvider.GetService<IHttpClientFactory>();
 			signerService = new SignerService();
-		}
+            _protectorCert = dataProtectionProvider.CreateProtector("cert-protector");
+            _protectorCred = dataProtectionProvider.CreateProtector("cred-protector");
+        }
 
 		public async Task ProcessContingency()
 		{
@@ -153,10 +160,12 @@ namespace XDev_UnitWork.Business
 						#endregion
 
 						// Firmar json
-						var pathCert = Path.Combine(ebillingCom.IsProd ? ebilling.CertPathProd : ebilling.CertPathTest, $"{ebillingCom.ApiUser}.crt");
-						var key = ebillingCom.IsProd ? ebillingCom.PrivateKeyProd : ebillingCom.PrivateKeyTest;
+						//var pathCert = Path.Combine(ebillingCom.IsProd ? ebilling.CertPathProd : ebilling.CertPathTest, $"{ebillingCom.ApiUser}.crt");
+						//var key = ebillingCom.IsProd ? ebillingCom.PrivateKeyProd : ebillingCom.PrivateKeyTest;
 						var strJson = JsonConvert.SerializeObject(jsondto);
-						string dteSigned = await signerService.SignDocument(pathCert, key, strJson);
+                        var certificado = await ReadCertificado();
+                        var key = _protectorCred.Unprotect(ebillingCom.IsProd ? ebillingCom.PrivateKeyProd : ebillingCom.PrivateKeyTest);
+                        string dteSigned = await signerService.SignDocument(certificado, key, strJson);
 
 						// Obtener token
 						var token = await GetToken();
@@ -200,7 +209,7 @@ namespace XDev_UnitWork.Business
 
 									// Firmar DTE
 									strJson = JsonConvert.SerializeObject(dte);
-									dteSigned = await signerService.SignDocument(pathCert, key, strJson);
+									dteSigned = await signerService.SignDocument(certificado, key, strJson);
 									
 									// Enviando a MH									
 									RequestDte req = new RequestDte()
@@ -285,7 +294,7 @@ namespace XDev_UnitWork.Business
 				var requestContent = new FormUrlEncodedContent(new[]
 				{
 				new KeyValuePair<string, string>("user", ebillingCom.ApiUser),
-				new KeyValuePair<string, string>("pwd", ebillingCom.IsProd ? ebillingCom.ApiKeyProd: ebillingCom.ApiKeyTest)//Clave Api
+				new KeyValuePair<string, string>("pwd", ebillingCom.IsProd ? _protectorCred.Unprotect(ebillingCom.ApiKeyProd): _protectorCred.Unprotect(ebillingCom.ApiKeyTest))//Clave Api
                 });
 
 				HttpResponseMessage response = await client.PostAsync("/seguridad/auth/", requestContent);
@@ -326,7 +335,20 @@ namespace XDev_UnitWork.Business
 			}
 			return token;
 		}
-	}
+
+        private async Task<CertificadoMH> ReadCertificado()
+        {
+            return await Task.Run(() =>
+            {
+                var certificado = ebillingCom.IsProd ? ebillingCom.CertPrd : ebillingCom.CertTest;
+                var xml = _protectorCert.Unprotect(Encoding.UTF8.GetString(certificado));
+                var serializer = new XmlSerializer(typeof(CertificadoMH));
+
+                using var reader = new StringReader(xml);
+                return (CertificadoMH)serializer.Deserialize(reader);
+            });
+        }
+    }
 
 	internal class ResponseContingenciaDte
 	{

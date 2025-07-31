@@ -54,12 +54,14 @@ namespace XDev_UnitWork.Business
 
         public async Task<List<MaterialBranchListDTO>> GetListAsync(string materialid)
         {
+            
             return await Task.Run<List<MaterialBranchListDTO>>(() =>
             {
-                var query = DbContext.Database.SqlQuery<MaterialBranchListDTO>($"select a.MaterialId, a.BranchId, b.Code as BranchCode, b.Name as BranchName, b.CompanyId, c.Name as CompanyName, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, \r\n\tisnull(sum(d.Stock),0) as Stock, isnull(sum(d.SoldStock),0) as SoldStock, isnull(sum(d.PurchasedStock),0) as PurchasedStock, isnull(sum(d.LockedStock),0) as LockedStock, \r\n\tisnull(sum(d.InTransitStock),0) as InTransitStock, a.ConcurrencyStamp\r\nfrom MaterialBranch as a inner join Branch as b on b.id = a.BranchId\r\n\t\t\t\t\t     inner join Company as c on c.Id = b.CompanyId\r\n\t\t\t\t\t\t left join MaterialWareHouse as d on d.MaterialId = a.MaterialId and\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t d.BranchId = a.BranchId\r\nwhere a.MaterialId = {materialid.ToString()}\r\ngroup by a.MaterialId, a.BranchId, b.Code, b.Name, b.CompanyId, c.Name, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, a.ConcurrencyStamp");
+                //var query = DbContext.Database.SqlQuery<MaterialBranchListDTO>($"select a.MaterialId, a.BranchId, b.Code as BranchCode, b.Name as BranchName, b.CompanyId, c.Name as CompanyName, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, \r\n\tisnull(sum(d.Stock),0) as Stock, isnull(sum(d.SoldStock),0) as SoldStock, isnull(sum(d.PurchasedStock),0) as PurchasedStock, isnull(sum(d.LockedStock),0) as LockedStock, \r\n\tisnull(sum(d.InTransitStock),0) as InTransitStock, a.ConcurrencyStamp\r\nfrom MaterialBranch as a inner join Branch as b on b.id = a.BranchId\r\n\t\t\t\t\t     inner join Company as c on c.Id = b.CompanyId\r\n\t\t\t\t\t\t left join MaterialWareHouse as d on d.MaterialId = a.MaterialId and\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t d.BranchId = a.BranchId\r\nwhere a.MaterialId = {materialid.ToString()}\r\ngroup by a.MaterialId, a.BranchId, b.Code, b.Name, b.CompanyId, c.Name, a.PriceSale, a.PricePurchase, a.IsLockedPurchase, a.IsLockedSale, a.ConcurrencyStamp");
+                var query = DbContext.Database.SqlQuery<MaterialBranchListDTO>($"SELECT\r\n  a.\"MaterialId\",\r\n  a.\"BranchId\",\r\n  b.\"Code\"           AS \"BranchCode\",\r\n  b.\"Name\"           AS \"BranchName\",\r\n  b.\"CompanyId\",\r\n  c.\"Name\"           AS \"CompanyName\",\r\n  a.\"PriceSale\",\r\n  a.\"PricePurchase\",\r\n  a.\"IsLockedPurchase\",\r\n  a.\"IsLockedSale\",\r\n  COALESCE(SUM(d.\"Stock\"),          0) AS \"Stock\",\r\n  COALESCE(SUM(d.\"SoldStock\"),      0) AS \"SoldStock\",\r\n  COALESCE(SUM(d.\"PurchasedStock\"), 0) AS \"PurchasedStock\",\r\n  COALESCE(SUM(d.\"LockedStock\"),    0) AS \"LockedStock\",\r\n  COALESCE(SUM(d.\"InTransitStock\"), 0) AS \"InTransitStock\",\r\n  a.\"ConcurrencyStamp\"\r\nFROM \"MaterialBranch\" AS a\r\nJOIN \"Branch\"          AS b ON b.\"Id\"        = a.\"BranchId\"\r\nJOIN \"Company\"         AS c ON c.\"Id\"        = b.\"CompanyId\"\r\nLEFT JOIN \"MaterialWareHouse\" AS d\r\n  ON d.\"MaterialId\"  = a.\"MaterialId\"\r\n AND d.\"BranchId\"    = a.\"BranchId\"\r\nWHERE a.\"MaterialId\" = {materialid.ToString()}::uuid\r\nGROUP BY\r\n  a.\"MaterialId\",\r\n  a.\"BranchId\",\r\n  b.\"Code\",\r\n  b.\"Name\",\r\n  b.\"CompanyId\",\r\n  c.\"Name\",\r\n  a.\"PriceSale\",\r\n  a.\"PricePurchase\",\r\n  a.\"IsLockedPurchase\",\r\n  a.\"IsLockedSale\",\r\n  a.\"ConcurrencyStamp\";\r\n");
                 return query.ToListAsync();
             });
-            
+
             //var query = await (from mb in DbContext.MaterialBranch.AsNoTracking()
             //                   join br in DbContext.Branch.AsNoTracking() on mb.BranchId equals br.Id
             //                   join co in DbContext.Company.AsNoTracking() on br.CompanyId equals co.Id
@@ -79,7 +81,7 @@ namespace XDev_UnitWork.Business
             //                       ConcurrencyStamp = mb.ConcurrencyStamp,
             //                   }).ToListAsync();
 
-            
+
         }
 
         public Task<List<MaterialBranchDTO>> GetListAsync()

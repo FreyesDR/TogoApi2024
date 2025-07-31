@@ -6,6 +6,7 @@ using XDev_UnitWork.Business;
 using XDev_UnitWork.Interfaces;
 using XDev_UnitWork.Custom;
 using XDev_TogoApi.Code;
+using Microsoft.AspNetCore.Mvc;
 
 namespace XDev_TogoApi.EndPoints
 {
@@ -19,7 +20,15 @@ namespace XDev_TogoApi.EndPoints
                                         .WithDescription("Crear").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
             builder.MapPut("/", Update).AddEndpointFilter<ValidationFilter<EBillingCompanyDTO>>()
                                        .WithDescription("Modificar").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
+
+            builder.MapPost("/uploadcert", UploadCert).DisableAntiforgery().WithDescription("Cargar Certificados").WithMetadata(new ModuleAttribute("Facturación Electrónica Sociedad"));
             return builder;
+        }
+
+        private static async Task<Results<Ok, BadRequest<ExceptionReturnDTO>>> UploadCert([FromForm] EBillinCertsDTO dto, IEBillingCompanyBL eBillingCompanyBL)
+        {
+            await eBillingCompanyBL.UploadCertificados(dto);
+            return TypedResults.Ok();
         }
 
         private static async Task<Results<Ok, BadRequest<ExceptionReturnDTO>>> Update(EBillingCompanyDTO dto, IEBillingCompanyBL eBillingCompanyBL)

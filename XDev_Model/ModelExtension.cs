@@ -7,140 +7,163 @@ namespace XDev_Model
     public static class ModelExtension
     {
 		public static OperationBuilder<SqlOperation> CreateSPMaterialWareHouseInvoiceCancel(this MigrationBuilder migrationBuilder)
-			=> migrationBuilder.Sql(@"CREATE PROCEDURE [dbo].[XSP_MATERIAL_WH_INVOICE_CANCEL]
-@INVOICEID UNIQUEIDENTIFIER, @TIPOMOV NVARCHAR(1)
-AS
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED
-BEGIN TRANSACTION
-DECLARE @BRANCHID UNIQUEIDENTIFIER;
-DECLARE @MATID UNIQUEIDENTIFIER;
-DECLARE @WHID UNIQUEIDENTIFIER;
-DECLARE @QTY DECIMAL(18,3);
-DECLARE @STOCK DECIMAL(18,3);
-DECLARE @LOCKEDSTOCK DECIMAL(18,3);
-DECLARE @INTRANSITSTOCK DECIMAL(18,3);
-DECLARE @SOLDSTOCK DECIMAL(18,3);
-
-SELECT @BRANCHID = BranchId
-FROM INVOICE WHERE Id = @INVOICEID;
-
-DECLARE POSITION_CURSOR CURSOR FOR
-SELECT MaterialId, WareHouseId, Quantity
-FROM InvoicePosition WHERE InvoiceId = @INVOICEID AND MaterialTypeCode = 'B';
-
-OPEN POSITION_CURSOR;
-
-FETCH NEXT FROM POSITION_CURSOR
-INTO @MATID, @WHID, @QTY
-
-WHILE @@FETCH_STATUS = 0
+			=> migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION public.xsp_material_wh_invoice_cancel(
+    p_invoiceid UUID,
+    p_tipomov   VARCHAR
+)
+RETURNS VOID AS $$
+DECLARE
+    v_branchid       UUID;
+    rec_pos          RECORD;
+    v_stock          NUMERIC(18,3);
+    v_soldstock      NUMERIC(18,3);
+    v_lockedstock    NUMERIC(18,3);
+    v_intransitstock NUMERIC(18,3);
 BEGIN
+    -- Obtener sucursal de la factura
+    SELECT ""BranchId""
+    INTO v_branchid
+    FROM ""Invoice""
+    WHERE ""Id"" = p_invoiceid;
 
-	SELECT @STOCK = Stock, @SOLDSTOCK = SoldStock, @LOCKEDSTOCK = LockedStock, @INTRANSITSTOCK = InTransitStock
-	FROM MaterialWareHouse WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
+    -- Iterar posiciones de materiales tipo 'Bien'
+    FOR rec_pos IN
+        SELECT ""MaterialId"", ""WareHouseId"", ""Quantity""
+        FROM ""InvoicePosition""
+        WHERE ""InvoiceId"" = p_invoiceid
+          AND ""MaterialTypeCode"" = 'B'
+    LOOP
+        -- Bloquear fila para concurrencia y leer stocks
+        SELECT ""Stock"", ""SoldStock"", ""LockedStock"", ""InTransitStock""
+        INTO v_stock, v_soldstock, v_lockedstock, v_intransitstock
+        FROM ""MaterialWareHouse""
+        WHERE ""MaterialId""   = rec_pos.""MaterialId""
+          AND ""BranchId""     = v_branchid
+          AND ""WareHouseId""  = rec_pos.""WareHouseId""
+        FOR UPDATE;
 
-	IF @TIPOMOV = 'R'
-		BEGIN
-			UPDATE MaterialWareHouse SET SoldStock = @SOLDSTOCK - @QTY, Stock = @STOCK + @QTY
-			WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-		END
+        IF p_tipomov = 'R' THEN
+            -- Cancelación de venta: revertir SoldStock y devolver a Stock
+            UPDATE ""MaterialWareHouse""
+            SET ""SoldStock"" = v_soldstock   - rec_pos.""Quantity"",
+                ""Stock""     = v_stock       + rec_pos.""Quantity""
+            WHERE ""MaterialId""   = rec_pos.""MaterialId""
+              AND ""BranchId""     = v_branchid
+              AND ""WareHouseId""  = rec_pos.""WareHouseId"";
 
-	IF @TIPOMOV = 'I'
-		BEGIN
-			UPDATE MaterialWareHouse SET Stock = @STOCK - @QTY
-			WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-		END
-
-	FETCH NEXT FROM POSITION_CURSOR
-	INTO @MATID, @WHID, @QTY
-END
-
-COMMIT TRANSACTION;
-
-CLOSE POSITION_CURSOR;
-DEALLOCATE POSITION_CURSOR;");
+        ELSIF p_tipomov = 'I' THEN
+            -- Cancelación de tránsito: reducir Stock
+            UPDATE ""MaterialWareHouse""
+            SET ""Stock"" = v_stock - rec_pos.""Quantity""
+            WHERE ""MaterialId""   = rec_pos.""MaterialId""
+              AND ""BranchId""     = v_branchid
+              AND ""WareHouseId""  = rec_pos.""WareHouseId"";
+        END IF;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;");
 
         public static OperationBuilder<SqlOperation> CreateSPMaterialWareHouseInvoice(this MigrationBuilder migrationBuilder)
-		=> migrationBuilder.Sql(@"CREATE PROCEDURE [dbo].[XSP_MATERIAL_WH_INVOICE]
-@INVOICEID UNIQUEIDENTIFIER, @TIPOMOV NVARCHAR(1)
-AS
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED
-BEGIN TRANSACTION
-DECLARE @BRANCHID UNIQUEIDENTIFIER;
-DECLARE @MATID UNIQUEIDENTIFIER;
-DECLARE @WHID UNIQUEIDENTIFIER;
-DECLARE @QTY DECIMAL(18,3);
-DECLARE @STOCK DECIMAL(18,3);
-DECLARE @LOCKEDSTOCK DECIMAL(18,3);
-DECLARE @INTRANSITSTOCK DECIMAL(18,3);
-DECLARE @SOLDSTOCK DECIMAL(18,3);
-
-SELECT @BRANCHID = BranchId
-FROM INVOICE WHERE Id = @INVOICEID;
-
-DECLARE POSITION_CURSOR CURSOR FOR
-SELECT MaterialId, WareHouseId, Quantity
-FROM InvoicePosition WHERE InvoiceId = @INVOICEID AND MaterialTypeCode = 'B';
-
-OPEN POSITION_CURSOR;
-
-FETCH NEXT FROM POSITION_CURSOR
-INTO @MATID, @WHID, @QTY
-
-WHILE @@FETCH_STATUS = 0
+		=> migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION public.xsp_material_wh_invoice(
+    p_invoiceid UUID,
+    p_tipomov   VARCHAR
+)
+RETURNS VOID AS $$
+DECLARE
+    v_branchid      UUID;
+    rec_pos         RECORD;
+    v_stock         NUMERIC(18,3);
+    v_lockedstock   NUMERIC(18,3);
+    v_intransitstock NUMERIC(18,3);
+    v_soldstock     NUMERIC(18,3);
 BEGIN
+    -- Obtener la sucursal de la factura
+    SELECT ""BranchId""
+    INTO v_branchid
+    FROM ""Invoice""
+    WHERE ""Id"" = p_invoiceid;
 
-	SELECT @STOCK = Stock, @SOLDSTOCK = SoldStock, @LOCKEDSTOCK = LockedStock, @INTRANSITSTOCK = InTransitStock
-	FROM MaterialWareHouse WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
+    -- Procesar cada posición de material tipo ""Bien""
+    FOR rec_pos IN
+        SELECT ""MaterialId"", ""WareHouseId"", ""Quantity""
+        FROM ""InvoicePosition""
+        WHERE ""InvoiceId"" = p_invoiceid
+          AND ""MaterialTypeCode"" = 'B'
+    LOOP
+        -- Bloquear fila para concurrencia y obtener stocks
+        SELECT ""Stock"", ""SoldStock"", ""LockedStock"", ""InTransitStock""
+        INTO v_stock, v_soldstock, v_lockedstock, v_intransitstock
+        FROM ""MaterialWareHouse""
+        WHERE ""MaterialId""  = rec_pos.""MaterialId""
+          AND ""BranchId""    = v_branchid
+          AND ""WareHouseId"" = rec_pos.""WareHouseId""
+        FOR UPDATE;
 
-	IF @TIPOMOV = 'R'
-		BEGIN
-			UPDATE MaterialWareHouse SET SoldStock = @SOLDSTOCK + @QTY, LockedStock = @LOCKEDSTOCK - @QTY
-			WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-		END
+        IF p_tipomov = 'R' THEN
+            -- Movimiento de venta: aumentar SoldStock y disminuir LockedStock
+            UPDATE ""MaterialWareHouse""
+            SET ""SoldStock""   = v_soldstock   + rec_pos.""Quantity"",
+                ""LockedStock"" = v_lockedstock - rec_pos.""Quantity""
+            WHERE ""MaterialId""  = rec_pos.""MaterialId""
+              AND ""BranchId""    = v_branchid
+              AND ""WareHouseId"" = rec_pos.""WareHouseId"";
 
-	IF @TIPOMOV = 'I'
-		BEGIN
-			UPDATE MaterialWareHouse SET Stock = @STOCK + @QTY, InTransitStock = @INTRANSITSTOCK - @QTY
-			WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-		END
-
-	FETCH NEXT FROM POSITION_CURSOR
-	INTO @MATID, @WHID, @QTY
-END
-
-COMMIT TRANSACTION;
-
-CLOSE POSITION_CURSOR;
-DEALLOCATE POSITION_CURSOR;");
+        ELSIF p_tipomov = 'I' THEN
+            -- Movimiento de devolución: aumentar Stock y disminuir InTransitStock
+            UPDATE ""MaterialWareHouse""
+            SET ""Stock""          = v_stock         + rec_pos.""Quantity"",
+                ""InTransitStock"" = v_intransitstock - rec_pos.""Quantity""
+            WHERE ""MaterialId""  = rec_pos.""MaterialId""
+              AND ""BranchId""    = v_branchid
+              AND ""WareHouseId"" = rec_pos.""WareHouseId"";
+        END IF;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;");
 
 		public static OperationBuilder<SqlOperation> CreateSPMaterialWareHouseSaleOrder(this MigrationBuilder migrationBuilder)
-			=> migrationBuilder.Sql(@"CREATE PROCEDURE [dbo].[XSP_MATERIAL_WH_SALE_ORDER]
-@MATID UNIQUEIDENTIFIER, @BRANCHID UNIQUEIDENTIFIER, @WHID UNIQUEIDENTIFIER,
-@TIPOMOV VARCHAR(1), @QTY DECIMAL(18,3)
-AS
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED
-BEGIN TRANSACTION
-DECLARE @STOCK DECIMAL(18,3);
-DECLARE @LOCKED DECIMAL(18,3);
-DECLARE @INTRANSIT DECIMAL(18,3);
+			=> migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION public.xsp_material_wh_sale_order(
+    p_matid     UUID,
+    p_branchid  UUID,
+    p_whid      UUID,
+    p_tipomov   VARCHAR,
+    p_qty       NUMERIC(18,3)
+)
+RETURNS VOID AS $$
+DECLARE
+    v_stock      NUMERIC(18,3);
+    v_locked     NUMERIC(18,3);
+    v_intransit  NUMERIC(18,3);
+BEGIN
+    -- Bloquear la fila para concurrencia
+    SELECT ""Stock"", ""LockedStock"", ""InTransitStock""
+    INTO v_stock, v_locked, v_intransit
+    FROM ""MaterialWareHouse""
+    WHERE ""MaterialId""   = p_matid
+      AND ""BranchId""     = p_branchid
+      AND ""WareHouseId""  = p_whid
+    FOR UPDATE;
 
-SELECT @STOCK = STOCK, @LOCKED = LockedStock, @INTRANSIT = InTransitStock FROM MaterialWareHouse
-WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
+    -- Ajustar según tipo de movimiento
+    IF p_tipomov = 'R' THEN
+        -- Reserva: decrementa stock y aumenta stock bloqueado
+        UPDATE ""MaterialWareHouse""
+        SET ""Stock""       = v_stock - p_qty,
+            ""LockedStock"" = v_locked + p_qty
+        WHERE ""MaterialId""   = p_matid
+          AND ""BranchId""     = p_branchid
+          AND ""WareHouseId""  = p_whid;
 
-IF @TIPOMOV = 'R'
-	BEGIN
-		UPDATE MaterialWareHouse SET Stock = @STOCK - @QTY, LockedStock = @LOCKED + @QTY
-		WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-	END
-
-IF @TIPOMOV = 'I'
-	BEGIN
-		UPDATE MaterialWareHouse SET InTransitStock = @INTRANSIT + @QTY
-		WHERE MaterialId = @MATID AND BranchId = @BRANCHID AND WareHouseId = @WHID;
-	END
-
-COMMIT TRANSACTION;");
+    ELSIF p_tipomov = 'I' THEN
+        -- En tránsito: incrementa stock en tránsito
+        UPDATE ""MaterialWareHouse""
+        SET ""InTransitStock"" = v_intransit + p_qty
+        WHERE ""MaterialId""   = p_matid
+          AND ""BranchId""     = p_branchid
+          AND ""WareHouseId""  = p_whid;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;");
 
         /// <summary>
         /// SP Crear rango de número para Facturación Electrónica SV
@@ -150,76 +173,62 @@ COMMIT TRANSACTION;");
         public static OperationBuilder<SqlOperation> CreateEBillingDocumentNextNumber(this MigrationBuilder migrationBuilder)
 			=> migrationBuilder.Sql(@"
 
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Fernando Reyes
--- Create date: 03/02/2025
--- Description:	Generar número de rango FE 
--- =============================================
-CREATE PROCEDURE XSP_EBILLING_CO_NEXT_NUMBER
-@coid uniqueidentifier, @doid uniqueidentifier
-as
-set transaction isolation level read committed
-begin transaction
-declare @ini bigint;
-declare @fin bigint;
-declare @curr bigint;			
-declare @inc bigint;
-declare @return bigint;
-declare @reIni bit;
-declare @nextY int;
+CREATE OR REPLACE FUNCTION public.xsp_ebilling_co_next_number(
+    coid UUID,
+    doid UUID
+)
+RETURNS BIGINT AS $$
+DECLARE
+    v_ini      BIGINT;
+    v_fin      BIGINT;
+    v_curr     BIGINT;
+    v_inc      BIGINT;
+    v_return   BIGINT;
+    v_reIni    BOOLEAN;
+    v_nextY    INTEGER;
+BEGIN
+    -- Bloquea la fila para evitar concurrencia
+    SELECT ""RangeStart"", ""RangeEnd"", ""Current"", ""ReStartYear"", ""NextReStart""
+    INTO v_ini, v_fin, v_curr, v_reIni, v_nextY
+    FROM ""EBillingCompanyInvoice""
+    WHERE ""CompanyId"" = coid
+      AND ""InvoiceTypeId"" = doid
+    FOR UPDATE;
 
-select 			    
-	@ini = RangeStart,
-	@fin = RangeEnd,
-	@return = [Current],
-	@reIni = ReStartYear,
-	@nextY = NextReStart
-	from EBillingCompanyInvoice where CompanyId = @coid and InvoiceTypeId = @doid;
+    v_inc := v_curr + 1;
 
-set @inc = @return + 1;
+    IF v_inc BETWEEN v_ini AND v_fin THEN
+        IF v_reIni AND EXTRACT(YEAR FROM CURRENT_DATE) = v_nextY THEN
+            UPDATE ""EBillingCompanyInvoice""
+            SET ""Current""     = 2,
+                ""NextReStart"" = v_nextY + 1
+            WHERE ""CompanyId"" = coid
+              AND ""InvoiceTypeId"" = doid;
+            v_return := 1;
+        ELSE
+            UPDATE ""EBillingCompanyInvoice""
+            SET ""Current"" = v_inc
+            WHERE ""CompanyId"" = coid
+              AND ""InvoiceTypeId"" = doid;
+            -- Devuelve el valor anterior al incremento
+            v_return := v_curr;
+        END IF;
+    ELSE
+        IF v_reIni THEN
+            UPDATE ""EBillingCompanyInvoice""
+            SET ""Current""     = 2,
+                ""NextReStart"" = EXTRACT(YEAR FROM CURRENT_DATE) + 1
+            WHERE ""CompanyId"" = coid
+              AND ""InvoiceTypeId"" = doid;
+            v_return := 1;
+        ELSE
+            RAISE EXCEPTION 'Rango agotado';
+        END IF;
+    END IF;
 
-if @inc between @ini and @fin
-	begin
-		if @reIni = 1 and YEAR(GETDATE()) = @nextY
-			begin
-				update [dbo].[EBillingCompanyInvoice] 
-					set [Current] = 2, NextReStart = @nextY + 1
-					where CompanyId = @coid and InvoiceTypeId = @doid;		
-
-				set @return = 1;
-			end
-		else
-			begin
-				update [dbo].[EBillingCompanyInvoice] set [Current] = @inc 
-				where CompanyId = @coid and InvoiceTypeId = @doid;		
-			end
-
-		commit transaction
-		Select @return
-	end
-else
-	begin
-		if @reIni = 1 
-			begin
-				update [dbo].[EBillingCompanyInvoice] 
-					set [Current] = 2, NextReStart = YEAR(GETDATE()) + 1
-				where CompanyId = @coid and InvoiceTypeId = @doid;		
-
-				set @return = 1;
-
-				commit transaction
-				Select @return
-			end
-	    else
-			begin
-				rollback transaction;
-				raiserror( 'Rango agotado', 16, 1 );
-			end
-	end
+    RETURN v_return;
+END;
+$$ LANGUAGE plpgsql;
 ");
 
         /// <summary>
@@ -229,46 +238,40 @@ else
 		/// <returns></returns>
 		public static OperationBuilder<SqlOperation> CreateSPGetNumberNext(this MigrationBuilder migrationBuilder)
         => migrationBuilder.Sql(@"
-		 SET ANSI_NULLS ON
-		 GO
-		 SET QUOTED_IDENTIFIER ON
-		 GO
-		 -- =============================================
-		 -- Author:		Fernando Reyes
-		 -- Create date: 11/11/2024
-		 -- Description:	Generar número de rango
-		 -- =============================================
-		 CREATE PROCEDURE XSP_GEN_NEXT_NUMBER         
-		 @id uniqueidentifier
-         as
-         set transaction isolation level read committed
-		 begin transaction            
-			declare @ini bigint;
-			declare @fin bigint;
-            declare @curr bigint;			
-			declare @inc bigint;
-			declare @return bigint;
+		 
+		 CREATE OR REPLACE FUNCTION public.xsp_gen_next_number(
+    p_id UUID
+)
+RETURNS BIGINT AS $$
+DECLARE
+    v_ini      BIGINT;
+    v_fin      BIGINT;
+    v_curr     BIGINT;
+    v_inc      BIGINT;
+    v_return   BIGINT;
+BEGIN
+    -- Bloquea la fila para evitar concurrencia
+    SELECT ""NumStart"", ""NumEnd"", ""NumCurrent""
+    INTO v_ini, v_fin, v_curr
+    FROM ""NumberRange""
+    WHERE ""Id"" = p_id
+    FOR UPDATE;
 
-            select 			    
-				@ini = NumStart,
-				@fin = NumEnd,
-				@return = NumCurrent
-			from NumberRange where id = @id;
+    -- Calcula siguiente valor y actualiza
+    v_inc := v_curr + 1;
+    UPDATE ""NumberRange""
+    SET ""NumCurrent"" = v_inc
+    WHERE ""Id"" = p_id;
 
-			set @inc = @return + 1;
-
-			update NumberRange set NumCurrent = @inc where Id = @id;
-
-			if @return between @ini and @fin
-				begin
-					commit transaction
-					Select @return
-				end
-			else
-				begin
-					rollback transaction;
-					raiserror( 'Rango agotado', 16, 1 );
-				end
+    -- Verifica rango y devuelve
+    IF v_curr BETWEEN v_ini AND v_fin THEN
+        RETURN v_curr;
+    ELSE
+        -- Si está fuera de rango, deshace la actualización y lanza error
+        RAISE EXCEPTION 'Rango agotado';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 		");
     }
 }

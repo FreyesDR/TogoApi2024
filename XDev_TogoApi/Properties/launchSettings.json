@@ -16,7 +16,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION_STRING": "Server=.\\Sqlexpress;Database=TogoDBDev;MultipleActiveResultSets=true;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true"
+        "CORS_FRONTEND": "http://localhost:3000",
+        "DB_CONNECTION_STRING": "USER ID = postgres; Password = Xcontra1256; Server = localhost; Port = 5433; Database = TogoDBDev;"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7255;http://localhost:5271"

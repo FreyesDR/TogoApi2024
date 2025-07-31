@@ -141,8 +141,8 @@ namespace XDev_UnitWork.Business
                     var res = await feSvBL.ProcessCancelInvoiceAsync(model, dto);
                     try
                     {
-                        if (res.StatusCode.Substring(0, 2) == "20" && soType is not null)
-                            await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {soType.Inventory}");
+                        //if (res.StatusCode.Substring(0, 2) == "20" && soType is not null)
+                        //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {soType.Inventory}");
                     }
                     catch (Exception ex)
                     {
@@ -164,8 +164,8 @@ namespace XDev_UnitWork.Business
 
                 try
                 {
-                    if (soType is not null)
-                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {soType.Inventory}");
+                    //if (soType is not null)
+                    //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {soType.Inventory}");
                 }
                 catch (Exception ex)
                 {
@@ -351,7 +351,7 @@ namespace XDev_UnitWork.Business
                 pay.InvoiceId = model.Id;
             }
 
-            var result = DbContext.Database.SqlQuery<long>($"EXECUTE XSP_GEN_NEXT_NUMBER {invtype.RangeId.ToString()}").ToList();
+            var result = DbContext.Database.SqlQuery<long>($"select * from xsp_gen_next_number({invtype.RangeId}::uuid)").ToList();
             if (result.Count == 0)
                 throw new CustomTogoException("Error generando rango de número, validar configuración");
 
@@ -378,8 +378,8 @@ namespace XDev_UnitWork.Business
 
                     try
                     {
-                        if (res.StatusCode.Substring(0, 2) == "20")
-                            await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {dto.SaleOrderType.Inventory}");
+                        //if (res.StatusCode.Substring(0, 2) == "20")
+                        //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {dto.SaleOrderType.Inventory}");
                     }
                     catch (Exception ex)
                     {
@@ -399,14 +399,14 @@ namespace XDev_UnitWork.Business
                 DbContext.SaleOrder.Update(dto);
                 await DbContext.SaveChangesAsync();
 
-                try
-                {
-                    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {dto.SaleOrderType.Inventory}");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex.InnerException is null ? ex.Message : ex.InnerException.Message);
-                }
+                //try
+                //{
+                //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_INVOICE {model.Id.ToString()}, {dto.SaleOrderType.Inventory}");
+                //}
+                //catch (Exception ex)
+                //{
+                //    logger.LogError(ex.InnerException is null ? ex.Message : ex.InnerException.Message);
+                //}
 
 
                 return new FeResponseDTO { StatusCode = StatusCodes.Status201Created.ToString(), Message = $"Factura #{model.Number} creada correctamente" };

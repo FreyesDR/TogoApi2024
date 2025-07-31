@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -8,23 +9,40 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace XDev_Model.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class TogoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AccountType",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AddressType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,11 +53,11 @@ namespace XDev_Model.Migrations
                 name: "AppLog",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Source = table.Column<string>(type: "text", nullable: true),
+                    Message = table.Column<string>(type: "text", nullable: true),
+                    StackTrace = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,14 +68,14 @@ namespace XDev_Model.Migrations
                 name: "BranchType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,14 +86,14 @@ namespace XDev_Model.Migrations
                 name: "CompanyType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -86,15 +104,15 @@ namespace XDev_Model.Migrations
                 name: "Country",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    CodeMH = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    CodeMH = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,15 +123,15 @@ namespace XDev_Model.Migrations
                 name: "Currency",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    ISOCode = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    ISOCode = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,19 +142,19 @@ namespace XDev_Model.Migrations
                 name: "EBilling",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UrlTest = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UrlProd = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UrlSigner = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CertPathTest = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CertPathProd = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    UrlTest = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    UrlProd = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    UrlSigner = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CertPathTest = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CertPathProd = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,28 +165,28 @@ namespace XDev_Model.Migrations
                 name: "EBillingLog",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PointSaleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CodGen = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NumControl = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    SelloRecibido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    TipoDte = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Request = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Response = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ResponseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ResponseStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    ResponseStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    ResponseMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StatusCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Observaciones = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SaleOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Cancel = table.Column<bool>(type: "bit", nullable: false),
-                    CancelInvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsProd = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PointSaleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CodGen = table.Column<Guid>(type: "uuid", nullable: false),
+                    NumControl = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    SelloRecibido = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    TipoDte = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Request = table.Column<string>(type: "text", nullable: true),
+                    Response = table.Column<string>(type: "text", nullable: true),
+                    ResponseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ResponseStatus = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    ResponseStatusCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    ResponseMessage = table.Column<string>(type: "text", nullable: true),
+                    StatusCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Observaciones = table.Column<string>(type: "text", nullable: true),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Cancel = table.Column<bool>(type: "boolean", nullable: false),
+                    CancelInvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsProd = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,14 +197,14 @@ namespace XDev_Model.Migrations
                 name: "EconomicActivities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,15 +215,15 @@ namespace XDev_Model.Migrations
                 name: "IDType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    AltCode = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    AltCode = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,14 +234,14 @@ namespace XDev_Model.Migrations
                 name: "IncoTerms",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,17 +252,17 @@ namespace XDev_Model.Migrations
                 name: "InvoiceType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    RangeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FormName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Export = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    RangeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FormName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Export = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -252,20 +270,37 @@ namespace XDev_Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "JournalType",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JournalType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MaterialBranch",
                 columns: table => new
                 {
-                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceSale = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    IsLockedSale = table.Column<bool>(type: "bit", nullable: false),
-                    PricePurchase = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    IsLockedPurchase = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MaterialId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceSale = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    IsLockedSale = table.Column<bool>(type: "boolean", nullable: false),
+                    PricePurchase = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    IsLockedPurchase = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -276,14 +311,14 @@ namespace XDev_Model.Migrations
                 name: "MaterialFeatures",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     NumType = table.Column<short>(type: "smallint", nullable: false),
-                    RangeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RangeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,14 +329,14 @@ namespace XDev_Model.Migrations
                 name: "MaterialType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -312,19 +347,19 @@ namespace XDev_Model.Migrations
                 name: "MaterialWareHouse",
                 columns: table => new
                 {
-                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WareHouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Stock = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    SoldStock = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    PurchasedStock = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    LockedStock = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    InTransitStock = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MaterialId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WareHouseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Stock = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    SoldStock = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    PurchasedStock = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    LockedStock = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    InTransitStock = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -335,14 +370,14 @@ namespace XDev_Model.Migrations
                 name: "MeanOfPayment",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -353,17 +388,17 @@ namespace XDev_Model.Migrations
                 name: "NumberRange",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     NumStart = table.Column<long>(type: "bigint", nullable: false),
                     NumEnd = table.Column<long>(type: "bigint", nullable: false),
                     NumCurrent = table.Column<long>(type: "bigint", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -374,14 +409,14 @@ namespace XDev_Model.Migrations
                 name: "PartnerFeatures",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     NumType = table.Column<short>(type: "smallint", nullable: false),
-                    RangeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RangeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -392,14 +427,14 @@ namespace XDev_Model.Migrations
                 name: "PartnerRole",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -410,14 +445,14 @@ namespace XDev_Model.Migrations
                 name: "PartnerType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -428,17 +463,17 @@ namespace XDev_Model.Migrations
                 name: "PaymentCondition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Tipo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Plazo = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    PlazoCount = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Tipo = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Plazo = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    PlazoCount = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -449,8 +484,8 @@ namespace XDev_Model.Migrations
                 name: "Policy",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -461,21 +496,21 @@ namespace XDev_Model.Migrations
                 name: "PriceCondition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    AltCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Source = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    SourceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    ValueType = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Edit = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    AltCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    Type = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Source = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    SourceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    ValueType = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Edit = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -486,14 +521,14 @@ namespace XDev_Model.Migrations
                 name: "PriceScheme",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -504,14 +539,14 @@ namespace XDev_Model.Migrations
                 name: "RecintoFiscal",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -522,14 +557,14 @@ namespace XDev_Model.Migrations
                 name: "RegimenExport",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -540,15 +575,15 @@ namespace XDev_Model.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    RoleName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -559,26 +594,26 @@ namespace XDev_Model.Migrations
                 name: "SaleOrderType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Delivery = table.Column<bool>(type: "bit", nullable: false),
-                    Invoice = table.Column<bool>(type: "bit", nullable: false),
-                    InvoiceTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RangeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceSchemeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PdfFormName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Inventory = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    ApplyRet1 = table.Column<bool>(type: "bit", nullable: false),
-                    ApplyRet10 = table.Column<bool>(type: "bit", nullable: false),
-                    ApplyPer1 = table.Column<bool>(type: "bit", nullable: false),
-                    AssignmentRequired = table.Column<bool>(type: "bit", nullable: false),
-                    Export = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Delivery = table.Column<bool>(type: "boolean", nullable: false),
+                    Invoice = table.Column<bool>(type: "boolean", nullable: false),
+                    InvoiceTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RangeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceSchemeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PdfFormName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Inventory = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    ApplyRet1 = table.Column<bool>(type: "boolean", nullable: false),
+                    ApplyRet10 = table.Column<bool>(type: "boolean", nullable: false),
+                    ApplyPer1 = table.Column<bool>(type: "boolean", nullable: false),
+                    AssignmentRequired = table.Column<bool>(type: "boolean", nullable: false),
+                    Export = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -589,15 +624,15 @@ namespace XDev_Model.Migrations
                 name: "UnitMeasure",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    AltCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    AltCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -608,30 +643,30 @@ namespace XDev_Model.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IDTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    IDCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IDTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    IDCode = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -639,21 +674,55 @@ namespace XDev_Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccountCatalog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
+                    Level = table.Column<short>(type: "smallint", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    AccountTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountCatalog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccountCatalog_AccountCatalog_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "AccountCatalog",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AccountCatalog_AccountType_AccountTypeId",
+                        column: x => x.AccountTypeId,
+                        principalTable: "AccountType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Company",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    TradeName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    UrlLogo = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    TradeName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    UrlLogo = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -670,15 +739,15 @@ namespace XDev_Model.Migrations
                 name: "Region",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -695,30 +764,30 @@ namespace XDev_Model.Migrations
                 name: "EBillingCompany",
                 columns: table => new
                 {
-                    EBillingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsProd = table.Column<bool>(type: "bit", nullable: false),
-                    ApiUser = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    ApiKeyTest = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ApiKeyProd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PrivateKeyTest = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PrivateKeyProd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    Contingency = table.Column<bool>(type: "bit", nullable: false),
-                    SmtpService = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    SmtpHost = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    SmtpPort = table.Column<int>(type: "int", nullable: false),
-                    SmtpUserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    SmtpUserPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SmtpEnableSsl = table.Column<bool>(type: "bit", nullable: false),
-                    FromName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CcEmail1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CcEmail2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EBillingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsProd = table.Column<bool>(type: "boolean", nullable: false),
+                    ApiUser = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    ApiKeyTest = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    ApiKeyProd = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PrivateKeyTest = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PrivateKeyProd = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Contingency = table.Column<bool>(type: "boolean", nullable: false),
+                    SmtpService = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    SmtpHost = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    SmtpPort = table.Column<int>(type: "integer", nullable: false),
+                    SmtpUserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    SmtpUserPassword = table.Column<string>(type: "text", nullable: true),
+                    SmtpEnableSsl = table.Column<bool>(type: "boolean", nullable: false),
+                    FromName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CcEmail1 = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CcEmail2 = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -735,15 +804,15 @@ namespace XDev_Model.Migrations
                 name: "EBillingDocument",
                 columns: table => new
                 {
-                    EBillingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EBillingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -760,15 +829,15 @@ namespace XDev_Model.Migrations
                 name: "EBillingTax",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EBillingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TaxCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    TaxName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EBillingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TaxCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    TaxName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -782,24 +851,49 @@ namespace XDev_Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Journal",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    JournalTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Journal", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Journal_JournalType_JournalTypeId",
+                        column: x => x.JournalTypeId,
+                        principalTable: "JournalType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Material",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    MaterialTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OldCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    PriceType = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    UnitMeasureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    MaterialTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OldCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    PriceType = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    UnitMeasureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -816,51 +910,51 @@ namespace XDev_Model.Migrations
                 name: "Invoice",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvoiceTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PaymentConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    NetAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    DiscountPorcent = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PointSaleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PointSaleCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RefDocument = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    RefDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Sporadic = table.Column<bool>(type: "bit", nullable: false),
-                    Per1 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    Ret1 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    Ret10 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    SaleOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Canceled = table.Column<bool>(type: "bit", nullable: false),
-                    CanceledDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CanceledUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    NumControl = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CodGeneracion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    SelloRecepcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    FechaRecepcion = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EBillingDoc = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Assignment = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecintoFiscalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecintoFiscalCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RegimenExportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegimenExportCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IncoTermsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IncoTerms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    SentEmail = table.Column<bool>(type: "bit", nullable: false),
-                    Contingency = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InvoiceTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PaymentConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrencyCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    NetAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    DiscountPorcent = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PointSaleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PointSaleCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RefDocument = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    RefDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Sporadic = table.Column<bool>(type: "boolean", nullable: false),
+                    Per1 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    Ret1 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    Ret10 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Canceled = table.Column<bool>(type: "boolean", nullable: false),
+                    CanceledDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CanceledUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    NumControl = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CodGeneracion = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    SelloRecepcion = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    FechaRecepcion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EBillingDoc = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Assignment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    AssignmentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RecintoFiscalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RecintoFiscalCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RegimenExportId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegimenExportCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    IncoTermsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IncoTerms = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    SentEmail = table.Column<bool>(type: "boolean", nullable: false),
+                    Contingency = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -883,23 +977,23 @@ namespace XDev_Model.Migrations
                 name: "Partner",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    OldCode = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    TradeName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ContactPersonName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ContactPersonIDNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    ContactPersonPhone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ContactPersonEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    PaymentConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    OldCode = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    TradeName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ContactPersonName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ContactPersonIDNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    ContactPersonPhone = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    ContactPersonEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    PaymentConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -922,18 +1016,18 @@ namespace XDev_Model.Migrations
                 name: "EndPointPolicy",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MethodHttp = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    MethodPath = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Module = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    PolicyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PolicyParams = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    MethodHttp = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true),
+                    MethodPath = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Module = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PolicyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PolicyParams = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -950,15 +1044,15 @@ namespace XDev_Model.Migrations
                 name: "PriceSchemeCondition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceSchemeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceSchemeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
                     Position = table.Column<short>(type: "smallint", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -981,11 +1075,11 @@ namespace XDev_Model.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1002,42 +1096,42 @@ namespace XDev_Model.Migrations
                 name: "SaleOrder",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SaleOrderTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PaymentConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    NetAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    DiscountPorcent = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PointSaleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PointSaleCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RefDocument = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    RefDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Delivered = table.Column<bool>(type: "bit", nullable: false),
-                    Invoiced = table.Column<bool>(type: "bit", nullable: false),
-                    Sporadic = table.Column<bool>(type: "bit", nullable: false),
-                    Per1 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    Ret1 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    Ret10 = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    Assignment = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecintoFiscalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecintoFiscalCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RegimenExportId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegimenExportCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IncoTermsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IncoTerms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SaleOrderTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PaymentConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrencyCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    NetAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    DiscountPorcent = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PointSaleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PointSaleCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RefDocument = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    RefDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Delivered = table.Column<bool>(type: "boolean", nullable: false),
+                    Invoiced = table.Column<bool>(type: "boolean", nullable: false),
+                    Sporadic = table.Column<bool>(type: "boolean", nullable: false),
+                    Per1 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    Ret1 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    Ret10 = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    Assignment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    AssignmentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RecintoFiscalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RecintoFiscalCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RegimenExportId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegimenExportCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    IncoTermsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IncoTerms = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1060,11 +1154,11 @@ namespace XDev_Model.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1081,10 +1175,10 @@ namespace XDev_Model.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1101,8 +1195,8 @@ namespace XDev_Model.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1125,10 +1219,10 @@ namespace XDev_Model.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1145,16 +1239,16 @@ namespace XDev_Model.Migrations
                 name: "Branch",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1177,15 +1271,15 @@ namespace XDev_Model.Migrations
                 name: "CompanyEconomicActivities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EconomicActivityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Principal = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EconomicActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Principal = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1197,7 +1291,7 @@ namespace XDev_Model.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CompanyEconomicActivities_EconomicActivities_EconomicActivityId",
+                        name: "FK_CompanyEconomicActivities_EconomicActivities_EconomicActivi~",
                         column: x => x.EconomicActivityId,
                         principalTable: "EconomicActivities",
                         principalColumn: "Id",
@@ -1208,20 +1302,20 @@ namespace XDev_Model.Migrations
                 name: "CompanyID",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DocumentNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    DateIssue = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateExpira = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NIFNum = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    DateIssue = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateExpira = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    NIFNum = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1244,15 +1338,15 @@ namespace XDev_Model.Migrations
                 name: "City",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1269,20 +1363,20 @@ namespace XDev_Model.Migrations
                 name: "EBillingCompanyInvoice",
                 columns: table => new
                 {
-                    EBillingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InvoiceTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EBillingDocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EBillingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InvoiceTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EBillingDocumentId = table.Column<Guid>(type: "uuid", nullable: false),
                     RangeStart = table.Column<long>(type: "bigint", nullable: false),
                     RangeEnd = table.Column<long>(type: "bigint", nullable: false),
                     Current = table.Column<long>(type: "bigint", nullable: false),
-                    ReStartYear = table.Column<bool>(type: "bit", nullable: false),
-                    NextReStart = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ReStartYear = table.Column<bool>(type: "boolean", nullable: false),
+                    NextReStart = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1299,15 +1393,15 @@ namespace XDev_Model.Migrations
                 name: "InvoicePayment",
                 columns: table => new
                 {
-                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MeanOfPaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    MeanOfPaymentCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Reference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Tipo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Plazo = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Periodo = table.Column<int>(type: "int", nullable: false)
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MeanOfPaymentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    MeanOfPaymentCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Reference = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Tipo = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Plazo = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Periodo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1324,24 +1418,24 @@ namespace XDev_Model.Migrations
                 name: "InvoicePosition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MaterialTypeCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    MaterialCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    MaterialName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    GrossPrice = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    NetPrice = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    PriceType = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    UnitMeasureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UnitMeasureCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    UnitMeasureAltCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Quantity = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    NetAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    WareHouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    MaterialId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaterialTypeCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    MaterialCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    MaterialName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    GrossPrice = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    NetPrice = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    PriceType = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    UnitMeasureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UnitMeasureCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    UnitMeasureAltCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Quantity = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    NetAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    WareHouseId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1358,31 +1452,31 @@ namespace XDev_Model.Migrations
                 name: "InvoiceSporadicPartner",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IDTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    IDNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IDTypeId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDCode2 = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    IDNumber2 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CountryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CountryCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RegionName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    RegionCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CityCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    EcoActivityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EcoActivityName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    EcoActivityCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    TypePerson = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    IDTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDCode = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    IDNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    IDTypeId2 = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDCode2 = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    IDNumber2 = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CountryName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CountryCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RegionName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    RegionCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CityName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CityCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    EcoActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EcoActivityName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    EcoActivityCode = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    TypePerson = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1399,8 +1493,8 @@ namespace XDev_Model.Migrations
                 name: "PartnerCompany",
                 columns: table => new
                 {
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1423,21 +1517,21 @@ namespace XDev_Model.Migrations
                 name: "PartnerEconomicActivity",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EconomicActivityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Principal = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EconomicActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Principal = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PartnerEconomicActivity", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PartnerEconomicActivity_EconomicActivities_EconomicActivityId",
+                        name: "FK_PartnerEconomicActivity_EconomicActivities_EconomicActivity~",
                         column: x => x.EconomicActivityId,
                         principalTable: "EconomicActivities",
                         principalColumn: "Id",
@@ -1454,20 +1548,20 @@ namespace XDev_Model.Migrations
                 name: "PartnerID",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DocumentNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    DateIssue = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateExpira = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NIFNum = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    DateIssue = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateExpira = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    NIFNum = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1490,8 +1584,8 @@ namespace XDev_Model.Migrations
                 name: "PartnerRoles",
                 columns: table => new
                 {
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1514,15 +1608,15 @@ namespace XDev_Model.Migrations
                 name: "SaleOrderPayment",
                 columns: table => new
                 {
-                    SaleOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MeanOfPaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    MeanOfPaymentCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Reference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Tipo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Plazo = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Periodo = table.Column<int>(type: "int", nullable: false)
+                    SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MeanOfPaymentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    MeanOfPaymentCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Reference = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Tipo = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Plazo = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Periodo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1539,29 +1633,29 @@ namespace XDev_Model.Migrations
                 name: "SaleOrderPosition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SaleOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MaterialTypeCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    MaterialCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    MaterialName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    GrossPrice = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    NetPrice = table.Column<decimal>(type: "decimal(18,5)", precision: 18, scale: 5, nullable: false),
-                    PriceType = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    UnitMeasureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UnitMeasureCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    UnitMeasureAltCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
-                    Quantity = table.Column<decimal>(type: "decimal(18,3)", precision: 18, scale: 3, nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    NetAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    WareHouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    MaterialId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaterialTypeCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    MaterialCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    MaterialName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    GrossPrice = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    NetPrice = table.Column<decimal>(type: "numeric(18,5)", precision: 18, scale: 5, nullable: false),
+                    PriceType = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    UnitMeasureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UnitMeasureCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    UnitMeasureAltCode = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    Quantity = table.Column<decimal>(type: "numeric(18,3)", precision: 18, scale: 3, nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    NetAmount = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    WareHouseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1578,36 +1672,36 @@ namespace XDev_Model.Migrations
                 name: "SaleOrderSporadicPartner",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SaleOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IDTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    IDNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    IDTypeId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDCode2 = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    IDNumber2 = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CountryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CountryCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RegionName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    RegionCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CityCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    EcoActivityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EcoActivityName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    EcoActivityCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    TypePerson = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    IDTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDCode = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    IDNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    IDTypeId2 = table.Column<Guid>(type: "uuid", nullable: false),
+                    IDCode2 = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    IDNumber2 = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CountryName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CountryCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RegionName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    RegionCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CityName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CityCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    EcoActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EcoActivityName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    EcoActivityCode = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
+                    TypePerson = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1624,15 +1718,15 @@ namespace XDev_Model.Migrations
                 name: "PointSale",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1649,15 +1743,15 @@ namespace XDev_Model.Migrations
                 name: "WareHouse",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1674,20 +1768,20 @@ namespace XDev_Model.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AddressTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Address1 = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Address1 = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PartnerId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1736,20 +1830,20 @@ namespace XDev_Model.Migrations
                 name: "InvoicePositionCondition",
                 columns: table => new
                 {
-                    InvoicePositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    AltCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Source = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    SourceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false),
-                    ValueType = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Edit = table.Column<bool>(type: "bit", nullable: false),
-                    BaseCondition = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false),
-                    ValueCondition = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false)
+                    InvoicePositionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    AltCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    Type = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Source = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    SourceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false),
+                    ValueType = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Edit = table.Column<bool>(type: "boolean", nullable: false),
+                    BaseCondition = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false),
+                    ValueCondition = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1766,26 +1860,26 @@ namespace XDev_Model.Migrations
                 name: "SaleOrderPositionCondition",
                 columns: table => new
                 {
-                    SaleOrderPositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PriceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    AltCode = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Source = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    SourceConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false),
-                    ValueType = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
-                    Edit = table.Column<bool>(type: "bit", nullable: false),
-                    BaseCondition = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false),
-                    ValueCondition = table.Column<decimal>(type: "decimal(18,7)", precision: 18, scale: 7, nullable: false)
+                    SaleOrderPositionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PriceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Position = table.Column<int>(type: "integer", nullable: false),
+                    Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    AltCode = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    Type = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Source = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    SourceConditionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false),
+                    ValueType = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: true),
+                    Edit = table.Column<bool>(type: "boolean", nullable: false),
+                    BaseCondition = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false),
+                    ValueCondition = table.Column<decimal>(type: "numeric(18,7)", precision: 18, scale: 7, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SaleOrderPositionCondition", x => new { x.SaleOrderPositionId, x.PriceConditionId });
                     table.ForeignKey(
-                        name: "FK_SaleOrderPositionCondition_SaleOrderPosition_SaleOrderPositionId",
+                        name: "FK_SaleOrderPositionCondition_SaleOrderPosition_SaleOrderPosit~",
                         column: x => x.SaleOrderPositionId,
                         principalTable: "SaleOrderPosition",
                         principalColumn: "Id",
@@ -1796,10 +1890,10 @@ namespace XDev_Model.Migrations
                 name: "AddressEmail",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Principal = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Principal = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1816,10 +1910,10 @@ namespace XDev_Model.Migrations
                 name: "AddressPhone",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
-                    PhoneExt = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Phone = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: true),
+                    PhoneExt = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1987,7 +2081,7 @@ namespace XDev_Model.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "Active", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Email", "EmailConfirmed", "IDCode", "IDNumber", "IDTypeId", "LastUpdatedAt", "LastUpdatedBy", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "8c5b29e5-fbb8-4cc9-871a-d61aaf739bf5", 0, true, "f17f2e43-833f-4d0e-83c1-dc22f141c304", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin@avalink.com", true, null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Administrador de Sistema", "ADMIN@AVALINK.COM", "ADMIN@AVALINK.COM", "AQAAAAIAAYagAAAAEG3VrHMqyIN4gVB/lVaj6OGcuVKSCx3EJhfna64rRTI/0qlORLppSj2xkzKyeCrNKA==", null, false, "068a1d4b-ffd9-4cd1-b293-c05602554e9a", false, "admin@avalink.com" });
+                values: new object[] { "8c5b29e5-fbb8-4cc9-871a-d61aaf739bf5", 0, true, "cf12012f-c891-4f5f-aa46-fe4271aca2cf", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin@avalink.com", true, null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, null, "Administrador de Sistema", "ADMIN@AVALINK.COM", "ADMIN@AVALINK.COM", "AQAAAAIAAYagAAAAEG3VrHMqyIN4gVB/lVaj6OGcuVKSCx3EJhfna64rRTI/0qlORLppSj2xkzKyeCrNKA==", null, false, "12f8e906-1586-4fac-add7-298f566b358a", false, "admin@avalink.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -2090,6 +2184,22 @@ namespace XDev_Model.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccountCatalog_AccountTypeId",
+                table: "AccountCatalog",
+                column: "AccountTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountCatalog_Code",
+                table: "AccountCatalog",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountCatalog_ParentId",
+                table: "AccountCatalog",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Address_AddressTypeId",
                 table: "Address",
                 column: "AddressTypeId");
@@ -2138,8 +2248,7 @@ namespace XDev_Model.Migrations
                 name: "IX_AddressType_Code",
                 table: "AddressType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -2180,8 +2289,7 @@ namespace XDev_Model.Migrations
                 name: "IX_BranchType_Code",
                 table: "BranchType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_City_Code",
@@ -2197,8 +2305,7 @@ namespace XDev_Model.Migrations
                 name: "IX_Company_Code",
                 table: "Company",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Company_CompanyTypeId",
@@ -2229,15 +2336,13 @@ namespace XDev_Model.Migrations
                 name: "IX_CompanyType_Code",
                 table: "CompanyType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Country_Code",
                 table: "Country",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Country_CodeMH",
@@ -2248,15 +2353,13 @@ namespace XDev_Model.Migrations
                 name: "IX_Currency_Code",
                 table: "Currency",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EBilling_Code",
                 table: "EBilling",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EBillingDocument_Code",
@@ -2307,8 +2410,7 @@ namespace XDev_Model.Migrations
                 name: "IX_EconomicActivities_Code",
                 table: "EconomicActivities",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EndPointPolicy_MethodHttp",
@@ -2329,22 +2431,19 @@ namespace XDev_Model.Migrations
                 name: "IX_IDType_Code",
                 table: "IDType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_IncoTerms_Code",
                 table: "IncoTerms",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoice_CodGeneracion",
                 table: "Invoice",
                 column: "CodGeneracion",
-                unique: true,
-                filter: "[CodGeneracion] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoice_InvoiceTypeId",
@@ -2355,8 +2454,7 @@ namespace XDev_Model.Migrations
                 name: "IX_Invoice_Number",
                 table: "Invoice",
                 column: "Number",
-                unique: true,
-                filter: "[Number] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoice_PaymentConditionId",
@@ -2383,15 +2481,24 @@ namespace XDev_Model.Migrations
                 name: "IX_InvoiceType_Code",
                 table: "InvoiceType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Journal_Code",
+                table: "Journal",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Journal_JournalTypeId",
+                table: "Journal",
+                column: "JournalTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Material_Code",
                 table: "Material",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Material_MaterialTypeId",
@@ -2408,22 +2515,19 @@ namespace XDev_Model.Migrations
                 name: "IX_MaterialType_Code",
                 table: "MaterialType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MeanOfPayment_Code",
                 table: "MeanOfPayment",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Partner_Code",
                 table: "Partner",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Partner_OldCode",
@@ -2480,8 +2584,7 @@ namespace XDev_Model.Migrations
                 name: "IX_PartnerRole_Code",
                 table: "PartnerRole",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartnerRoles_PartnerId",
@@ -2497,15 +2600,13 @@ namespace XDev_Model.Migrations
                 name: "IX_PartnerType_Code",
                 table: "PartnerType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PaymentCondition_Code",
                 table: "PaymentCondition",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PointSale_BranchId",
@@ -2541,15 +2642,13 @@ namespace XDev_Model.Migrations
                 name: "IX_RecintoFiscal_Code",
                 table: "RecintoFiscal",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegimenExport_Code",
                 table: "RegimenExport",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Region_Code",
@@ -2565,15 +2664,13 @@ namespace XDev_Model.Migrations
                 name: "RoleNameIndex",
                 table: "Roles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleOrder_Number",
                 table: "SaleOrder",
                 column: "Number",
-                unique: true,
-                filter: "[Number] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleOrder_PaymentConditionId",
@@ -2605,15 +2702,13 @@ namespace XDev_Model.Migrations
                 name: "IX_SaleOrderType_Code",
                 table: "SaleOrderType",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UnitMeasure_Code",
                 table: "UnitMeasure",
                 column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -2624,8 +2719,7 @@ namespace XDev_Model.Migrations
                 name: "UserNameIndex",
                 table: "Users",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_WareHouse_BranchId",
@@ -2647,6 +2741,9 @@ namespace XDev_Model.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AccountCatalog");
+
             migrationBuilder.DropTable(
                 name: "AddressEmail");
 
@@ -2706,6 +2803,9 @@ namespace XDev_Model.Migrations
 
             migrationBuilder.DropTable(
                 name: "InvoiceSporadicPartner");
+
+            migrationBuilder.DropTable(
+                name: "Journal");
 
             migrationBuilder.DropTable(
                 name: "Material");
@@ -2768,6 +2868,9 @@ namespace XDev_Model.Migrations
                 name: "WareHouse");
 
             migrationBuilder.DropTable(
+                name: "AccountType");
+
+            migrationBuilder.DropTable(
                 name: "Address");
 
             migrationBuilder.DropTable(
@@ -2784,6 +2887,9 @@ namespace XDev_Model.Migrations
 
             migrationBuilder.DropTable(
                 name: "InvoicePosition");
+
+            migrationBuilder.DropTable(
+                name: "JournalType");
 
             migrationBuilder.DropTable(
                 name: "MaterialType");

@@ -249,7 +249,7 @@ namespace XDev_UnitWork.Business
             if (co is not null) {
                 var urlfile = await UtilsExtension.SaveImage(Env, ContextAccessor, "image", formFile);
 
-                await DbContext.Database.ExecuteSqlAsync($"UPDATE COMPANY SET URLLOGO = {urlfile} WHERE ID={co.Id.ToString()}");
+                await DbContext.Database.ExecuteSqlAsync($"UPDATE \"Company\" SET \"UrlLogo\" = {urlfile} WHERE \"Id\"={co.Id.ToString()}::uuid");
 
                 return urlfile;
             }

@@ -37,7 +37,7 @@ namespace XDev_UnitWork.Business
 
                 if (dto.Principal)
                 {
-                    await DbContext.Database.ExecuteSqlAsync($"UPDATE PartnerEconomicActivity SET PRINCIPAL = 0 WHERE PARTNERID={dto.PartnerId}");
+                    await DbContext.Database.ExecuteSqlAsync($"UPDATE \"PartnerEconomicActivity\" SET \"Principal\" = false WHERE \"PartnerId\"={dto.PartnerId}::uuid");
                 }
 
                 await Repository.CreateAsync(model);

@@ -202,7 +202,7 @@ namespace XDev_UnitWork.Business
                         var result = await emailSender.SendEmailAsync(to, subject, body, attachList, ccemails);
 
                         if (result.Successful)
-                            await dbContext.Database.ExecuteSqlAsync($"UPDATE Invoice SET SentEmail = {false} WHERE Id={invid.ToString()}");
+                            await dbContext.Database.ExecuteSqlAsync($"UPDATE \"Invoice\" SET \"SentEmail\" = false WHERE \"Id\"={invid.ToString()}::uuid");
 
                         if (!result.Successful)
                             foreach (var msg in result.ErrorMessages)

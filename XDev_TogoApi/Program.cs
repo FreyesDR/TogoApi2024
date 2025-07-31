@@ -82,7 +82,7 @@ builder.Services.AddCors(opc =>
 {
     opc.AddDefaultPolicy(pol =>
     {
-        pol.WithOrigins(config.FrontEndUrl)
+        pol.WithOrigins(Environment.GetEnvironmentVariable("CORS_FRONTEND")!)
            .AllowAnyHeader()
            .AllowAnyMethod()
            .WithExposedHeaders(new string[] { "page", "pages", "items", "www-authenticate" });
@@ -256,7 +256,7 @@ builder.Services.AddScoped<ISaleOrderTypeBL, SaleOrderTypeBL>();
 builder.Services.AddScoped<IValidator<SaleOrderTypeDTO>, SaleOrderTypeValidator>();
 
 builder.Services.AddScoped<ISaleOrderBL, SaleOrderBL>();
-builder.Services.AddScoped<IValidator<SaleOrderDTO>, SaleOrderValidator>();
+//builder.Services.AddScoped<IValidator<SaleOrderDTO>, SaleOrderValidator>();
 
 builder.Services.AddScoped<IMaterialTypeBL, MaterialTypeBL>();
 builder.Services.AddScoped<IValidator<MaterialTypeDTO>, MaterialTypeValidator>();

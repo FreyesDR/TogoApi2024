@@ -9,11 +9,7 @@ namespace XDev_Model.Configuration
         public void Configure(EntityTypeBuilder<EBillingCompany> builder)
         {
             builder.HasKey(k => new { k.EBillingId, k.CompanyId });
-            builder.Property(p => p.ApiUser).HasMaxLength(20);
-            builder.Property(p => p.ApiKeyTest).HasMaxLength(50);
-            builder.Property(p => p.ApiKeyProd).HasMaxLength(50);
-            builder.Property(p => p.PrivateKeyTest).HasMaxLength(50);
-            builder.Property(p => p.PrivateKeyProd).HasMaxLength(50);
+            builder.Property(p => p.ApiUser).HasMaxLength(20);            
             builder.Property(p => p.SmtpService).HasMaxLength(1);
             builder.Property(p => p.SmtpHost).HasMaxLength(30);
             builder.Property(p => p.SmtpUserName).HasMaxLength(100);

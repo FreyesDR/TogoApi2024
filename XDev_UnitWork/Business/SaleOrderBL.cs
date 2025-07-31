@@ -159,7 +159,7 @@ namespace XDev_UnitWork.Business
                     model.AssignmentId = inv.Id;
             }
 
-            var result = DbContext.Database.SqlQuery<long>($"EXECUTE XSP_GEN_NEXT_NUMBER {sotype.RangeId.ToString()}").ToList();
+            var result = DbContext.Database.SqlQuery<long>($"select * from xsp_gen_next_number({sotype.RangeId}::uuid)").ToList();
             if (result.Count == 0)
                 throw new CustomTogoException("Error generando rango de número, validar configuración");
 
@@ -173,7 +173,7 @@ namespace XDev_UnitWork.Business
                 foreach (var pos in dto.Positions)
                 {
                     if (pos.MaterialTypeCode == "B")
-                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sotype.Inventory}, {pos.Quantity}");
+                        await DbContext.Database.ExecuteSqlAsync($"select xsp_material_wh_sale_order({pos.MaterialId}::uuid, {dto.BranchId}::uuid, {pos.WareHouseId}::uuid, {sotype.Inventory}, {pos.Quantity})");
                 }
             }
             catch (Exception ex)
@@ -203,7 +203,7 @@ namespace XDev_UnitWork.Business
                 foreach (var pos in entity.Positions)
                 {
                     if (pos.MaterialTypeCode == "B")
-                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {model.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity * -1}");
+                        await DbContext.Database.ExecuteSqlAsync($"select xsp_material_wh_sale_order({pos.MaterialId}::uuid, {model.BranchId}::uuid, {pos.WareHouseId}::uuid, {sot.Inventory}, {pos.Quantity * -1})");
 
                 }
 
@@ -375,8 +375,8 @@ namespace XDev_UnitWork.Business
                             modelpos = Mapper.Map<SaleOrderPosition>(pos);
                             newPos.Add(modelpos);
 
-                            if (pos.MaterialTypeCode == "B")
-                                await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity}");
+                            //if (pos.MaterialTypeCode == "B")
+                            //    await DbContext.Database.ExecuteSqlAsync($"select xsp_material_wh_sale_order({pos.MaterialId} ::uuid,  {dto.BranchId} ::uuid,  {pos.WareHouseId} ::uuid,  {sot.Inventory} ,  {pos.Quantity} )");
                         }
                         else
                         {
@@ -387,20 +387,20 @@ namespace XDev_UnitWork.Business
                                 {
                                     // Liberar inventario almacén anterior
                                     var whOld = wareHouse.FirstOrDefault(f => f.WareHouseId == modelpos.WareHouseId && f.MaterialId == modelpos.MaterialId);
-                                    if (whOld is not null)
-                                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {whOld.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity * -1}");
+                                    //if (whOld is not null)
+                                    //    await DbContext.Database.ExecuteSqlAsync($"select xsp_material_wh_sale_order({pos.MaterialId}::uuid, {dto.BranchId}::uuid, {whOld.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity * -1}");
 
                                     // Bloquear inventario almacén actual
-                                    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity}");
+                                    //await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity}");
                                 }
                                 else
                                 {
                                     // Validar cantidad
-                                    if (modelpos.Quantity > pos.Quantity)
-                                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {modelpos.Quantity - pos.Quantity}");
+                                    //if (modelpos.Quantity > pos.Quantity)
+                                    //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {modelpos.Quantity - pos.Quantity}");
 
-                                    if (modelpos.Quantity < pos.Quantity)
-                                        await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity - modelpos.Quantity}");
+                                    //if (modelpos.Quantity < pos.Quantity)
+                                    //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {pos.MaterialId.ToString()}, {dto.BranchId.ToString()}, {pos.WareHouseId.ToString()}, {sot.Inventory}, {pos.Quantity - modelpos.Quantity}");
                                 }
                             }
 
@@ -423,7 +423,7 @@ namespace XDev_UnitWork.Business
                             modelpos.WareHouseId = pos.WareHouseId;
                             modelpos.Conditions = Mapper.Map<HashSet<SaleOrderPositionCondition>>(pos.Conditions);
 
-                            await DbContext.Database.ExecuteSqlAsync($"delete from SaleOrderPositionCondition where SaleOrderPositionId = {modelpos.Id}");
+                            await DbContext.Database.ExecuteSqlAsync($"delete from \"SaleOrderPositionCondition\" where \"SaleOrderPositionId\" = {modelpos.Id}::uuid");
                             //model.Positions.Add(modelpos);
                         }
                     }
@@ -461,8 +461,8 @@ namespace XDev_UnitWork.Business
                         foreach (var del in delPos)
                         {
                             var wh = wareHouse.FirstOrDefault(f => f.MaterialId == del.MaterialId && f.WareHouseId == del.WareHouseId);
-                            if (wh is not null && del.MaterialTypeCode == "B")
-                                await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {wh.MaterialId.ToString()}, {dto.BranchId.ToString()}, {wh.WareHouseId.ToString()}, {sot.Inventory}, {del.Quantity * -1}");
+                            //if (wh is not null && del.MaterialTypeCode == "B")
+                            //    await DbContext.Database.ExecuteSqlAsync($"EXECUTE XSP_MATERIAL_WH_SALE_ORDER {wh.MaterialId.ToString()}, {dto.BranchId.ToString()}, {wh.WareHouseId.ToString()}, {sot.Inventory}, {del.Quantity * -1}");
                         }
 
                         DbContext.SaleOrderPosition.RemoveRange(delPos);

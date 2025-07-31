@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using XDev_Model;
 using XDev_Model.Entities;
 using XDev_Model.Interfaces;
-using XDev_Model;
 using XDev_UnitWork.Custom;
 using XDev_UnitWork.DTO;
-using XDev_UnitWork.Interfaces;
-using XDev_UnitWork.DTO.Partner;
 using XDev_UnitWork.DTO.Address;
+using XDev_UnitWork.DTO.Partner;
+using XDev_UnitWork.Interfaces;
 
 namespace XDev_UnitWork.Business
 {
@@ -45,7 +46,8 @@ namespace XDev_UnitWork.Business
 
                 if (partnercfg.NumType == 1)
                 {
-                    var result = DbContext.Database.SqlQuery<long>($"EXECUTE XSP_GEN_NEXT_NUMBER {partnercfg.RangeId.ToString()}").ToList();
+                    
+                    var result = DbContext.Database.SqlQuery<long>($"select * from xsp_gen_next_number({partnercfg.RangeId}::uuid)").ToList();
                     if (result.Count == 0)
                         throw new CustomTogoException("Error generando rango de número, validar configuración");
 

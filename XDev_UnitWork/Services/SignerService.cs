@@ -8,11 +8,11 @@ namespace XDev_UnitWork.Services
 {
 	public class SignerService : ISignerService
 	{
-		public async Task<string> SignDocument(string pathCert, string key, string document)
+		public async Task<string> SignDocument(CertificadoMH cert, string key, string document)
 		{
 			return await Task.Run(() =>
 			{
-				var cert = CargarCertificado(pathCert);
+				
 				if (cert is not null)
 				{
 					if (CheckPassword(cert, key))
@@ -54,29 +54,29 @@ namespace XDev_UnitWork.Services
 			return certificado.PrivateKey.Clave == hashPassword;
 		}
 
-		private CertificadoMH CargarCertificado(string rutaCertificado)
-		{
-			if (!File.Exists(rutaCertificado))
-				throw new CustomTogoException("Firmador: Certificado no existe");
+		//private CertificadoMH CargarCertificado(string rutaCertificado)
+		//{
+		//	if (!File.Exists(rutaCertificado))
+		//		throw new CustomTogoException("Firmador: Certificado no existe");
 
-			try
-			{
-				// Leer el contenido del archivo .crt
-				string contenido = File.ReadAllText(rutaCertificado);
+		//	try
+		//	{
+		//		// Leer el contenido del archivo .crt
+		//		string contenido = File.ReadAllText(rutaCertificado);
 
-				// Deserializar el contenido XML
-				XmlSerializer serializer = new XmlSerializer(typeof(CertificadoMH));
-				using (StringReader reader = new StringReader(contenido))
-				{
-					CertificadoMH certificado = (CertificadoMH)serializer.Deserialize(reader);
-					return certificado;
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new CustomTogoException("Firmador: " + ex.Message);
-			}
-		}
+		//		// Deserializar el contenido XML
+		//		XmlSerializer serializer = new XmlSerializer(typeof(CertificadoMH));
+		//		using (StringReader reader = new StringReader(contenido))
+		//		{
+		//			CertificadoMH certificado = (CertificadoMH)serializer.Deserialize(reader);
+		//			return certificado;
+		//		}
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		throw new CustomTogoException("Firmador: " + ex.Message);
+		//	}
+		//}
 	}
 
 	[XmlRoot("CertificadoMH")]

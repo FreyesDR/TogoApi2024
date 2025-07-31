@@ -25,6 +25,9 @@
         public string CcEmail1 {  get; set; }
         public string CcEmail2 { get; set; }
 
+        public byte[] CertTest { get; set; }
+        public byte[] CertPrd { get; set; }
+
         public HashSet<EBillingCompanyInvoice> Invoice { get; set; }
     }
 }
